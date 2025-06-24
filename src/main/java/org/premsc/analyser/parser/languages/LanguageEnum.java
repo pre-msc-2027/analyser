@@ -16,6 +16,12 @@ public enum LanguageEnum {
     private final String dll;
     private final String extension;
 
+    /**
+     * Constructor for the LanguageEnum.
+     * @param name the name of the language
+     * @param dll the name of the DLL file associated with the language
+     * @param extension the file extension associated with the language
+     */
     LanguageEnum(String name, String dll, String extension) {
         this.name = name;
         this.dll = dll;
@@ -54,8 +60,12 @@ public enum LanguageEnum {
         return this.dll.replace('-', '_');
     }
 
+    /**
+     * Get the language helper for this language.
+     * @return the ILanguageHelper instance for this language
+     */
     public ILanguageHelper getHelper() {
-        return LanguageHelperBuilder.get(this);
+        return LanguageHelperFactory.get(this);
     }
 
     /**

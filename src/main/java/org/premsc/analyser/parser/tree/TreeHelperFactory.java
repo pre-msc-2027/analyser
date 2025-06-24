@@ -5,8 +5,17 @@ import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.tree.html.HTMLTree;
 import org.premsc.analyser.repository.Source;
 
-public class TreeHelperBuilder {
+/**
+ * Factory class for creating instances of ITreeHelper based on the specified source.
+ */
+public class TreeHelperFactory {
 
+    /**
+     * Returns an instance of ITreeHelper for the specified source.
+     * @param source the source to create the tree helper for
+     * @return an instance of ITreeHelper for the specified source
+     * @throws RuntimeException if the language is unsupported
+     */
     static public ITreeHelper from(Source source) {
 
         LanguageEnum language;

@@ -2,6 +2,9 @@ package org.premsc.analyser.parser.languages;
 
 import io.github.treesitter.jtreesitter.Language;
 
+/**
+ * Interface for helper of TreeSitter Language.
+ */
 public interface ILanguageHelper {
 
     /**

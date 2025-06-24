@@ -3,7 +3,10 @@ package org.premsc.analyser.parser.languages;
 import java.util.HashMap;
 import java.util.Map;
 
-public class LanguageHelperBuilder {
+/**
+ * Factory class for creating instances of LanguageHelper based on the specified language or file extension.
+ */
+public class LanguageHelperFactory {
 
     static private final Map<LanguageEnum, ILanguageHelper> instances = new HashMap<>();
 
@@ -29,6 +32,11 @@ public class LanguageHelperBuilder {
         return get(LanguageEnum.getByExtension(extension));
     }
 
+    /**
+     * Returns the instance of ILanguageHelper for the specified language.
+     * @param language the language enum representing the language to from
+     * @return the instance of ILanguageHelper for the specified language
+     */
     static private ILanguageHelper getInstance(LanguageEnum language) {
 
         return switch (language) {

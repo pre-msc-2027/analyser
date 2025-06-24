@@ -4,17 +4,25 @@ import org.premsc.analyser.parser.languages.ILanguageHelper;
 import org.premsc.analyser.parser.languages.LanguageEnum;
 import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.tree.ITreeHelper;
-import org.premsc.analyser.parser.tree.TreeHelperBuilder;
+import org.premsc.analyser.parser.tree.TreeHelperFactory;
 
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
+/**
+ * Abstract class representing a source file.
+ * Provides methods to access the file path, content, language helper, and parse the source.
+ */
 public abstract class Source {
 
     protected final String filepath;
 
+    /**
+     * Constructor for the Source class.
+     * @param filepath the path to the source file.
+     */
     protected Source(String filepath) {
         this.filepath = filepath;
     }
@@ -70,7 +78,7 @@ public abstract class Source {
      * @return an instance of ITreeHelper.
      */
     public ITreeHelper parse() {
-        return TreeHelperBuilder.from(this);
+        return TreeHelperFactory.from(this);
     }
 
     @Override

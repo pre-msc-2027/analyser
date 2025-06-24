@@ -5,12 +5,18 @@ import io.github.treesitter.jtreesitter.Language;
 import java.lang.foreign.Arena;
 import java.lang.foreign.SymbolLookup;
 
-
+/**
+ * Abstract class for language helper implementations.
+ */
 public abstract class LanguageHelperAbs implements ILanguageHelper {
 
     protected final LanguageEnum language;
     protected final Language tsLanguage;
 
+    /**
+     * Constructor for the LanguageHelperAbs class.
+     * @param language the language enum representing the language to be used
+     */
     protected LanguageHelperAbs(LanguageEnum language) {
 
         this.language = language;

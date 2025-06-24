@@ -20,6 +20,10 @@ public class Repository {
     private final Path path;
     private final List<Source> sources = new ArrayList<>();
 
+    /**
+     * Constructor for the Repository class.
+     * @param path the path to the repository directory
+     */
     public Repository(Path path) {
         this.path = path;
         this.read();
@@ -52,11 +56,17 @@ public class Repository {
         }
     }
 
-
+    /**
+     * Visitor class for traversing files in a directory.
+     */
     static class FileVisitor extends SimpleFileVisitor<Path> {
 
         private final List<Source> sources;
 
+        /**
+         * Constructor for the FileVisitor class.
+         * @param sources the list of sources to populate
+         */
         public FileVisitor(List<Source> sources) {
             this.sources = sources;
         }
