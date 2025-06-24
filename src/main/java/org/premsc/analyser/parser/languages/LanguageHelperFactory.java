@@ -1,5 +1,6 @@
 package org.premsc.analyser.parser.languages;
 
+import java.util.EnumMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -8,7 +9,7 @@ import java.util.Map;
  */
 public class LanguageHelperFactory {
 
-    static private final Map<LanguageEnum, ILanguageHelper> instances = new HashMap<>();
+    static private final Map<LanguageEnum, ILanguageHelper> instances = new EnumMap<>(LanguageEnum.class);
 
     /**
      * Returns the instance of ILanguageHelper for the specified language.
@@ -17,7 +18,7 @@ public class LanguageHelperFactory {
      * @return the instance of ILanguageHelper for the specified language
      */
     static public ILanguageHelper get(LanguageEnum language) {
-        if (!instances.containsKey(language)) instances.put(language, getInstance(language));
+        if (!instances.containsKey(language)) instances.put(language, new LanguageHelper(language));
         return instances.get(language);
     }
 
@@ -32,16 +33,4 @@ public class LanguageHelperFactory {
         return get(LanguageEnum.getByExtension(extension));
     }
 
-    /**
-     * Returns the instance of ILanguageHelper for the specified language.
-     * @param language the language enum representing the language to from
-     * @return the instance of ILanguageHelper for the specified language
-     */
-    static private ILanguageHelper getInstance(LanguageEnum language) {
-
-        return switch (language) {
-            case HTML -> null;
-        };
-
-    }
 }
