@@ -1,4 +1,4 @@
-package org.premsc.analyser.parser.queries;
+package org.premsc.analyser.parser.queries.builder;
 
 
 public class QueryBuilderWildcard<This extends QueryBuilderWildcard<This>> extends QueryBuilderSimpleAbs<This> {

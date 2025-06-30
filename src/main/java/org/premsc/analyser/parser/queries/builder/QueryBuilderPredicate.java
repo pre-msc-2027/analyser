@@ -1,6 +1,8 @@
-package org.premsc.analyser.parser.queries;
+package org.premsc.analyser.parser.queries.builder;
 
-
+/**
+ * Abstract class representing a query builder predicate.
+ */
 class QueryBuilderPredicate<This extends QueryBuilderPredicate<This>> extends QueryBuilderAbs<This> {
 
     private final String operator;

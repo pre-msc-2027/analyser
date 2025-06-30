@@ -1,4 +1,4 @@
-package org.premsc.analyser.parser.queries;
+package org.premsc.analyser.parser.queries.builder;
 
 /**
  * Abstract class representing a simple query builder node.
