@@ -8,16 +8,36 @@ import org.premsc.analyser.parser.tree.TreeHelperAbs;
 
 import java.util.List;
 
+/**
+ * CasingRule is a rule that checks if the casing of tag names in a tree structure matches a specified casing.
+ * It extends RuleAbs and implements the test method to return nodes that do not match the specified casing.
+ */
 public class CasingRule extends RuleAbs {
 
+    /**
+     * Constructor for CasingRule.
+     * @param data A JsonObject containing the rule data.
+     */
     public CasingRule(JsonObject data) {
         super(data);
     }
 
+    /**
+     * Returns the casing type specified in the rule parameters.
+     * The casing is expected to be one of the values defined in the Casing enum.
+     *
+     * @return The Casing enum value corresponding to the "casing" parameter.
+     */
     public Casing getCasing() {
         return Casing.valueOf(this.getParameter("casing"));
     }
 
+    /**
+     * Constructs a query to find elements in the tree that do not match the specified casing.
+     * The query looks for both start and end tags with the tag name "target" and checks if they do not match the specified casing.
+     *
+     * @return A QueryBuilder object representing the query.
+     */
     protected QueryBuilder<?> getQuery() {
         return QueryBuilder
                 .of("element")
