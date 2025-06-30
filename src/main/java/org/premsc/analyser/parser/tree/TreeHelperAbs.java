@@ -39,12 +39,7 @@ public abstract class TreeHelperAbs implements ITreeHelper {
         return this.source;
     }
 
-    /**
-     * Executes a query on the parse tree using a QueryBuilder and returns the matches.
-     *
-     * @param queryBuilder the QueryBuilder to build the query
-     * @return a list of Node objects representing the matches found
-     */
+    @Override
     public QueryHelper query(QueryBuilder<?> queryBuilder) {
         return new QueryHelper(this, queryBuilder.build());
     }
