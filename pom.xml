@@ -33,7 +33,12 @@
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
-			<version>2.13.1</version> <!-- check latest version -->
+			<version>2.13.1</version>
+		</dependency>
+		<dependency>
+			<groupId>org.eclipse.jgit</groupId>
+			<artifactId>org.eclipse.jgit</artifactId>
+			<version>7.3.0.202506031305-r</version>
 		</dependency>
 	</dependencies>
 
@@ -46,7 +51,8 @@
 				<configuration>
 					<source>22</source>
 					<target>22</target>
-				</configuration>
+                    <compilerArgs>--enable-preview</compilerArgs>
+                </configuration>
 			</plugin>
 		</plugins>
 	</build>

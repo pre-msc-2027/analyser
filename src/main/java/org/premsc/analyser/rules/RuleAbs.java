@@ -3,6 +3,7 @@ package org.premsc.analyser.rules;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import io.github.treesitter.jtreesitter.Node;
+import org.premsc.analyser.Utils;
 import org.premsc.analyser.parser.languages.LanguageEnum;
 import org.premsc.analyser.parser.tree.TreeHelperAbs;
 
@@ -17,8 +18,6 @@ import java.util.stream.Stream;
  */
 public abstract class RuleAbs implements IRule {
 
-    private static final Function<Map.Entry<String, JsonElement>, String> ParamMapper = (Map.Entry<String, JsonElement> entry) -> entry.getValue().getAsString();
-
     private final int id;
     private final String[] tags;
     private final LanguageEnum language;
@@ -32,8 +31,8 @@ public abstract class RuleAbs implements IRule {
         this(
                 data.get("id").getAsInt(),
                 LanguageEnum.valueOf(data.get("language").getAsString()),
-                data.get("tags").getAsJsonArray().asList().stream().map(JsonElement::getAsString).toArray(String[]::new),
-                data.get("parameters").getAsJsonObject().entrySet().stream().collect(Collectors.toMap(Map.Entry::getKey, ParamMapper))
+                Utils.JsonArrayMapper(data.get("tags"), JsonElement::getAsString, String[]::new),
+                Utils.JsonObjectMapper(data.get("parameters"), JsonElement::getAsString)
         );
     }
 

@@ -17,6 +17,9 @@ public class AnalyserApplication {
 	private final int id;
 
 	private final Api api = new Api(this);
+	private final Repository repository = new Repository(this);
+	private final Ruleset ruleset = new Ruleset(this);
+	private Config config;
 
 	private AnalyserApplication(int id) {
 		this.id = id;
@@ -30,8 +33,12 @@ public class AnalyserApplication {
 		return this.api;
 	}
 
+	public Config getConfig() {
+		return this.config;
 	}
 
+	public Repository getRepository() {
+		return this.repository;
 	}
 
 	private void start() {
@@ -42,9 +49,33 @@ public class AnalyserApplication {
 	}
 
 	private void init() {
+		this.config = Config.fromJson(this.api.get("configuration"));
+		this.repository.init();
+		this.ruleset.init();
 	}
 
 	private void run() {
+
+		List<Warning> warnings = new ArrayList<>();
+
+		this.repository.stream().forEach(source -> {
+
+			try(ITreeHelper treeHelper = TreeHelperFactory.from(source)) {
+
+				this.ruleset
+						.stream()
+						.filter(new IRule.LanguagePredicate(source.getLanguageHelper().getLanguage()))
+						.flatMap(rule -> rule.test(treeHelper))
+						.forEach(warnings::add);
+
+			} catch (Exception e) {
+                throw new RuntimeException(e);
+            }
+
+		});
+
+		System.out.println(warnings);
+
 	}
 
 	public static void main(String[] args) {

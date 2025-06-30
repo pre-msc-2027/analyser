@@ -1,12 +1,11 @@
 package org.premsc.analyser.rules;
 
-import io.github.treesitter.jtreesitter.Language;
-import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.languages.LanguageEnum;
-import org.premsc.analyser.parser.tree.TreeHelperAbs;
+import org.premsc.analyser.parser.tree.ITreeHelper;
 
-import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
+import java.util.stream.Stream;
 
 /**
  * Interface for defining rules in the analysis.
@@ -48,8 +47,23 @@ public interface IRule {
 
     /**
      * Tests the rule against a tree structure using the provided TreeHelper.
+     *
      * @param treeHelper The TreeHelper instance to use for testing the rule.
      * @return A list of Node objects that match the rule criteria.
      */
-    List<Node> test(TreeHelperAbs treeHelper);
+    Stream<Warning> test(ITreeHelper treeHelper);
+
+    class LanguagePredicate implements Predicate<IRule> {
+
+        private final LanguageEnum language;
+
+        public LanguagePredicate(LanguageEnum language) {
+            this.language = language;
+        }
+        @Override
+        public boolean test(IRule rule) {
+            return rule.getLanguage() == this.language;
+        }
+    }
+
 }

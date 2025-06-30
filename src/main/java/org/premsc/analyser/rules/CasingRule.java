@@ -4,15 +4,16 @@ import com.google.gson.JsonObject;
 import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
-import org.premsc.analyser.parser.tree.TreeHelperAbs;
+import org.premsc.analyser.parser.tree.ITreeHelper;
 
 import java.util.List;
+import java.util.stream.Stream;
 
 /**
  * CasingRule is a rule that checks if the casing of tag names in a tree structure matches a specified casing.
  * It extends RuleAbs and implements the test method to return nodes that do not match the specified casing.
  */
-public class CasingRule extends RuleAbs {
+public class CasingRule extends QueryRuleAbs {
 
     /**
      * Constructor for CasingRule.
@@ -51,11 +52,4 @@ public class CasingRule extends RuleAbs {
                 ).notMatch("target", this.getCasing().getRegex());
     }
 
-    @Override
-    public List<Node> test(TreeHelperAbs treeHelper) {
-        QueryHelper queryHelper = treeHelper.query(this.getQuery());
-        List<Node> nodes = queryHelper.streamNodes().toList();
-        queryHelper.close();
-        return nodes;
-    }
 }
