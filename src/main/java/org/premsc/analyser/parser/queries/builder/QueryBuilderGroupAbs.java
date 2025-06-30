@@ -1,4 +1,4 @@
-package org.premsc.analyser.parser.queries;
+package org.premsc.analyser.parser.queries.builder;
 
 /**
  * Abstract class for query builder groups, providing common functionality for building query groups.
@@ -19,6 +19,20 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
     }
 
     /**
+     * Creates a new QueryBuilderGroupAbs instance with the specified open and close characters.
+     * @param open the character that opens the group
+     * @param close the character that closes the group
+     */
+    public QueryBuilderGroupAbs(Character open, Character close, QueryBuilderAbs<?>[] nodes) {
+        this.open = open;
+        this.close = close;
+
+        for (QueryBuilderAbs<?> node : nodes) {
+            this.addChild(node);
+        }
+    }
+
+    /**
      * Creates a new QueryBuilderGroupAbs instance with the specified open, close characters, and capture name.
      * @param open the character that opens the group
      * @param close the character that closes the group
@@ -28,6 +42,21 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
         super(capture);
         this.open = open;
         this.close = close;
+    }
+    /**
+     * Creates a new QueryBuilderGroupAbs instance with the specified open, close characters, and capture name.
+     * @param open the character that opens the group
+     * @param close the character that closes the group
+     * @param capture the capture name for the query node
+     */
+    public QueryBuilderGroupAbs(Character open, Character close, String capture, QueryBuilderAbs<?>[] nodes) {
+        super(capture);
+        this.open = open;
+        this.close = close;
+
+        for (QueryBuilderAbs<?> node : nodes) {
+            this.addChild(node);
+        }
     }
 
     @Override

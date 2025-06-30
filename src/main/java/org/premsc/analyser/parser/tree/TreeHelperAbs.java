@@ -1,9 +1,9 @@
 package org.premsc.analyser.parser.tree;
 
 import io.github.treesitter.jtreesitter.*;
+import org.premsc.analyser.parser.queries.QueryHelper;
+import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.repository.Source;
-
-import java.util.List;
 
 /**
  * Abstract class for tree helper implementations.
@@ -34,24 +34,19 @@ public abstract class TreeHelperAbs implements ITreeHelper {
         return this.tsTree.getRootNode();
     }
 
+    @Override
+    public Source getSource() {
+        return this.source;
+    }
+
     /**
-     * Executes a query on the parse tree and returns the matches.
+     * Executes a query on the parse tree using a QueryBuilder and returns the matches.
      *
-     * @param queryString the query string to be executed
-     * @return a list of QueryMatch objects representing the matches found
+     * @param queryBuilder the QueryBuilder to build the query
+     * @return a list of Node objects representing the matches found
      */
-    public List<QueryMatch> query(String queryString) {
-
-        Query query = new Query(this.source.getLanguageHelper().getTsLanguage(), queryString);
-        QueryCursor cursor = new QueryCursor(query);
-
-        List<QueryMatch> matches = cursor.findMatches(this.getRoot()).toList();
-
-        query.close();
-        cursor.close();
-
-        return matches;
-
+    public QueryHelper query(QueryBuilder<?> queryBuilder) {
+        return new QueryHelper(this, queryBuilder.build());
     }
 
     @Override
@@ -59,4 +54,5 @@ public abstract class TreeHelperAbs implements ITreeHelper {
         tsTree.close();
         tsParser.close();
     }
+
 }

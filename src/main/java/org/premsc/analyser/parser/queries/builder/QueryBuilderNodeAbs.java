@@ -1,4 +1,4 @@
-package org.premsc.analyser.parser.queries;
+package org.premsc.analyser.parser.queries.builder;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,18 +77,8 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param node The child node to add.
      * @return This QueryBuilder instance for method chaining.
      */
-    public This addChild(QueryBuilderAbs<?> node) {
+    public <Q extends QueryBuilderAbs<?>> This addChild(Q node) {
         this.nodes.add(node);
-        return self;
-    }
-
-    /**
-     * Adds multiple child nodes to this QueryBuilderNode.
-     * @param nodes The child nodes to add.
-     * @return This QueryBuilder instance for method chaining.
-     */
-    public This addChildren(QueryBuilderAbs<?>... nodes) {
-        this.nodes.addAll(List.of(nodes));
         return self;
     }
 
@@ -125,8 +115,9 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param nodes The nodes to add to the group.
      * @return This QueryBuilder instance for method chaining.
      */
-    public This addGroup(QueryBuilderAbs<?>... nodes) {
-        return this.addGroup(new QueryBuilderGroup(), nodes);
+    @SafeVarargs
+    public final <Q extends QueryBuilderAbs<?>> This addGroup(Q... nodes) {
+        return this.addChild(new QueryBuilderGroup(nodes));
     }
 
     /**
@@ -135,8 +126,9 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param nodes The nodes to add to the group.
      * @return This QueryBuilder instance for method chaining.
      */
-    public This addGroup(String capture, QueryBuilderAbs<?>... nodes) {
-        return this.addGroup(new QueryBuilderGroup(capture), nodes);
+    @SafeVarargs
+    public final <Q extends QueryBuilderAbs<?>> This addGroup(String capture, Q... nodes) {
+        return this.addChild(new QueryBuilderGroup(capture, nodes));
     }
 
     /**
@@ -144,8 +136,9 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param nodes The nodes to add to the alternation group.
      * @return This QueryBuilder instance for method chaining.
      */
-    public This addAlternation(QueryBuilderAbs<?>... nodes) {
-        return this.addGroup(new QueryBuilderAlternation(), nodes);
+    @SafeVarargs
+    public final <Q extends QueryBuilderAbs<?>> This addAlternation(Q... nodes) {
+        return this.addChild(new QueryBuilderAlternation(nodes));
     }
 
     /**
@@ -154,21 +147,20 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param nodes The nodes to add to the alternation group.
      * @return This QueryBuilder instance for method chaining.
      */
-    public This addAlternation(String capture, QueryBuilderAbs<?>... nodes) {
-        return this.addGroup(new QueryBuilderAlternation(capture), nodes);
+    @SafeVarargs
+    public final <Q extends QueryBuilderAbs<?>> This addAlternation(String capture, Q... nodes) {
+        return this.addChild(new QueryBuilderAlternation(capture, nodes));
     }
 
     /**
-     * Adds a group to this QueryBuilderNode with the specified group and nodes.
-     * @param group The group to add to this QueryBuilderNode.
-     * @param nodes The nodes to add to the group.
+     * Adds multiple child nodes to this QueryBuilderNode.
+     * @param nodes The child nodes to add.
      * @return This QueryBuilder instance for method chaining.
      */
-    protected This addGroup(QueryBuilderGroupAbs<?> group, QueryBuilderAbs<?>... nodes) {
-        for (QueryBuilderAbs<?> node : nodes) {
-            group.addChild(node);
-        }
-        return this.addChild(group);
+    @SafeVarargs
+    public final <Q extends QueryBuilderAbs<?>> This addChildren(Q... nodes) {
+        this.nodes.addAll(List.of(nodes));
+        return self;
     }
 
     /**
@@ -203,7 +195,7 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param regex The regular expression to not match.
      * @return This QueryBuilder instance for method chaining.
      */
-    protected This notMatch(String regex) {
+    public This notMatch(String regex) {
         return this.addValuePredicate("not-match", regex);
     }
 
@@ -212,7 +204,7 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param capture The capture name to compare with.
      * @return This QueryBuilder instance for method chaining.
      */
-    protected This equalOther(String capture) {
+    public This equalOther(String capture) {
         return this.addComparePredicate("eq", capture);
     }
 
@@ -221,7 +213,7 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param capture The capture name to compare with.
      * @return This QueryBuilder instance for method chaining.
      */
-    protected This notEqualOther(String capture) {
+    public This notEqualOther(String capture) {
         return this.addComparePredicate("not-eq", capture);
     }
 
@@ -253,7 +245,18 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      */
     protected This addPredicate(String operator, String target) {
         if (this.capture.isEmpty()) throw new RuntimeException("Missing capture for predicate");
-        this.predicates.add(new QueryBuilderPredicate<>(operator, this.capture, target));
+        return this.addPredicate(this.capture, operator, target);
+    }
+
+    /**
+     * Adds a predicate to this QueryBuilder with the specified capture, operator, and target.
+     * @param capture The capture name to use for the predicate.
+     * @param operator The operator to use for the predicate (e.g., "eq", "not-eq").
+     * @param target The target value or capture for the predicate.
+     * @return This QueryBuilder instance for method chaining.
+     */
+    protected This addPredicate(String capture, String operator, String target) {
+        this.predicates.add(new QueryBuilderPredicate<>(operator, capture, target));
         return self;
     }
 
@@ -306,7 +309,7 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
 
         if (this.capture.isEmpty()) return;
 
-        builder.append("@")
+        builder.append(" @")
                 .append(this.capture);
     }
 
