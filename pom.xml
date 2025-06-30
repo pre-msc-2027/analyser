@@ -29,6 +29,10 @@
 			<groupId>io.github.tree-sitter</groupId>
 			<artifactId>jtreesitter</artifactId>
 			<version>0.25.1</version>
+		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+			<version>2.13.1</version> <!-- check latest version -->
 		</dependency>
 		<dependency>
 			<groupId>com.google.code.gson</groupId>
