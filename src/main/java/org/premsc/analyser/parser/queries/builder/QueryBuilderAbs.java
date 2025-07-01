@@ -12,6 +12,10 @@ abstract class QueryBuilderAbs<This extends QueryBuilderAbs<This>> {
     @SuppressWarnings("unchecked")
     protected final This self = (This) this;
 
+    /**
+     * Builds the query represented by this QueryBuilderNode.
+     * @param builder The StringBuilder to which the query will be appended.
+     */
     protected abstract void build(StringBuilder builder);
 
     /**

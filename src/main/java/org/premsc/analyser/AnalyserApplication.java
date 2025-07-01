@@ -8,11 +8,9 @@ import org.premsc.analyser.indexer.IndexerManager;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 import org.premsc.analyser.repository.ISource;
 import org.premsc.analyser.repository.Repository;
-import org.premsc.analyser.repository.Source;
 import org.premsc.analyser.rules.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**

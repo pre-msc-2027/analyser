@@ -1,6 +1,8 @@
 package org.premsc.analyser.parser.queries.builder;
 
-
+/**
+ * A query builder for creating anonymous query nodes.
+ */
 public class QueryBuilderAnonymous<This extends QueryBuilderAnonymous<This>> extends QueryBuilderSimpleAbs<This> {
 
     static public QueryBuilderAnonymous<?> of(String value) {

@@ -1,6 +1,9 @@
 package org.premsc.analyser.parser.tree;
 
-import io.github.treesitter.jtreesitter.*;
+import io.github.treesitter.jtreesitter.InputEncoding;
+import io.github.treesitter.jtreesitter.Node;
+import io.github.treesitter.jtreesitter.Parser;
+import io.github.treesitter.jtreesitter.Tree;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.repository.Source;

@@ -142,6 +142,13 @@ public class IndexModel {
         return this.queryMultiple(query);
     }
 
+    /**
+     * Inserts a new index entry into the database.
+     * @param language The language of the index.
+     * @param source   The source of the index.
+     * @param type     The type of the index.
+     * @throws SQLException If there is an error executing the SQL query or if no index is found.
+     */
     public void insert(LanguageEnum language, String source, String type, String value, int line, int startByte, int endByte) throws SQLException {
         try (Statement statement = this.dbHandler.getConnection().createStatement()) {
             statement.executeUpdate(
@@ -153,6 +160,13 @@ public class IndexModel {
         }
     }
 
+    /**
+     * Creates an Index object from a ResultSet.
+     *
+     * @param result The ResultSet containing the index data.
+     * @return An Index object populated with the data from the ResultSet.
+     * @throws SQLException If there is an error retrieving data from the ResultSet.
+     */
     public Index fromResult(ResultSet result) throws SQLException {
         return new Index(this, result);
     }
@@ -182,6 +196,12 @@ public class IndexModel {
             int endByte
     ) {
 
+        /**
+         * Constructor for creating an Index object.
+         * @param model the IndexModel instance managing this index.
+         * @param result the ResultSet containing the index data.
+         * @throws SQLException if there is an error retrieving data from the ResultSet.
+         */
         Index(IndexModel model, ResultSet result) throws SQLException {
             this(model,
                     result.getInt("id"),

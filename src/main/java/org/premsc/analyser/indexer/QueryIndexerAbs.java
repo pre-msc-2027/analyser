@@ -8,8 +8,17 @@ import org.premsc.analyser.parser.tree.ITreeHelper;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Abstract class for indexers that use a query to find nodes in the tree.
+ */
 public abstract class QueryIndexerAbs extends IndexerAbs implements IQueryIndexer {
 
+    /**
+     * Constructor for QueryIndexerAbs.
+     *
+     * @param language the programming language of the code being indexed
+     * @param type the type of indexer
+     */
     protected QueryIndexerAbs(LanguageEnum language, String type) {
         super(language, type);
     }

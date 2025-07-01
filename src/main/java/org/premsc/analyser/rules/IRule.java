@@ -1,11 +1,9 @@
 package org.premsc.analyser.rules;
 
 import org.premsc.analyser.parser.languages.LanguageEnum;
-import org.premsc.analyser.parser.tree.ITreeHelper;
 
 import java.util.Map;
 import java.util.function.Predicate;
-import java.util.stream.Stream;
 
 /**
  * Interface for defining rules in the analysis.
@@ -58,4 +56,10 @@ public interface IRule {
         }
     }
 
+    enum Severity {
+        LOW,
+        MEDIUM,
+        HIGH,
+        CRITICAL;
+    }
 }

@@ -1,5 +1,8 @@
 package org.premsc.analyser.parser.queries.builder;
 
+/**
+ * A query builder for creating groups of query nodes.
+ */
 public class QueryBuilderGroup extends QueryBuilderGroupAbs<QueryBuilderGroup> {
 
     /**

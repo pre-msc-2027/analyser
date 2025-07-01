@@ -1,14 +1,12 @@
 package org.premsc.analyser.rules;
 
-import com.google.gson.JsonObject;
-import org.premsc.analyser.parser.queries.QueryHelper;
-import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Interface representing a query rule in the analysis framework.
+ */
 public interface IQueryRule extends IRule {
 
     /**

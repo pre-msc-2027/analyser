@@ -5,9 +5,11 @@ import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
+/**
+ * IndexerManager is responsible for managing different indexers.
+ */
 public class IndexerManager {
 
     private final IIndexer[] indexers = new IIndexer[] {
@@ -16,16 +18,26 @@ public class IndexerManager {
             new CssClassIndexer(),
     };
 
+    /**
+     * Returns the array of indexers managed by this IndexerManager.
+     * @return an array of IIndexer instances
+     */
     public IIndexer[] getIndexers() {
         return indexers;
     }
 
+    /**
+     * Represents an indexed entry with its value, line number, start byte, and end byte.
+     */
     public record Index(String value, int line, int startByte, int endByte) {
         public static Index[] of(String value, int line, int startByte, int endByte) {
             return new Index[] {new Index(value, line, startByte, endByte)};
         }
     }
 
+    /**
+     * Indexer for HTML link elements with rel="stylesheet".
+     */
     public static class HtmlLinkStylesheetIndexer extends QueryIndexerAbs {
 
 
@@ -58,8 +70,11 @@ public class IndexerManager {
         }
 
     }
-    public static class HtmlClassIndexer extends QueryIndexerAbs {
 
+    /**
+     * Indexer for HTML class attributes.
+     */
+    public static class HtmlClassIndexer extends QueryIndexerAbs {
 
         public HtmlClassIndexer() {
             super(LanguageEnum.HTML, "class");
@@ -79,6 +94,7 @@ public class IndexerManager {
                                             .addChild("attribute_value", "target"))))
                     .equal("attribute.name", "class");
         }
+
         @Override
         public List<Index> index(ITreeHelper treeHelper, String value, int line, int startByte, int endByte) {
 
@@ -94,6 +110,9 @@ public class IndexerManager {
 
     }
 
+    /**
+     * Indexer for CSS class selectors.
+     */
     public static class CssClassIndexer extends QueryIndexerAbs {
 
         public CssClassIndexer() {

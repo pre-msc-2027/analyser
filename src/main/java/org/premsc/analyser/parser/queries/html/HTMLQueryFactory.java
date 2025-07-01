@@ -1,7 +1,7 @@
 package org.premsc.analyser.parser.queries.html;
 
-import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.queries.QueryFactoryAbs;
+import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.rules.Casing;
 
 public class HTMLQueryFactory extends QueryFactoryAbs {

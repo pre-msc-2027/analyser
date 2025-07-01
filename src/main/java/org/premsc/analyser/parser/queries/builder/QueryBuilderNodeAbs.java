@@ -39,35 +39,72 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
         return self;
     }
 
+    /**
+     * Adds an optional quantifier to this QueryBuilderNode.
+     * @return This QueryBuilder instance for method chaining.
+     */
     public This optional() {
         return this.quantify("?");
     }
 
+    /**
+     * Adds a quantifier that indicates this QueryBuilderNode can appear one or more times.
+     * @return This QueryBuilder instance for method chaining.
+     */
     public This oneOrMore() {
         return this.quantify("+");
     }
 
+    /**
+     * Adds a quantifier that indicates this QueryBuilderNode can appear zero or more times.
+     * @return This QueryBuilder instance for method chaining.
+     */
     public This zeroOrMore() {
         return this.quantify("*");
     }
 
+    /**
+     * Adds a quantifier to this QueryBuilderNode.
+     * @param quantity The quantifier to set (e.g., "?", "+", "*").
+     * @return This QueryBuilder instance for method chaining.
+     */
     protected This quantify(String quantity) {
         this.quantity = quantity;
         return self;
     }
 
+    /**
+     * Adds an anchor to this QueryBuilderNode.
+     * An anchor is a special node that can be used to mark the start or end of a query.
+     * @return This QueryBuilder instance for method chaining.
+     */
     public This addAnchor() {
         return this.addChild(new QueryBuilderAnchor<>());
     }
 
+    /**
+     * Adds a wildcard node to this QueryBuilderNode.
+     * A wildcard can match any sequence of characters.
+     * @return This QueryBuilder instance for method chaining.
+     */
     public This addWildcard() {
         return this.addWildcard(false);
     }
 
+    /**
+     * Adds a named wildcard node to this QueryBuilderNode.
+     * A named wildcard can match any sequence of characters and is identified by a name.
+     * @return This QueryBuilder instance for method chaining.
+     */
     public This addNamedWildcard() {
         return this.addWildcard(true);
     }
 
+    /**
+     * Adds a wildcard node to this QueryBuilderNode, optionally named.
+     * @param named If true, the wildcard will be named; otherwise, it will be anonymous.
+     * @return This QueryBuilder instance for method chaining.
+     */
     protected This addWildcard(boolean named) {
         return this.addChild(new QueryBuilderWildcard<>(named));
     }
