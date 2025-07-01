@@ -40,6 +40,11 @@
 			<artifactId>org.eclipse.jgit</artifactId>
 			<version>7.3.0.202506031305-r</version>
 		</dependency>
+		<dependency>
+			<groupId>org.xerial</groupId>
+			<artifactId>sqlite-jdbc</artifactId>
+			<version>3.50.1.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>
@@ -51,7 +56,6 @@
 				<configuration>
 					<source>22</source>
 					<target>22</target>
-                    <compilerArgs>--enable-preview</compilerArgs>
                 </configuration>
 			</plugin>
 		</plugins>

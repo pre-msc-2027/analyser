@@ -1,37 +1,24 @@
 package org.premsc.analyser.rules;
 
 import io.github.treesitter.jtreesitter.Node;
+import org.apache.commons.codec.language.bm.Rule;
+import org.premsc.analyser.db.IndexModel;
+import org.premsc.analyser.repository.ISource;
 import org.premsc.analyser.repository.Source;
 
-public class Warning {
+public record Warning(
+        IRule rule,
+        ISource source,
+        int line,
+        int startByte,
+        int endByte
+){
 
-    private final Source source;
-    private final int from;
-    private final int to;
-
-    public Warning(Source source, int from, int to) {
-        this.source = source;
-        this.from = from;
-        this.to = to;
+    public Warning(IRule rule, ISource source, Node node) {
+        this(rule, source, node.getStartPoint().row(), node.getStartByte(), node.getEndByte());
     }
 
-    public Warning(Source source, Node from) {
-        this(source, from.getStartByte(), from.getEndByte());
+    public Warning(IRule rule, ISource source, IndexModel.Index index) {
+        this(rule, source, index.line(), index.startByte(), index.endByte());
     }
-
-    public Source getSource() {
-        return source;
-    }
-
-    public int getFrom() {
-        return from;
-    }
-
-    public int getTo() {
-        return to;
-    }
-
-
-
-
 }

@@ -1,0 +1,200 @@
+package org.premsc.analyser.db;
+
+import org.premsc.analyser.parser.languages.LanguageEnum;
+
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Optional;
+
+/**
+ * IndexModel is responsible for managing index entries in the database.
+ */
+public class IndexModel {
+
+    private final DatabaseHandler dbHandler;
+
+    /**
+     * Constructor for IndexModel.
+     *
+     * @param dbHandler The DatabaseHandler instance to interact with the database.
+     */
+    public IndexModel(DatabaseHandler dbHandler) {
+        this.dbHandler = dbHandler;
+    }
+
+    /**
+     * Returns the DatabaseHandler associated with this IndexModel.
+     *
+     * @return The DatabaseHandler instance.
+     */
+    public DatabaseHandler getHandler() {
+        return this.dbHandler;
+    }
+
+    /**
+     * Queries the database for a single index entry based on the provided SQL query.
+     *
+     * @param query The SQL query to execute.
+     * @return An Optional containing the Index if found, or empty if not found.
+     * @throws SQLException If there is an error executing the SQL query.
+     */
+    private Optional<Index> queryOne(String query) throws SQLException {
+        try (Statement statement = this.dbHandler.getConnection().createStatement()) {
+            ResultSet result = statement.executeQuery(query);
+            if (!result.next()) return Optional.empty();
+            return Optional.of(new Index(this, result));
+        }
+    }
+
+    /**
+     * Queries the database for multiple index entries based on the provided SQL query.
+     *
+     * @param query The SQL query to execute.
+     * @return An array of Index objects containing the results.
+     * @throws SQLException If there is an error executing the SQL query.
+     */
+    private Index[] queryMultiple(String query) throws SQLException {
+
+        List<Index> results = new ArrayList<>();
+
+        try (Statement statement = this.dbHandler.getConnection().createStatement()) {
+            ResultSet result = statement.executeQuery(query);
+            while (result.next()) {
+                results.add(new Index(this, result));
+            }
+        }
+
+        return results.toArray(Index[]::new);
+    }
+
+    /**
+     * Retrieves an Index by its ID.
+     *
+     * @param id The ID of the index to retrieve.
+     * @return The Index object corresponding to the given ID.
+     * @throws SQLException If the index with the specified ID is not found or if there is an error executing the query.
+     */
+    public Index getWithId(int id) throws SQLException {
+        Optional<Index> result = this.queryOne("SELECT * FROM index_table WHERE id = " + id);
+        if (result.isEmpty()) throw new SQLException("Index with id " + id + " not found.");
+        return result.get();
+    }
+
+    /**
+     * Retrieves an Index based on the specified language, source, type, and value.
+     *
+     * @param language The language of the index.
+     * @param source   The source of the index.
+     * @param type     The type of the index.
+     * @param value    The value of the index.
+     * @return An array of Index objects that match the specified criteria.
+     * @throws SQLException If there is an error executing the SQL query or if no index is found.
+     */
+    public Index[] getWithType(LanguageEnum language, String source, String type, String value) throws SQLException {
+        String query = "SELECT * FROM index_table WHERE source = '%s' AND type = '%s' AND value = '%s'".formatted(source, type, value);
+        return this.queryMultiple(query);
+    }
+
+    /**
+     * Retrieves an Index based on the specified language, source, type, and value.
+     *
+     * @param language The language of the index.
+     * @param source   The source of the index.
+     * @param type     The type of the index.
+     * @return An array of Index objects that match the specified criteria.
+     * @throws SQLException If there is an error executing the SQL query or if no index is found.
+     */
+    public Index[] getWithValue(LanguageEnum language, String source, String type, String value) throws SQLException {
+        String query = "SELECT * FROM index_table WHERE source = '%s' AND language = '%s' AND type = '%s' AND value = '%s'".formatted(language, source, type, value);
+        return this.queryMultiple(query);
+    }
+
+    /**
+     * Retrieves an Index based on the specified language, type, and value.
+     *
+     * @param language The language of the index.
+     * @param type     The type of the index.
+     * @param value    The value of the index.
+     * @return An array of Index objects that match the specified criteria.
+     * @throws SQLException If there is an error executing the SQL query or if no index is found.
+     */
+    public Index[] getWithValue(LanguageEnum language, String type, String value) throws SQLException {
+
+        String query = "SELECT * FROM index_table WHERE language = '%s' AND type = '%s' AND value = '%s'".formatted(language, type, value);
+
+        return this.queryMultiple(query);
+    }
+
+    /**
+     * Retrieves an Index based on the specified source, type, and value.
+     *
+     * @param source the source of the index.
+     * @param type   the type of the index.
+     * @param value  the value of the index.
+     * @return an array of Index objects that match the specified criteria.
+     * @throws SQLException if there is an error executing the SQL query or if no index is found.
+     */
+    public Index[] getWithValue(String source, String type, String value) throws SQLException {
+        String query = "SELECT * FROM index_table WHERE source = '%s' AND type = '%s' AND value = '%s'".formatted(source, type, value);
+        return this.queryMultiple(query);
+    }
+
+    public void insert(LanguageEnum language, String source, String type, String value, int line, int startByte, int endByte) throws SQLException {
+        try (Statement statement = this.dbHandler.getConnection().createStatement()) {
+            statement.executeUpdate(
+                    """
+                    INSERT INTO index_table (language, source, type, value, line, startByte, endByte)
+                    VALUES ('%s', '%s', '%s', '%s', %d, %d, %d)
+                    """.formatted(language, source, type, value, line, startByte, endByte)
+            );
+        }
+    }
+
+    public Index fromResult(ResultSet result) throws SQLException {
+        return new Index(this, result);
+    }
+
+    /**
+     * Represents an index entry in the database.
+     *
+     * @param model     the IndexModel instance managing this index.
+     * @param id        the unique identifier for the index entry.
+     * @param language  the language of the index entry.
+     * @param source    the source file of the index entry.
+     * @param type      the type of the index entry (e.g., class, method).
+     * @param value     the value of the index entry (e.g., class name, method name).
+     * @param line      the line number in the source file where the index entry is located.
+     * @param startByte the starting position of the index entry in the source file.
+     * @param endByte   the ending position of the index entry in the source file.
+     */
+    public record Index(
+            IndexModel model,
+            int id,
+            LanguageEnum language,
+            String source,
+            String type,
+            String value,
+            int line,
+            int startByte,
+            int endByte
+    ) {
+
+        Index(IndexModel model, ResultSet result) throws SQLException {
+            this(model,
+                    result.getInt("id"),
+                    LanguageEnum.valueOf(result.getString("language")),
+                    result.getString("source"),
+                    result.getString("type"),
+                    result.getString("value"),
+                    result.getInt("line"),
+                    result.getInt("startByte"),
+                    result.getInt("endByte")
+            );
+        }
+
+    }
+
+}

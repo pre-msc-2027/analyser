@@ -2,16 +2,10 @@ package org.premsc.analyser.rules;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
-import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.Utils;
 import org.premsc.analyser.parser.languages.LanguageEnum;
-import org.premsc.analyser.parser.tree.TreeHelperAbs;
 
-import java.util.List;
 import java.util.Map;
-import java.util.function.Function;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * Abstract base class for rules in the analysis.
@@ -30,7 +24,7 @@ public abstract class RuleAbs implements IRule {
     public RuleAbs(JsonObject data) {
         this(
                 data.get("id").getAsInt(),
-                LanguageEnum.valueOf(data.get("language").getAsString()),
+                LanguageEnum.valueOf(data.get("language").getAsString().toUpperCase()),
                 Utils.JsonArrayMapper(data.get("tags"), JsonElement::getAsString, String[]::new),
                 Utils.JsonObjectMapper(data.get("parameters"), JsonElement::getAsString)
         );

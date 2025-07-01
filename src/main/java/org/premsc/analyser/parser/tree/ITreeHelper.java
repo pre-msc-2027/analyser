@@ -30,4 +30,5 @@ public interface ITreeHelper extends AutoCloseable {
      * @return a list of Node objects representing the matches found
      */
     QueryHelper query(QueryBuilder<?> queryBuilder);
+
 }

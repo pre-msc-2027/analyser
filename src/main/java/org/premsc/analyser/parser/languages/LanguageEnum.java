@@ -7,7 +7,7 @@ package org.premsc.analyser.parser.languages;
 public enum LanguageEnum {
 
     HTML("html", "tree-sitter-html", "html"),
-    //CSS,
+    CSS("css", "tree-sitter-css", "css"),
     //JAVASCRIPT,
     //TYPESCRIPT
     ;
@@ -73,7 +73,7 @@ public enum LanguageEnum {
      * @return the formatted library name
      */
     public String getLibraryName() {
-        return "libs/%s/%s".formatted(this.dll, this.dll);
+        return "libs/" + this.dll;
     }
 
     /**

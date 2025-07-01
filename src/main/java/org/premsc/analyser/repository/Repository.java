@@ -5,9 +5,9 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.premsc.analyser.AnalyserApplication;
+import org.premsc.analyser.Visualizer;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.nio.file.FileVisitResult;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +15,8 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 /**
@@ -27,7 +29,7 @@ public class Repository {
     private static String PATH = "folders";
 
     private final AnalyserApplication app;
-    private final List<Source> sources = new ArrayList<>();
+    private final List<ISource> sources = new ArrayList<>();
 
     /**
      * Constructor for the Repository class.
@@ -50,10 +52,23 @@ public class Repository {
      *
      * @return a stream of sources in the repository
      */
-    public Stream<Source> stream() {
+    public Stream<ISource> stream() {
         return sources.stream();
     }
 
+    /**
+     * Lists all sources in the repository.
+     *
+     * @return a list of sources in the repository
+     */
+    public List<ISource> list() {
+        return this.sources;
+    }
+
+    /**
+     * Initializes the repository by cloning the git repository and reading its contents.
+     * This method is typically called at the start of the application to set up the repository.
+     */
     public void init() {
 
         this.gitClone();
@@ -68,7 +83,9 @@ public class Repository {
      */
     private void gitClone() {
 
-        String access_token = this.app.getApi().get("token").getAsString();
+        if (this.app.getId() == 0) return;
+
+        String access_token = this.app.getApi().get("token").getAsJsonObject().get("token").getAsString();
         String url = this.app.getConfig().repoUrl();
         String branch = this.app.getConfig().branch();
         String commit = this.app.getConfig().commit();
@@ -102,6 +119,13 @@ public class Repository {
      * Reads the files from the repository.
      */
     private void read() {
+
+        if (this.app.getId() == 0) {
+            this.sources.add(new MockSource("index.html"));
+            this.sources.add(new MockSource("style.css"));
+            return;
+        }
+
         try {
             Files.walkFileTree(this.getPath(), new FileVisitor(this.sources));
         } catch (IOException e) {
@@ -114,23 +138,20 @@ public class Repository {
      */
     static class FileVisitor extends SimpleFileVisitor<Path> {
 
-        private final List<Source> sources;
+        private final List<ISource> sources;
 
         /**
          * Constructor for the FileVisitor class.
          *
          * @param sources the list of sources to populate
          */
-        public FileVisitor(List<Source> sources) {
+        public FileVisitor(List<ISource> sources) {
             this.sources = sources;
         }
 
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
-            if (Source.isSupported(file)) {
-                this.sources.add(new Source(file.toString()) {
-                });
-            }
+            if (ISource.isSupported(file)) this.sources.add(new Source(file.toString()));
             return FileVisitResult.CONTINUE;
         }
 
@@ -139,6 +160,5 @@ public class Repository {
             return FileVisitResult.CONTINUE;
         }
     }
-
 
 }

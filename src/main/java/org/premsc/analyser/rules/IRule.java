@@ -45,14 +45,6 @@ public interface IRule {
      */
     boolean hasTag(String tag);
 
-    /**
-     * Tests the rule against a tree structure using the provided TreeHelper.
-     *
-     * @param treeHelper The TreeHelper instance to use for testing the rule.
-     * @return A list of Node objects that match the rule criteria.
-     */
-    Stream<Warning> test(ITreeHelper treeHelper);
-
     class LanguagePredicate implements Predicate<IRule> {
 
         private final LanguageEnum language;
