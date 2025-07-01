@@ -1,6 +1,8 @@
 package org.premsc.analyser.db;
 
 import org.premsc.analyser.parser.languages.LanguageEnum;
+import org.premsc.analyser.repository.ISource;
+import org.premsc.analyser.repository.Source;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -86,15 +88,13 @@ public class IndexModel {
     /**
      * Retrieves an Index based on the specified language, source, type, and value.
      *
-     * @param language The language of the index.
      * @param source   The source of the index.
      * @param type     The type of the index.
-     * @param value    The value of the index.
      * @return An array of Index objects that match the specified criteria.
      * @throws SQLException If there is an error executing the SQL query or if no index is found.
      */
-    public Index[] getWithType(LanguageEnum language, String source, String type, String value) throws SQLException {
-        String query = "SELECT * FROM index_table WHERE source = '%s' AND type = '%s' AND value = '%s'".formatted(source, type, value);
+    public Index[] getWithType(ISource source, String type) throws SQLException {
+        String query = "SELECT * FROM index_table WHERE language = '%s' AND source = '%s' AND type = '%s'".formatted(source.getLanguage(), source.getFilepath(), type);
         return this.queryMultiple(query);
     }
 
@@ -107,8 +107,8 @@ public class IndexModel {
      * @return An array of Index objects that match the specified criteria.
      * @throws SQLException If there is an error executing the SQL query or if no index is found.
      */
-    public Index[] getWithValue(LanguageEnum language, String source, String type, String value) throws SQLException {
-        String query = "SELECT * FROM index_table WHERE source = '%s' AND language = '%s' AND type = '%s' AND value = '%s'".formatted(language, source, type, value);
+    public Index[] getWithValue(LanguageEnum language, ISource source, String type, String value) throws SQLException {
+        String query = "SELECT * FROM index_table WHERE source = '%s' AND language = '%s' AND type = '%s' AND value = '%s'".formatted(language, source.getFilepath(), type, value);
         return this.queryMultiple(query);
     }
 
@@ -137,25 +137,24 @@ public class IndexModel {
      * @return an array of Index objects that match the specified criteria.
      * @throws SQLException if there is an error executing the SQL query or if no index is found.
      */
-    public Index[] getWithValue(String source, String type, String value) throws SQLException {
-        String query = "SELECT * FROM index_table WHERE source = '%s' AND type = '%s' AND value = '%s'".formatted(source, type, value);
+    public Index[] getWithValue(ISource source, String type, String value) throws SQLException {
+        String query = "SELECT * FROM index_table WHERE source = '%s' AND type = '%s' AND value = '%s'".formatted(source.getFilepath(), type, value);
         return this.queryMultiple(query);
     }
 
     /**
      * Inserts a new index entry into the database.
-     * @param language The language of the index.
      * @param source   The source of the index.
      * @param type     The type of the index.
      * @throws SQLException If there is an error executing the SQL query or if no index is found.
      */
-    public void insert(LanguageEnum language, String source, String type, String value, int line, int startByte, int endByte) throws SQLException {
+    public void insert(ISource source, String type, String value, int line, int startByte, int endByte) throws SQLException {
         try (Statement statement = this.dbHandler.getConnection().createStatement()) {
             statement.executeUpdate(
                     """
                     INSERT INTO index_table (language, source, type, value, line, startByte, endByte)
                     VALUES ('%s', '%s', '%s', '%s', %d, %d, %d)
-                    """.formatted(language, source, type, value, line, startByte, endByte)
+                    """.formatted(source.getLanguage(), source.getFilepath(), type, value, line, startByte, endByte)
             );
         }
     }

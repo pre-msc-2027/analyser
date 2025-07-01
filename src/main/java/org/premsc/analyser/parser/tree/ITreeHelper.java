@@ -3,7 +3,7 @@ package org.premsc.analyser.parser.tree;
 import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
-import org.premsc.analyser.repository.Source;
+import org.premsc.analyser.repository.ISource;
 
 /**
  * Interface for tree helper implementations.
@@ -15,7 +15,7 @@ public interface ITreeHelper extends AutoCloseable {
      * Returns the source associated with this tree helper.
      * @return the source object
      */
-    Source getSource();
+    ISource getSource();
 
     /**
      * Returns the root node of the parse tree.

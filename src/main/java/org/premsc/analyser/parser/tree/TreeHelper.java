@@ -6,6 +6,7 @@ import io.github.treesitter.jtreesitter.Parser;
 import io.github.treesitter.jtreesitter.Tree;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
+import org.premsc.analyser.repository.ISource;
 import org.premsc.analyser.repository.Source;
 
 /**
@@ -14,7 +15,7 @@ import org.premsc.analyser.repository.Source;
  */
 public class TreeHelper implements ITreeHelper {
 
-    protected final Source source;
+    protected final ISource source;
     protected final Parser tsParser;
     protected final Tree tsTree;
 
@@ -24,7 +25,7 @@ public class TreeHelper implements ITreeHelper {
      *
      * @param source the source object containing the content to be parsed
      */
-    public TreeHelper(Source source) {
+    public TreeHelper(ISource source) {
         this.source = source;
 
         this.tsParser = new Parser(source.getLanguageHelper().getTsLanguage());
@@ -38,7 +39,7 @@ public class TreeHelper implements ITreeHelper {
     }
 
     @Override
-    public Source getSource() {
+    public ISource getSource() {
         return this.source;
     }
 

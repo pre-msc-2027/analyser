@@ -2,6 +2,7 @@ package org.premsc.analyser.rules;
 
 import com.google.gson.JsonObject;
 import org.premsc.analyser.db.DatabaseHandler;
+import org.premsc.analyser.db.IndexModel;
 import org.premsc.analyser.repository.ISource;
 
 import java.sql.ResultSet;
@@ -23,57 +24,35 @@ public class ClassExistRule extends IndexRuleAbs {
     }
 
     @Override
-    public List<Warning> test(DatabaseHandler handler, ISource source) {
-
-        List<Warning> warnings = new ArrayList<>();
-
-        String queryImport = """
-                SELECT value FROM index_table
-                WHERE source = '%s' AND language = 'HTML' AND type = 'link_stylesheet';
-                """.formatted(source.getFilepath());
+    public List<Warning> test(DatabaseHandler handler, ISource source) throws SQLException {
 
         List<String> cssSources = new ArrayList<>();
 
-        try (Statement statement = handler.getConnection().createStatement()) {
-            ResultSet result = statement.executeQuery(queryImport);
-            while (result.next()) {
-                cssSources.add("'" + result.getString("value") + "'");
-            }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+        for (IndexModel.Index index: handler.getIndexModel().getWithType(source, "link_stylesheet")) {
+            cssSources.add(index.value());
         }
 
         if (cssSources.isEmpty()) return List.of();
 
-        String cssSourcesInClause = String.join(",", cssSources);
+        String cssSourcesInClause = String.join(",", "'%s'".formatted(cssSources));
 
-        String queryHtml = """
-                SELECT * FROM index_table
-                WHERE source = '%s' AND language = 'HTML' AND type = 'class';
-                """.formatted(source.getFilepath());
+        List<Warning> warnings = new ArrayList<>();
 
-        try (Statement statement = handler.getConnection().createStatement()) {
-            ResultSet result = statement.executeQuery(queryHtml);
-            while (result.next()) {
-                String className = result.getString("value");
+        for (IndexModel.Index index: handler.getIndexModel().getWithType(source, "class")) {
 
-                String queryCss = """
+            String queryCss = """
                         SELECT EXISTS(SELECT 1 FROM index_table
                         WHERE source IN (%s)
                         AND language = 'CSS' AND type = 'class' AND value = '%s');
-                        """.formatted(cssSourcesInClause, className);
+                        """.formatted(cssSourcesInClause, index.value());
 
-                try (Statement cssCheck = handler.getConnection().createStatement()) {
-                    ResultSet rs = cssCheck.executeQuery(queryCss);
-                    if (rs.next() && rs.getInt(1) == 0) {
-                        warnings.add(new Warning(this, source, handler.getIndexModel().fromResult(result)));
-                    }
-                } catch (SQLException e) {
-                    throw new RuntimeException(e);
+            try (Statement cssCheck = handler.getConnection().createStatement()) {
+                ResultSet rs = cssCheck.executeQuery(queryCss);
+                if (rs.next() && rs.getInt(1) == 0) {
+                    warnings.add(new Warning(this, source, index));
                 }
             }
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
+
         }
 
         return warnings;
