@@ -1,7 +1,6 @@
 package org.premsc.analyser.parser.languages;
 
 import java.util.EnumMap;
-import java.util.HashMap;
 import java.util.Map;
 
 /**

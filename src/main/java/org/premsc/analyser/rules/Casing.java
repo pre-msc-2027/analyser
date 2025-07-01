@@ -1,5 +1,8 @@
 package org.premsc.analyser.rules;
 
+/**
+ * Enum representing different casing styles with their corresponding regex patterns.
+ */
 public enum Casing {
 
     LOWER_CASE("lower_case", "^[a-z0-9]+$"),
@@ -18,15 +21,28 @@ public enum Casing {
     private final String name;
     private final String regex;
 
+    /**
+     * Constructs a Casing enum with the specified name and regex pattern.
+     * @param name The name of the casing style.
+     * @param regex The regex pattern associated with the casing style.
+     */
     Casing(String name, String regex) {
         this.name = name;
         this.regex = regex;
     }
 
+    /**
+     * Returns the name of the casing style.
+     * @return The name of the casing style.
+     */
     public String getName() {
         return name;
     }
 
+    /**
+     * Returns the regex pattern associated with the casing style.
+     * @return The regex pattern for the casing style.
+     */
     public String getRegex() {
         return regex;
     }

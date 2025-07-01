@@ -6,6 +6,9 @@ import org.premsc.analyser.repository.ISource;
 
 import java.util.List;
 
+/**
+ * Abstract class representing an index rule.
+ */
 public abstract class IndexRuleAbs extends RuleAbs implements IIndexRule {
 
     /**

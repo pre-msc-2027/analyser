@@ -1,13 +1,7 @@
 package org.premsc.analyser.rules;
 
 import com.google.gson.JsonObject;
-import io.github.treesitter.jtreesitter.Node;
-import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
-import org.premsc.analyser.parser.tree.ITreeHelper;
-
-import java.util.List;
-import java.util.stream.Stream;
 
 /**
  * CasingRule is a rule that checks if the casing of tag names in a tree structure matches a specified casing.

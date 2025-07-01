@@ -5,6 +5,9 @@ import org.premsc.analyser.repository.ISource;
 
 import java.util.List;
 
+/**
+ * IIndexRule is an interface that extends the IRule interface.
+ */
 public interface IIndexRule extends IRule {
 
     /**
@@ -14,5 +17,5 @@ public interface IIndexRule extends IRule {
      * @param source  The source to test the rule against.
      * @return A stream of Warning objects representing any warnings found during the test.
      */
-    public List<Warning> test(DatabaseHandler handler, ISource source);
+    List<Warning> test(DatabaseHandler handler, ISource source);
 }

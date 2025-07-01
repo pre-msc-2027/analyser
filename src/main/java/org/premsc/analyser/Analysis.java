@@ -8,6 +8,9 @@ import org.premsc.analyser.rules.Warning;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Represents the result of an analysis performed by the Analyser.
+ */
 public class Analysis {
 
     public int total_files;
@@ -16,7 +19,10 @@ public class Analysis {
 
     public final List<Warning> warnings = new ArrayList<>();
 
-
+    /**
+     * Returns the output of the analysis in JSON format.
+     * @return a JsonElement representing the analysis output
+     */
     public JsonElement getOutput() {
         JsonObject root = new JsonObject();
 

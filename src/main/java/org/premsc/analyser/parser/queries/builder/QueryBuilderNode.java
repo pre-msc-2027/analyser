@@ -1,6 +1,8 @@
 package org.premsc.analyser.parser.queries.builder;
 
-
+/**
+ * A query builder for creating query nodes with a specific type.
+ */
 public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends QueryBuilderNodeAbs<This> {
 
     protected final String type;

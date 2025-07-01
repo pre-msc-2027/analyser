@@ -2,6 +2,9 @@ package org.premsc.analyser.db;
 
 import java.sql.*;
 
+/**
+ * DatabaseHandler is responsible for managing the connection to the SQLite database.
+ */
 public class DatabaseHandler implements AutoCloseable {
 
     private static final String URL = "jdbc:sqlite:index.db";
@@ -10,16 +13,25 @@ public class DatabaseHandler implements AutoCloseable {
 
     private Connection connection;
 
-    public DatabaseHandler() {}
-
+    /**
+     * Returns the connection to the SQLite database.
+     * @return the connection to the database
+     */
     public Connection getConnection() {
         return connection;
     }
 
+    /**
+     * Returns the IndexModel instance associated with this DatabaseHandler.
+     * @return the IndexModel instance
+     */
     public IndexModel getIndexModel() {
         return this.INDEX_MODEL;
     }
 
+    /**
+     * Initializes the database connection and sets up the necessary tables.
+     */
     public void init() {
 
         try {
@@ -32,6 +44,10 @@ public class DatabaseHandler implements AutoCloseable {
 
     }
 
+    /**
+     * Sets up the database by creating the necessary tables and indexes.
+     * This method is called during initialization.
+     */
     private void setup() {
 
         try (Statement stmt = connection.createStatement()) {
@@ -56,6 +72,10 @@ public class DatabaseHandler implements AutoCloseable {
         }
     }
 
+    /**
+     * Closes the database connection.
+     * This method should be called when the database is no longer needed.
+     */
     @Override
     public void close() {
         try {
@@ -65,32 +85,4 @@ public class DatabaseHandler implements AutoCloseable {
         }
     }
 
-    public static void main(String[] args) {
-
-        DatabaseHandler databaseHandler = new DatabaseHandler();
-        databaseHandler.init();
-
-        try {
-
-            try (PreparedStatement preparedStatement = databaseHandler.getConnection().prepareStatement("INSERT INTO index_table VALUES (0, 'HTML', 'public/index.html', 'class', 'test_class', 52, 56);")) {
-                //preparedStatement.executeUpdate();
-            }
-
-            ResultSet result;
-
-            try (Statement stmt = databaseHandler.getConnection().createStatement()) {
-                result = stmt.executeQuery("SELECT * FROM index_table");
-
-                while (result.next()) {
-                    System.out.println(result.getInt("id") + " - " + result.getString("language"));
-                }
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        databaseHandler.close();
-
-
-    }
 }

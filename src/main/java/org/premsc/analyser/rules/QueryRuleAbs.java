@@ -9,6 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
 
+/**
+ * Abstract class for query rules.
+ */
 public abstract class QueryRuleAbs extends RuleAbs implements IQueryRule {
 
     /**
