@@ -30,7 +30,7 @@ public class CasingRule extends QueryRuleAbs {
      * @return The Casing enum value corresponding to the "casing" parameter.
      */
     public Casing getCasing() {
-        return Casing.valueOf(this.getParameter("casing"));
+        return Casing.valueOf(this.getParameter("casing").toUpperCase());
     }
 
     /**

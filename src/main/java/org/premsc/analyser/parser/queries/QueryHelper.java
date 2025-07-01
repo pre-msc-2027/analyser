@@ -3,6 +3,7 @@ package org.premsc.analyser.parser.queries;
 import io.github.treesitter.jtreesitter.*;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 
+import java.util.List;
 import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.stream.Stream;
@@ -24,6 +25,10 @@ public class QueryHelper implements AutoCloseable {
 
     public Stream<Node> streamNodes() {
         return cursor.findMatches(tree.getRoot()).flatMap(NodeFlatMapper);
+    }
+
+    public List<Node> findNodes() {
+        return cursor.findMatches(tree.getRoot()).flatMap(NodeFlatMapper).toList();
     }
 
     @Override

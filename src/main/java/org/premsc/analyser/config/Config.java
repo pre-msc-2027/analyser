@@ -16,20 +16,18 @@ public record Config(
         int maxDepth,
         boolean followSymlinks) {
 
-    public static Config fromJson(final JsonElement data) {
-
-        JsonObject scan_options = data.getAsJsonObject().getAsJsonObject("properties");
+    public static Config fromJson(final JsonObject data) {
 
         return new Config(
-                TargetType.valueOf(scan_options.get("targetType").getAsString()),
-                scan_options.get("repoUrl").getAsString(),
-                Utils.JsonArrayMapper(scan_options.get("targetFiles"), JsonElement::getAsString, String[]::new),
-                Severity.valueOf(scan_options.get("minimumSeverity").getAsString()),
-                scan_options.get("branch").getAsString(),
-                scan_options.get("commit").getAsString(),
-                scan_options.get("useAiAssistance").getAsBoolean(),
-                scan_options.get("maxDepth").getAsInt(),
-                scan_options.get("followSymlinks").getAsBoolean()
+                TargetType.valueOf(data.get("target_type").getAsString().toUpperCase()),
+                data.get("repo_url").getAsString(),
+                Utils.JsonArrayMapper(data.get("target_files"), JsonElement::getAsString, String[]::new),
+                Severity.valueOf(data.get("severity_min").getAsString().toUpperCase()),
+                data.get("branch").getAsString(),
+                data.get("commit").getAsString(),
+                data.get("use_ai_assistance").getAsBoolean(),
+                data.get("max_depth").getAsInt(),
+                data.get("follow_symlinks").getAsBoolean()
         );
 
     }
