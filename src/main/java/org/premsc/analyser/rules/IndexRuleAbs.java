@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.repository.ISource;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -20,5 +21,5 @@ public abstract class IndexRuleAbs extends RuleAbs implements IIndexRule {
     }
 
     @Override
-    abstract public List<Warning> test(DatabaseHandler handler, ISource source);
+    abstract public List<Warning> test(DatabaseHandler handler, ISource source) throws SQLException;
 }

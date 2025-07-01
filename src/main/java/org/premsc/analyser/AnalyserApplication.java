@@ -140,8 +140,7 @@ public class AnalyserApplication {
 
 						try {
 							this.getDbHandler().getIndexModel().insert(
-									treeHelper.getSource().getLanguage(),
-									treeHelper.getSource().getFilepath(),
+									treeHelper.getSource(),
 									indexer.getType(),
 									index.value(),
 									index.line(),
