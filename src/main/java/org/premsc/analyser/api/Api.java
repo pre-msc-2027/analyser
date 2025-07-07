@@ -174,7 +174,7 @@ public class Api {
                             {
                                 "rules": [
                                     {
-                                      "id": 0,
+                                      "rule_id": 0,
                                       "language": "html",
                                       "tags": [],
                                       "parameters": {
@@ -182,7 +182,7 @@ public class Api {
                                       }
                                     },
                                     {
-                                      "id": 1,
+                                      "rule_id": 1,
                                       "language": "html",
                                       "tags": [],
                                       "parameters": {}

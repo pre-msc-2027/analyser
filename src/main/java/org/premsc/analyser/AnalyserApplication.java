@@ -1,5 +1,7 @@
 package org.premsc.analyser;
 
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import org.premsc.analyser.api.Api;
 import org.premsc.analyser.config.Config;
 import org.premsc.analyser.db.DatabaseHandler;
@@ -168,7 +170,11 @@ public class AnalyserApplication {
 
 		for (ISource source: this.getRepository().list()) {
 
+			this.analysis.total_files += 1;
+
 			try (ITreeHelper treeHelper = source.parse()) {
+
+				boolean found = false;
 
 				for (IRule rule : this.ruleset.getRules()) {
 
@@ -182,9 +188,15 @@ public class AnalyserApplication {
 						default -> throw new IllegalStateException("Unexpected value: " + rule);
 					};
 
+					if (!results.isEmpty()) found = true;
+
+					this.analysis.warnings_found += results.size();
+
 					this.analysis.warnings.addAll(results);
 
 				}
+
+				if (found) this.analysis.files_with_warnings += 1;
 
 			} catch (Exception e) {
                 throw new RuntimeException(e);
@@ -194,8 +206,21 @@ public class AnalyserApplication {
 
 	}
 
+	/**
+	 * Logs a message with a timestamp and posts it to the API.
+	 * @param message the message to log
+	 */
 	private void log(String message) {
-		System.out.println(message);
+
+		String timestamp = java.time.LocalDateTime.now().toString();
+
+		System.out.printf("[%s] %s%n", timestamp, message);
+
+		JsonObject log = new JsonObject();
+		log.addProperty("timestamp", timestamp);
+		log.addProperty("message", message);
+
+		this.api.post("logs", log);
 	}
 
 	/**

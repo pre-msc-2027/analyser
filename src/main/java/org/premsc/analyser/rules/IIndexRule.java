@@ -3,6 +3,7 @@ package org.premsc.analyser.rules;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.repository.ISource;
 
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -17,5 +18,5 @@ public interface IIndexRule extends IRule {
      * @param source  The source to test the rule against.
      * @return A stream of Warning objects representing any warnings found during the test.
      */
-    List<Warning> test(DatabaseHandler handler, ISource source);
+    List<Warning> test(DatabaseHandler handler, ISource source) throws SQLException;
 }
