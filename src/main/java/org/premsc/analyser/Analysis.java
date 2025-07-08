@@ -36,9 +36,11 @@ public class Analysis {
 
         JsonArray warnings = new JsonArray();
         root.add("warnings", warnings);
+        int warning_id = 0;
         for (Warning warning : this.warnings) {
             JsonObject warningObject = new JsonObject();
-            warningObject.addProperty("id",   warning.rule().getId());
+            warningObject.addProperty("id", warning_id++);
+            warningObject.addProperty("rule_id", warning.rule().getId());
             warningObject.addProperty("file", warning.source().getFilepath());
             warningObject.addProperty("line", warning.line());
             warnings.add(warningObject);
