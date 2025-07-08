@@ -1,6 +1,9 @@
 package org.premsc.analyser.db;
 
+import org.premsc.analyser.db.selector.Predicate;
+import org.premsc.analyser.db.selector.Selector;
 import org.premsc.analyser.parser.languages.LanguageEnum;
+import org.premsc.analyser.repository.ISource;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -71,6 +74,17 @@ public class IndexModel {
     }
 
     /**
+     * Queries the database for multiple index entries based on the provided SQL query.
+     *
+     * @param selector The Selector object containing the SQL query to execute.
+     * @return An array of Index objects containing the results.
+     * @throws SQLException If there is an error executing the SQL query.
+     */
+    public Index[] queryMultiple(Selector<?> selector) throws SQLException {
+        return this.queryMultiple(selector.build());
+    }
+
+    /**
      * Retrieves an Index by its ID.
      *
      * @param id The ID of the index to retrieve.
@@ -78,7 +92,11 @@ public class IndexModel {
      * @throws SQLException If the index with the specified ID is not found or if there is an error executing the query.
      */
     public Index getWithId(int id) throws SQLException {
-        Optional<Index> result = this.queryOne("SELECT * FROM index_table WHERE id = " + id);
+
+        Selector<?> selector = Selector.of("index_table")
+                .setPredicate(Predicate.equal("id", id));
+
+        Optional<Index> result = this.queryOne(selector.build());
         if (result.isEmpty()) throw new SQLException("Index with id " + id + " not found.");
         return result.get();
     }
@@ -86,30 +104,21 @@ public class IndexModel {
     /**
      * Retrieves an Index based on the specified language, source, type, and value.
      *
-     * @param language The language of the index.
-     * @param source   The source of the index.
-     * @param type     The type of the index.
-     * @param value    The value of the index.
+     * @param source The source of the index.
+     * @param type   The type of the index.
      * @return An array of Index objects that match the specified criteria.
      * @throws SQLException If there is an error executing the SQL query or if no index is found.
      */
-    public Index[] getWithType(LanguageEnum language, String source, String type, String value) throws SQLException {
-        String query = "SELECT * FROM index_table WHERE source = '%s' AND type = '%s' AND value = '%s'".formatted(source, type, value);
-        return this.queryMultiple(query);
-    }
+    public Index[] getTypeInSource(ISource source, String type) throws SQLException {
 
-    /**
-     * Retrieves an Index based on the specified language, source, type, and value.
-     *
-     * @param language The language of the index.
-     * @param source   The source of the index.
-     * @param type     The type of the index.
-     * @return An array of Index objects that match the specified criteria.
-     * @throws SQLException If there is an error executing the SQL query or if no index is found.
-     */
-    public Index[] getWithValue(LanguageEnum language, String source, String type, String value) throws SQLException {
-        String query = "SELECT * FROM index_table WHERE source = '%s' AND language = '%s' AND type = '%s' AND value = '%s'".formatted(language, source, type, value);
-        return this.queryMultiple(query);
+        Selector<?> selector = Selector
+                .of("index_table")
+                .setPredicate(
+                        Predicate
+                                .equal("source", source.getFilepath())
+                                .and(Predicate.equal("type", type)));
+
+        return this.queryMultiple(selector);
     }
 
     /**
@@ -121,11 +130,17 @@ public class IndexModel {
      * @return An array of Index objects that match the specified criteria.
      * @throws SQLException If there is an error executing the SQL query or if no index is found.
      */
-    public Index[] getWithValue(LanguageEnum language, String type, String value) throws SQLException {
+    public Index[] getAllValues(LanguageEnum language, String type, String value) throws SQLException {
 
-        String query = "SELECT * FROM index_table WHERE language = '%s' AND type = '%s' AND value = '%s'".formatted(language, type, value);
+        Selector<?> selector = Selector
+                .of("index_table")
+                .setPredicate(
+                        Predicate
+                                .equal("language", language.name())
+                                .and(Predicate.equal("type", type))
+                                .and(Predicate.equal("value", value)));
 
-        return this.queryMultiple(query);
+        return this.queryMultiple(selector);
     }
 
     /**
@@ -137,25 +152,33 @@ public class IndexModel {
      * @return an array of Index objects that match the specified criteria.
      * @throws SQLException if there is an error executing the SQL query or if no index is found.
      */
-    public Index[] getWithValue(String source, String type, String value) throws SQLException {
-        String query = "SELECT * FROM index_table WHERE source = '%s' AND type = '%s' AND value = '%s'".formatted(source, type, value);
-        return this.queryMultiple(query);
+    public Index[] getAllValuesInSource(ISource source, String type, String value) throws SQLException {
+
+        Selector<?> selector = Selector
+                .of("index_table")
+                .setPredicate(
+                        Predicate
+                                .equal("source", source.getFilepath())
+                                .and(Predicate.equal("type", type))
+                                .and(Predicate.equal("value", value)));
+
+        return this.queryMultiple(selector);
     }
 
     /**
      * Inserts a new index entry into the database.
-     * @param language The language of the index.
-     * @param source   The source of the index.
-     * @param type     The type of the index.
+     *
+     * @param source The source of the index.
+     * @param type   The type of the index.
      * @throws SQLException If there is an error executing the SQL query or if no index is found.
      */
-    public void insert(LanguageEnum language, String source, String type, String value, int line, int startByte, int endByte) throws SQLException {
+    public void insert(ISource source, String type, String value, int line, int startByte, int endByte) throws SQLException {
         try (Statement statement = this.dbHandler.getConnection().createStatement()) {
             statement.executeUpdate(
                     """
-                    INSERT INTO index_table (language, source, type, value, line, startByte, endByte)
-                    VALUES ('%s', '%s', '%s', '%s', %d, %d, %d)
-                    """.formatted(language, source, type, value, line, startByte, endByte)
+                            INSERT INTO index_table (language, source, type, value, line, startByte, endByte)
+                            VALUES ('%s', '%s', '%s', '%s', %d, %d, %d)
+                            """.formatted(source.getLanguage(), source.getFilepath(), type, value, line, startByte, endByte)
             );
         }
     }
@@ -198,7 +221,8 @@ public class IndexModel {
 
         /**
          * Constructor for creating an Index object.
-         * @param model the IndexModel instance managing this index.
+         *
+         * @param model  the IndexModel instance managing this index.
          * @param result the ResultSet containing the index data.
          * @throws SQLException if there is an error retrieving data from the ResultSet.
          */

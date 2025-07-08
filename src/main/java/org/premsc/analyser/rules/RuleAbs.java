@@ -23,7 +23,7 @@ public abstract class RuleAbs implements IRule {
      */
     public RuleAbs(JsonObject data) {
         this(
-                data.get("id").getAsInt(),
+                data.get("rule_id").getAsInt(),
                 LanguageEnum.valueOf(data.get("language").getAsString().toUpperCase()),
                 Utils.JsonArrayMapper(data.get("tags"), JsonElement::getAsString, String[]::new),
                 Utils.JsonObjectMapper(data.get("parameters"), JsonElement::getAsString)

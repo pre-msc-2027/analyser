@@ -1,6 +1,7 @@
 package org.premsc.analyser.rules;
 
 import com.google.gson.JsonObject;
+import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.tree.ITreeHelper;
@@ -39,9 +40,9 @@ public abstract class QueryRuleAbs extends RuleAbs implements IQueryRule {
         List<Warning> warnings = new ArrayList<>();
 
         try(QueryHelper queryHelper = treeHelper.query(this.getQuery())) {
-            queryHelper.streamNodes().map(
-                    node -> new Warning(this, treeHelper.getSource(), node)
-            ).forEach(warnings::add);
+            for (Node node: queryHelper.findNodes()) {
+                warnings.add(new Warning(this, treeHelper.getSource(), node));
+            }
         }
 
         return warnings.stream();
