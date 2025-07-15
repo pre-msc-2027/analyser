@@ -1,9 +1,5 @@
 package org.premsc.analyser.db.selector;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-
 /**
  * Represents a SQL-like comparison predicate for a column.
  * This class allows for creating various types of comparison predicates such as equality, inequality,
@@ -13,9 +9,9 @@ import java.util.List;
  */
 class SelectorComparison<This extends SelectorComparison<This, T>, T> extends SelectorPredicateAbs<This> {
 
-    protected Comparator comparator;
-    protected String column;
-    protected T value;
+    protected final Comparator comparator;
+    protected final String column;
+    protected final T value;
 
     /**
      * Constructor for SelectorComparison.

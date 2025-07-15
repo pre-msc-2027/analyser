@@ -6,7 +6,7 @@ package org.premsc.analyser.db.selector;
  */
 public class SelectorLogical<This extends SelectorLogical<This>> extends SelectorPredicateAbs<This> {
 
-    protected String column;
+    protected final String column;
 
     /**
      * Creates a logical condition for a column.

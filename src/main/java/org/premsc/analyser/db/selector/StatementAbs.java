@@ -6,7 +6,7 @@ package org.premsc.analyser.db.selector;
 public abstract class StatementAbs<This extends StatementAbs<This>> {
 
     @SuppressWarnings("unchecked")
-    protected This me = (This) this;
+    protected final This me = (This) this;
 
     /**
      * Builds the SQL-like statement and returns it as a String.

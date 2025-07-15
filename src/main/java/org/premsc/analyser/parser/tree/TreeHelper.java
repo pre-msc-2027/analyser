@@ -4,10 +4,12 @@ import io.github.treesitter.jtreesitter.InputEncoding;
 import io.github.treesitter.jtreesitter.Node;
 import io.github.treesitter.jtreesitter.Parser;
 import io.github.treesitter.jtreesitter.Tree;
+import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.repository.ISource;
-import org.premsc.analyser.repository.Source;
+
+import java.io.IOException;
 
 /**
  * Abstract class for tree helper implementations.
@@ -25,7 +27,7 @@ public class TreeHelper implements ITreeHelper {
      *
      * @param source the source object containing the content to be parsed
      */
-    public TreeHelper(ISource source) {
+    public TreeHelper(ISource source) throws UnsupportedLanguage, IOException {
         this.source = source;
 
         this.tsParser = new Parser(source.getLanguageHelper().getTsLanguage());
@@ -44,7 +46,7 @@ public class TreeHelper implements ITreeHelper {
     }
 
     @Override
-    public QueryHelper query(QueryBuilder<?> queryBuilder) {
+    public QueryHelper query(QueryBuilder<?> queryBuilder) throws UnsupportedLanguage {
         return new QueryHelper(this, queryBuilder.build());
     }
 
