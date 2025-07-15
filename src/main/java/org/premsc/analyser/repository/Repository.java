@@ -24,7 +24,7 @@ import java.util.stream.Stream;
  */
 public class Repository {
 
-    private static String PATH = "folders";
+    private static final String PATH = "folders";
 
     private final AnalyserApplication app;
     private final List<ISource> sources = new ArrayList<>();
@@ -67,7 +67,7 @@ public class Repository {
      * Initializes the repository by cloning the git repository and reading its contents.
      * This method is typically called at the start of the application to set up the repository.
      */
-    public void init() {
+    public void init() throws Exception {
 
         this.gitClone();
         this.read();
@@ -79,7 +79,7 @@ public class Repository {
      * The repository is cloned into a specified directory, and if a branch or commit is specified,
      * it checks out that branch or commit after cloning.
      */
-    private void gitClone() {
+    private void gitClone() throws Exception {
 
         if (this.app.getId() == 0) return;
 
@@ -107,8 +107,6 @@ public class Repository {
                         .call();
             }
 
-        } catch (Exception e) {
-            e.printStackTrace();
         }
 
     }
@@ -116,7 +114,7 @@ public class Repository {
     /**
      * Reads the files from the repository.
      */
-    private void read() {
+    private void read() throws IOException {
 
         if (this.app.getId() == 0) {
             this.sources.add(new MockSource("index.html"));
@@ -124,11 +122,8 @@ public class Repository {
             return;
         }
 
-        try {
-            Files.walkFileTree(this.getPath(), new FileVisitor(this.sources));
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Files.walkFileTree(this.getPath(), new FileVisitor(this.sources));
+
     }
 
     /**

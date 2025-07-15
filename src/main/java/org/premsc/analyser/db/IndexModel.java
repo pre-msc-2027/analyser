@@ -3,6 +3,7 @@ package org.premsc.analyser.db;
 import org.premsc.analyser.db.selector.Predicate;
 import org.premsc.analyser.db.selector.Selector;
 import org.premsc.analyser.parser.languages.LanguageEnum;
+import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.repository.ISource;
 
 import java.sql.ResultSet;
@@ -172,7 +173,7 @@ public class IndexModel {
      * @param type   The type of the index.
      * @throws SQLException If there is an error executing the SQL query or if no index is found.
      */
-    public void insert(ISource source, String type, String value, int line, int startByte, int endByte) throws SQLException {
+    public void insert(ISource source, String type, String value, int line, int startByte, int endByte) throws Exception {
         try (Statement statement = this.dbHandler.getConnection().createStatement()) {
             statement.executeUpdate(
                     """

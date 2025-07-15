@@ -69,16 +69,12 @@ public class Api {
      * @param builder The HttpRequest.Builder to use for the request.
      * @return The HttpResponse<String> received from the server.
      */
-    private HttpResponse<String> send(HttpRequest.Builder builder) {
+    private HttpResponse<String> send(HttpRequest.Builder builder) throws IOException, InterruptedException {
 
         HttpResponse<String> response;
 
-        try {
-            if (this.app.getId() == 0) response = Api.mock(builder);
-            else response = this.client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
-        } catch (IOException | InterruptedException e) {
-            throw new RuntimeException(e);
-        }
+        if (this.app.getId() == 0) response = Api.mock(builder);
+        else response = this.client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
             throw new HttpResponseError(response.statusCode());
@@ -94,7 +90,7 @@ public class Api {
      * @param route The API route to send the GET request to.
      * @return The response body parsed as a JsonElement.
      */
-    public JsonElement get(String route) {
+    public JsonElement get(String route) throws IOException, InterruptedException {
 
         HttpResponse<String> response = this.send(this.getBuilder(route).GET());
 
@@ -110,9 +106,14 @@ public class Api {
      */
     public void post(String route, JsonElement data) {
 
-        HttpResponse<String> response = this.send(this.getBuilder(route)
-                .header("Content-Type", "application/json")
-                .POST(HttpRequest.BodyPublishers.ofString(data.toString())));
+        HttpResponse<String> response;
+        try {
+            response = this.send(this.getBuilder(route)
+                    .header("Content-Type", "application/json")
+                    .POST(HttpRequest.BodyPublishers.ofString(data.toString())));
+        } catch (Exception _) {
+            return;
+        }
 
         if (response.statusCode() != 200) {
             throw new HttpResponseError(response.statusCode());

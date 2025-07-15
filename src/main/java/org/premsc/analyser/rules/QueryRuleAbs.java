@@ -2,6 +2,7 @@ package org.premsc.analyser.rules;
 
 import com.google.gson.JsonObject;
 import io.github.treesitter.jtreesitter.Node;
+import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.tree.ITreeHelper;
@@ -35,7 +36,7 @@ public abstract class QueryRuleAbs extends RuleAbs implements IQueryRule {
      * @param treeHelper The TreeHelper instance to use for testing the rule.
      * @return A list of Node objects that match the rule criteria.
      */
-    public Stream<Warning> test(ITreeHelper treeHelper) {
+    public Stream<Warning> test(ITreeHelper treeHelper) throws UnsupportedLanguage {
 
         List<Warning> warnings = new ArrayList<>();
 
