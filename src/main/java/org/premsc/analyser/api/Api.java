@@ -18,7 +18,7 @@ import java.util.Optional;
  */
 public class Api {
 
-    private static final String ENV_URL = "api_url";
+    private static final String ENV_URL = "API_URL";
 
     private static final String URL = System.getenv(ENV_URL);
 
@@ -49,7 +49,7 @@ public class Api {
      * @return The API URL.
      */
     private URI getUri(String route) {
-        return URI.create("http://" + URL + "/" + this.app.getId() + "/" + route);
+        return URI.create("http://" + URL + "/" + route + "/" + this.app.getId());
     }
 
     /**
