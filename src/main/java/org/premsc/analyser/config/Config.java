@@ -33,18 +33,20 @@ public record Config(
      * @param data the JSON object containing configuration data
      * @return a Config object populated with the data from the JSON object
      */
-    public static Config fromJson(final JsonObject data) {
+    public static Config fromJson(final JsonElement data) {
+
+        JsonObject dataObject = data.getAsJsonObject();
 
         return new Config(
-                TargetType.valueOf(data.get("target_type").getAsString().toUpperCase()),
-                data.get("repo_url").getAsString(),
-                Utils.JsonArrayMapper(data.get("target_files"), JsonElement::getAsString, String[]::new),
-                IRule.Severity.valueOf(data.get("severity_min").getAsString().toUpperCase()),
-                data.get("branch").getAsString(),
-                data.get("commit").getAsString(),
-                data.get("use_ai_assistance").getAsBoolean(),
-                data.get("max_depth").getAsInt(),
-                data.get("follow_symlinks").getAsBoolean()
+                TargetType.valueOf(dataObject.get("target_type").getAsString().toUpperCase()),
+                dataObject.get("repo_url").getAsString(),
+                Utils.JsonArrayMapper(dataObject.get("target_files"), JsonElement::getAsString, String[]::new),
+                IRule.Severity.valueOf(dataObject.get("severity_min").getAsString().toUpperCase()),
+                dataObject.get("branch").getAsString(),
+                dataObject.get("commit").getAsString(),
+                dataObject.get("use_ai_assistance").getAsBoolean(),
+                dataObject.get("max_depth").getAsInt(),
+                dataObject.get("follow_symlinks").getAsBoolean()
         );
 
     }

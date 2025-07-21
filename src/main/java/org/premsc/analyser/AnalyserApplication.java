@@ -19,6 +19,8 @@ import java.util.List;
  */
 public class AnalyserApplication {
 
+    private static final boolean DEBUG = true;
+
     private final int id;
     private Config config;
 
@@ -117,6 +119,7 @@ public class AnalyserApplication {
 
         this.log("Posting results.");
         this.api.post("", this.analysis.getOutput());
+        if (this.getId() == 0) System.out.println(this.analysis.getOutput());
 
         this.log("Done.");
 
@@ -128,7 +131,7 @@ public class AnalyserApplication {
     private void init() throws Exception {
 
         this.log("Fetching configuration.");
-        this.config = Config.fromJson(this.api.get("configuration").getAsJsonObject());
+        this.config = Config.fromJson(this.api.get("configuration"));
 
         this.log("Cloning repository.");
         this.repository.init();
@@ -224,9 +227,10 @@ public class AnalyserApplication {
      */
     private void log(String message) {
 
-        String timestamp = java.time.LocalDateTime.now().toString();
+        String datetime = java.time.LocalDateTime.now().toString();
+        long timestamp = System.currentTimeMillis();
 
-        System.out.printf("[%s] %s%n", timestamp, message);
+        System.out.printf("[%s] %s%n", datetime, message);
 
         JsonObject log = new JsonObject();
         log.addProperty("timestamp", timestamp);
@@ -237,9 +241,10 @@ public class AnalyserApplication {
 
     private void logError(Exception error) {
 
+        String datetime = java.time.LocalDateTime.now().toString();
         long timestamp = System.currentTimeMillis();
 
-        System.err.printf("[%s] ERROR: (%s) %s%n", timestamp, error.getClass().getSimpleName(), error.getMessage());
+        System.err.printf("[%s] ERROR: (%s) %s%n", datetime, error.getClass().getSimpleName(), error.getMessage());
 
         JsonObject log = new JsonObject();
         log.addProperty("timestamp", timestamp);
@@ -247,6 +252,8 @@ public class AnalyserApplication {
         log.addProperty("error", error.getClass().getSimpleName());
 
         this.api.post("logs", log);
+
+        if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
     }
 
     /**

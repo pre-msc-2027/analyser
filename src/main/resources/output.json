@@ -1,0 +1,28 @@
+{
+  "status": "completed",
+  "summary": {
+    "total_files": 2,
+    "files_with_warnings": 1,
+    "warnings_found": 3
+  },
+  "warnings": [
+    {
+      "id": 0,
+      "rule_id": 0,
+      "file": "index.html",
+      "line": 2
+    },
+    {
+      "id": 1,
+      "rule_id": 0,
+      "file": "index.html",
+      "line": 6
+    },
+    {
+      "id": 2,
+      "rule_id": 1,
+      "file": "index.html",
+      "line": 8
+    }
+  ]
+}
