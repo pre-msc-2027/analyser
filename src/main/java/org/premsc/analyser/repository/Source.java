@@ -42,32 +42,26 @@ public class Source implements ISource {
     }
 
     @Override
-    public String getContent() {
+    public String getContent() throws IOException {
 
-        try {
-            return Files.readString(Path.of(this.filepath), StandardCharsets.UTF_8);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        return Files.readString(Path.of(this.filepath), StandardCharsets.UTF_8);
 
     }
 
     @Override
-    public LanguageEnum getLanguage() {
-        try {
-            return LanguageEnum.getByExtension(this.getExtension());
-        } catch (UnsupportedLanguage e) {
-            throw new RuntimeException(e);
-        }
+    public LanguageEnum getLanguage() throws UnsupportedLanguage {
+
+        return LanguageEnum.getByExtension(this.getExtension());
+
     }
 
     @Override
-    public ILanguageHelper getLanguageHelper() {
+    public ILanguageHelper getLanguageHelper() throws UnsupportedLanguage {
         return this.getLanguage().getHelper();
     }
 
     @Override
-    public ITreeHelper parse() {
+    public ITreeHelper parse() throws UnsupportedLanguage, IOException {
         return new TreeHelper(this);
     }
 

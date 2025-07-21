@@ -1,6 +1,7 @@
 package org.premsc.analyser.indexer;
 
 import org.premsc.analyser.parser.languages.LanguageEnum;
+import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 
 import java.util.List;
@@ -28,6 +29,6 @@ public interface IIndexer {
      * @param treeHelper the ITreeHelper to assist in indexing
      * @return a List of IndexerManager.Index objects representing the indexed entries
      */
-    List<IndexerManager.Index> index(ITreeHelper treeHelper);
+    List<IndexerManager.Index> index(ITreeHelper treeHelper) throws UnsupportedLanguage;
 
 }
