@@ -10,7 +10,7 @@ import java.util.Arrays;
  */
 class SelectorMembership<This extends SelectorMembership<This, T>, T> extends SelectorPredicateAbs<This> {
 
-    protected final String column;
+    protected String column;
     protected T[] value;
     protected Selector<?> selector;
 

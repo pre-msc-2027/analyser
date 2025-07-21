@@ -8,8 +8,8 @@ import java.util.List;
  */
 public abstract class SelectorPredicateAbs<This extends SelectorPredicateAbs<This>> extends StatementAbs<This> {
 
-    protected final List<SelectorPredicateAbs<?>> children = new ArrayList<>();
-    protected final List<Separator> separators = new ArrayList<>();
+    protected List<SelectorPredicateAbs<?>> children = new ArrayList<>();
+    protected List<Separator> separators = new ArrayList<>();
     protected boolean inverted;
 
     /**

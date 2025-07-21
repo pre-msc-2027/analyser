@@ -1,7 +1,6 @@
 package org.premsc.analyser.parser.tree;
 
 import io.github.treesitter.jtreesitter.Node;
-import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.repository.ISource;
@@ -30,6 +29,6 @@ public interface ITreeHelper extends AutoCloseable {
      * @param queryBuilder the QueryBuilder to build the query
      * @return a list of Node objects representing the matches found
      */
-    QueryHelper query(QueryBuilder<?> queryBuilder) throws UnsupportedLanguage;
+    QueryHelper query(QueryBuilder<?> queryBuilder);
 
 }

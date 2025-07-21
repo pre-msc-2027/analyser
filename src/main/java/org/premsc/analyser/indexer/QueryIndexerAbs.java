@@ -2,7 +2,6 @@ package org.premsc.analyser.indexer;
 
 import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.languages.LanguageEnum;
-import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 
@@ -25,7 +24,7 @@ public abstract class QueryIndexerAbs extends IndexerAbs implements IQueryIndexe
     }
 
     @Override
-    public List<IndexerManager.Index> index(ITreeHelper treeHelper) throws UnsupportedLanguage {
+    public List<IndexerManager.Index> index(ITreeHelper treeHelper) {
 
         List<IndexerManager.Index> indexes = new ArrayList<>();
 

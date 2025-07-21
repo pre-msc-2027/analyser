@@ -1,9 +1,6 @@
 package org.premsc.analyser.db;
 
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 
 /**
  * DatabaseHandler is responsible for managing the connection to the SQLite database.
@@ -35,9 +32,13 @@ public class DatabaseHandler implements AutoCloseable {
     /**
      * Initializes the database connection and sets up the necessary tables.
      */
-    public void init() throws SQLException {
+    public void init() {
 
-        connection = DriverManager.getConnection(URL);
+        try {
+            connection = DriverManager.getConnection(URL);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
 
         this.setup();
 
@@ -47,7 +48,7 @@ public class DatabaseHandler implements AutoCloseable {
      * Sets up the database by creating the necessary tables and indexes.
      * This method is called during initialization.
      */
-    private void setup() throws SQLException {
+    private void setup() {
 
         try (Statement stmt = connection.createStatement()) {
 
@@ -66,6 +67,8 @@ public class DatabaseHandler implements AutoCloseable {
                     CREATE INDEX idx3 ON index_table(language, source, type, value);
                     """);
 
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
     }
 
@@ -74,8 +77,12 @@ public class DatabaseHandler implements AutoCloseable {
      * This method should be called when the database is no longer needed.
      */
     @Override
-    public void close() throws SQLException {
-        this.connection.close();
+    public void close() {
+        try {
+            this.connection.close();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
 }

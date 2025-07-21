@@ -60,6 +60,6 @@ public interface IRule {
         LOW,
         MEDIUM,
         HIGH,
-        CRITICAL
+        CRITICAL;
     }
 }

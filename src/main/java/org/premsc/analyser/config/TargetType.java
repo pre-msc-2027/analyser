@@ -8,6 +8,6 @@ public enum TargetType {
 
     REPOSITORY,
     FILE,
-    FILE_LIST
+    FILE_LIST;
 
 }

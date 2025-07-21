@@ -5,7 +5,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.premsc.analyser.AnalyserApplication;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Stream;
@@ -37,7 +36,7 @@ public class Ruleset {
     /**
      * Initializes the ruleset by fetching rules from the API and populating the rules list.
      */
-    public void init() throws Exception {
+    public void init() {
 
         JsonObject data = this.app.getApi().get("rules").getAsJsonObject();
         JsonArray rules = data.getAsJsonArray("rules");

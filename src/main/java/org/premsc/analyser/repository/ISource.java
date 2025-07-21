@@ -5,7 +5,6 @@ import org.premsc.analyser.parser.languages.LanguageEnum;
 import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 
-import java.io.IOException;
 import java.nio.file.Path;
 
 /**
@@ -30,25 +29,25 @@ public interface ISource {
      * Returns the content of the source file.
      * @return the content as a String.
      */
-    String getContent() throws IOException;
+    String getContent();
 
     /**
      * Returns the language of the source file based on its extension.
      * @return an instance of LanguageEnum representing the language.
      */
-    LanguageEnum getLanguage() throws UnsupportedLanguage;
+    LanguageEnum getLanguage();
 
     /**
      * Returns the language helper for the source file.
      * @return an instance of ILanguageHelper.
      */
-    ILanguageHelper getLanguageHelper() throws UnsupportedLanguage;
+    ILanguageHelper getLanguageHelper();
 
     /**
      * Parses the source file and returns a tree helper for further processing.
      * @return an instance of ITreeHelper.
      */
-    ITreeHelper parse() throws UnsupportedLanguage, IOException;
+    ITreeHelper parse();
 
     /**
      * Checks if the given file path is supported by the parser based on its extension.
