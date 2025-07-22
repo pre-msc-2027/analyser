@@ -160,17 +160,11 @@ public class AnalyserApplication {
 
                     for (IndexerManager.Index index : indexes) {
 
-
                         this.getDbHandler().getIndexModel().insert(
                                 treeHelper.getSource(),
                                 indexer.getType(),
-                                index.value(),
-                                index.line(),
-                                index.startByte(),
-                                index.endByte()
+                                index
                         );
-
-
                     }
 
                 }
