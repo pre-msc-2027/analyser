@@ -150,7 +150,7 @@ public class Api {
             @Override
             public String body() {
 
-                if (request.uri().toString().endsWith("configuration")) {
+                if (request.uri().toString().contains("configuration")) {
                     return """
                             {
                                 "repo_url": "",
@@ -164,13 +164,13 @@ public class Api {
                                 "commit": "HEAD"
                             }
                             """;
-                } else if (request.uri().toString().endsWith("token")) {
+                } else if (request.uri().toString().contains("token")) {
                     return """
                             {
                                 "token": "mock-token"
                             }
                             """;
-                } else if (request.uri().toString().endsWith("rules")) {
+                } else if (request.uri().toString().contains("rules")) {
                     return """
                             {
                                 "rules": [

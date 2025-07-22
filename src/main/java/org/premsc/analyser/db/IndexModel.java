@@ -2,8 +2,8 @@ package org.premsc.analyser.db;
 
 import org.premsc.analyser.db.selector.Predicate;
 import org.premsc.analyser.db.selector.Selector;
+import org.premsc.analyser.indexer.IndexerManager;
 import org.premsc.analyser.parser.languages.LanguageEnum;
-import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.repository.ISource;
 
 import java.sql.ResultSet;
@@ -168,10 +168,13 @@ public class IndexModel {
 
     /**
      * Inserts a new index entry into the database.
-     *
-     * @param source The source of the index.
-     * @param type   The type of the index.
-     * @throws SQLException If there is an error executing the SQL query or if no index is found.
+     * @param source the source of the index entry.
+     * @param type the type of the index entry (e.g., class, method).
+     * @param value the value of the index entry (e.g., class name, method name).
+     * @param line the line number in the source file where the index entry is located.
+     * @param startByte the starting position of the index entry in the source file.
+     * @param endByte the ending position of the index entry in the source file.
+     * @throws Exception if there is an error executing the SQL query or if the source language is unsupported.
      */
     public void insert(ISource source, String type, String value, int line, int startByte, int endByte) throws Exception {
         try (Statement statement = this.dbHandler.getConnection().createStatement()) {
@@ -182,6 +185,17 @@ public class IndexModel {
                             """.formatted(source.getLanguage(), source.getFilepath(), type, value, line, startByte, endByte)
             );
         }
+    }
+
+    /**
+     * Inserts a new index entry into the database using an IndexerManager.Index object.
+     * @param source the source of the index entry.
+     * @param type the type of the index entry (e.g., class, method).
+     * @param index the IndexerManager.Index object containing the index entry details.
+     * @throws Exception if there is an error executing the SQL query or if the source language is unsupported.
+     */
+    public void insert(ISource source, String type, IndexerManager.Index index) throws Exception {
+        this.insert(source, type, index.value(), index.line(), index.startByte(), index.endByte());
     }
 
     /**

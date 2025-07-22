@@ -58,6 +58,7 @@ public class DatabaseHandler implements AutoCloseable {
                     source TEXT,
                     type TEXT,
                     value TEXT,
+                    line INTEGER,
                     startByte INTEGER,
                     endByte INTEGER);
                     CREATE UNIQUE INDEX idx ON index_table(id);

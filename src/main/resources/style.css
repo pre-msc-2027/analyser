@@ -1,4 +1,4 @@
-/* Class selector */
+
 .box {
     background-color: lightblue;
     padding: 20px;
@@ -6,26 +6,22 @@
     text-align: center;
 }
 
-/* ID selector */
 #main-title {
     color: darkblue;
     font-weight: bold;
     margin-bottom: 10px;
 }
 
-/* Element selector */
 p {
     font-family: Arial, sans-serif;
     color: gray;
     font-size: 14px;
 }
 
-/* Descendant selector */
 .box p {
     color: darkgreen;
 }
 
-/* Hover pseudo-class */
 .box:hover {
     background-color: lightcoral;
 }
