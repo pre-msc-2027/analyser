@@ -12,6 +12,7 @@ import org.premsc.analyser.repository.Repository;
 import org.premsc.analyser.rules.*;
 
 import java.util.List;
+import java.util.Objects;
 
 /**
  * AnalyserApplication is the main class for the application that performs analysis on code repositories.
@@ -21,7 +22,7 @@ public class AnalyserApplication {
 
     private static final boolean DEBUG = true;
 
-    private final int id;
+    private final String id;
     private Config config;
 
     private final Api api = new Api(this);
@@ -36,7 +37,7 @@ public class AnalyserApplication {
      *
      * @param id the unique identifier for the application instance
      */
-    private AnalyserApplication(int id) {
+    private AnalyserApplication(String id) {
         this.id = id;
     }
 
@@ -45,7 +46,7 @@ public class AnalyserApplication {
      *
      * @return the unique identifier
      */
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 
@@ -119,7 +120,7 @@ public class AnalyserApplication {
 
         this.log("Posting results.");
         this.api.post("", this.analysis.getOutput());
-        if (this.getId() == 0) System.out.println(this.analysis.getOutput());
+        if (Objects.equals(this.getId(), "0")) System.out.println(this.analysis.getOutput());
 
         this.log("Done.");
 
@@ -131,7 +132,7 @@ public class AnalyserApplication {
     private void init() throws Exception {
 
         this.log("Fetching configuration.");
-        this.config = Config.fromJson(this.api.get("configuration"));
+        this.config = Config.fromJson(this.api.get("scans/options"));
 
         this.log("Cloning repository.");
         this.repository.init();
@@ -257,7 +258,7 @@ public class AnalyserApplication {
      */
     public static void main(String[] args) {
 
-        int id = Integer.parseInt(args[0]);
+        String id = args[0];
 
         AnalyserApplication app = new AnalyserApplication(id);
 
