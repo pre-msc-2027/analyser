@@ -52,8 +52,8 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./target/my-app.jar
-        asset_name: my-app.jar
+        asset_path: ./target/*.jar
+        asset_name: analyser-${{ steps.project.outputs.version }}.jar
         asset_content_type: application/java-archive
 
 
