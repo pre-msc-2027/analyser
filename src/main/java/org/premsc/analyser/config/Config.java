@@ -42,8 +42,8 @@ public record Config(
                 dataObject.get("repo_url").getAsString(),
                 Utils.JsonArrayMapper(dataObject.get("target_files"), JsonElement::getAsString, String[]::new),
                 IRule.Severity.valueOf(dataObject.get("severity_min").getAsString().toUpperCase()),
-                dataObject.get("branch").getAsString(),
-                dataObject.get("commit").getAsString(),
+                dataObject.get("branch_id").getAsString(),
+                dataObject.get("commit_hash").getAsString(),
                 dataObject.get("use_ai_assistance").getAsBoolean(),
                 dataObject.get("max_depth").getAsInt(),
                 dataObject.get("follow_symlinks").getAsBoolean()

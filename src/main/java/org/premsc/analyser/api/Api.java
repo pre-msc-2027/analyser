@@ -112,7 +112,7 @@ public class Api {
             response = this.send(this.getBuilder(route)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(data.toString())));
-        } catch (Exception _) {
+        } catch (Exception ex) {
             return;
         }
 
@@ -163,12 +163,6 @@ public class Api {
                                 "severity_min": "low",
                                 "branch": "main",
                                 "commit": "HEAD"
-                            }
-                            """;
-                } else if (request.uri().toString().contains("token")) {
-                    return """
-                            {
-                                "token": "mock-token"
                             }
                             """;
                 } else if (request.uri().toString().contains("rules")) {
