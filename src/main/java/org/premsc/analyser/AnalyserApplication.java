@@ -11,7 +11,11 @@ import org.premsc.analyser.repository.ISource;
 import org.premsc.analyser.repository.Repository;
 import org.premsc.analyser.rules.*;
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
+
+import static org.premsc.analyser.Utils.DeleteFolder;
 
 /**
  * AnalyserApplication is the main class for the application that performs analysis on code repositories.
@@ -21,7 +25,8 @@ public class AnalyserApplication {
 
     private static final boolean DEBUG = true;
 
-    private final int id;
+    private final String id;
+    private final String token;
     private Config config;
 
     private final Api api = new Api(this);
@@ -34,19 +39,30 @@ public class AnalyserApplication {
     /**
      * Constructor for AnalyserApplication.
      *
-     * @param id the unique identifier for the application instance
+     * @param id the unique identifier for the scan
+     * @param token the user token for authentication
      */
-    private AnalyserApplication(int id) {
+    private AnalyserApplication(String id, String token) {
         this.id = id;
+        this.token = token;
     }
 
     /**
-     * Returns the unique identifier of the application instance.
+     * Returns the unique identifier of the scan.
      *
      * @return the unique identifier
      */
-    public int getId() {
+    public String getId() {
         return this.id;
+    }
+
+    /**
+     * Returns the user token for authentication.
+     *
+     * @return the user token
+     */
+    public String getToken() {
+        return this.token;
     }
 
     /**
@@ -119,7 +135,14 @@ public class AnalyserApplication {
 
         this.log("Posting results.");
         this.api.post("", this.analysis.getOutput());
-        if (this.getId() == 0) System.out.println(this.analysis.getOutput());
+        if (Objects.equals(this.getId(), "0")) System.out.println(this.analysis.getOutput());
+
+        this.log("Cleaning folder.");
+        try {
+            DeleteFolder(this.getRepository().getPath().toString());
+        } catch (IOException e) {
+            this.logError(e);
+        }
 
         this.log("Done.");
 
@@ -131,7 +154,7 @@ public class AnalyserApplication {
     private void init() throws Exception {
 
         this.log("Fetching configuration.");
-        this.config = Config.fromJson(this.api.get("configuration"));
+        this.config = Config.fromJson(this.api.get("scans/options"));
 
         this.log("Cloning repository.");
         this.repository.init();
@@ -257,9 +280,12 @@ public class AnalyserApplication {
      */
     public static void main(String[] args) {
 
-        int id = Integer.parseInt(args[0]);
+        String id = args[0];
+        String token = args[1];
 
-        AnalyserApplication app = new AnalyserApplication(id);
+        Utils.loadTreeSitter();
+
+        AnalyserApplication app = new AnalyserApplication(id, token);
 
         app.start();
 

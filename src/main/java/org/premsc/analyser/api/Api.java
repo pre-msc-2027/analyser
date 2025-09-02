@@ -11,6 +11,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Objects;
 import java.util.Optional;
 
 /**
@@ -73,7 +74,7 @@ public class Api {
 
         HttpResponse<String> response;
 
-        if (this.app.getId() == 0) response = Api.mock(builder);
+        if (Objects.equals(this.app.getId(), "0")) response = Api.mock(builder);
         else response = this.client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
@@ -111,7 +112,7 @@ public class Api {
             response = this.send(this.getBuilder(route)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(data.toString())));
-        } catch (Exception _) {
+        } catch (Exception ex) {
             return;
         }
 
@@ -150,7 +151,7 @@ public class Api {
             @Override
             public String body() {
 
-                if (request.uri().toString().contains("configuration")) {
+                if (request.uri().toString().contains("scans/options")) {
                     return """
                             {
                                 "repo_url": "",
@@ -162,12 +163,6 @@ public class Api {
                                 "severity_min": "low",
                                 "branch": "main",
                                 "commit": "HEAD"
-                            }
-                            """;
-                } else if (request.uri().toString().contains("token")) {
-                    return """
-                            {
-                                "token": "mock-token"
                             }
                             """;
                 } else if (request.uri().toString().contains("rules")) {

@@ -15,6 +15,7 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -81,13 +82,12 @@ public class Repository {
      */
     private void gitClone() throws Exception {
 
-        if (this.app.getId() == 0) return;
+        if (Objects.equals(this.app.getId(), "0")) return;
 
-        String access_token = this.app.getApi().get("token").getAsJsonObject().get("token").getAsString();
         String url = this.app.getConfig().repoUrl();
         String branch = this.app.getConfig().branch();
         String commit = this.app.getConfig().commit();
-        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(access_token, "");
+        CredentialsProvider credentialsProvider = new UsernamePasswordCredentialsProvider(this.app.getToken(), "");
         File directory = new File(PATH);
 
         CloneCommand command = Git.cloneRepository()
@@ -116,7 +116,7 @@ public class Repository {
      */
     private void read() throws IOException {
 
-        if (this.app.getId() == 0) {
+        if (Objects.equals(this.app.getId(), "0")) {
             this.sources.add(new MockSource("index.html"));
             this.sources.add(new MockSource("style.css"));
             return;
