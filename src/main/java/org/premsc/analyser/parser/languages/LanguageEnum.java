@@ -6,25 +6,22 @@ package org.premsc.analyser.parser.languages;
  */
 public enum LanguageEnum {
 
-    HTML("html", "tree-sitter-html", "html"),
-    CSS("css", "tree-sitter-css", "css"),
+    HTML("html","html"),
+    CSS("css", "css"),
     //JAVASCRIPT,
     //TYPESCRIPT
     ;
 
     private final String name;
-    private final String dll;
     private final String extension;
 
     /**
      * Constructor for the LanguageEnum.
      * @param name the name of the language
-     * @param dll the name of the DLL file associated with the language
      * @param extension the file extension associated with the language
      */
-    LanguageEnum(String name, String dll, String extension) {
+    LanguageEnum(String name, String extension) {
         this.name = name;
-        this.dll = dll;
         this.extension = extension;
     }
 
@@ -37,14 +34,6 @@ public enum LanguageEnum {
     }
 
     /**
-     * Get the name of the DLL file for the language.
-     * @return the name of the DLL file
-     */
-    public String getDll() {
-        return this.dll;
-    }
-
-    /**
      * Get the file extension associated with the language.
      * @return the file extension
      */
@@ -53,27 +42,11 @@ public enum LanguageEnum {
     }
 
     /**
-     * Get the class representing the language helper for this language.
-     * @return the class of the language helper
-     */
-    public String getDllName() {
-        return this.dll.replace('-', '_');
-    }
-
-    /**
      * Get the language helper for this language.
      * @return the ILanguageHelper instance for this language
      */
     public ILanguageHelper getHelper() {
         return LanguageHelperFactory.get(this);
-    }
-
-    /**
-     * Get the library name for the language, formatted as "libs/{dll}/{dll}".
-     * @return the formatted library name
-     */
-    public String getLibraryName() {
-        return "libs/" + this.dll;
     }
 
     /**

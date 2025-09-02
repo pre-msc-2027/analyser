@@ -161,8 +161,8 @@ public class Api {
                                 "target_type": "repository",
                                 "target_files": [],
                                 "severity_min": "low",
-                                "branch": "main",
-                                "commit": "HEAD"
+                                "branch_id": "main",
+                                "commit_hash": "HEAD"
                             }
                             """;
                 } else if (request.uri().toString().contains("rules")) {
@@ -173,15 +173,18 @@ public class Api {
                                       "rule_id": 0,
                                       "language": "html",
                                       "tags": [],
-                                      "parameters": {
-                                        "casing": "lower_case"
-                                      }
+                                      "parameters": [
+                                        {
+                                          "name": "casing", 
+                                          "default_value": "lower_case"
+                                        }
+                                      ]
                                     },
                                     {
                                       "rule_id": 1,
                                       "language": "html",
                                       "tags": [],
-                                      "parameters": {}
+                                      "parameters": []
                                     }
                                 ]
                             }
