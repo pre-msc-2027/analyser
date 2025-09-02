@@ -1,5 +1,6 @@
 package org.premsc.analyser;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -25,6 +26,7 @@ public class Analysis {
      */
     public JsonElement getOutput() {
         JsonObject root = new JsonObject();
+        ObjectMapper mapper = new ObjectMapper();
 
         root.addProperty("status", "completed");
 
@@ -38,12 +40,12 @@ public class Analysis {
         root.add("warnings", warnings);
         int warning_id = 0;
         for (Warning warning : this.warnings) {
+
             JsonObject warningObject = new JsonObject();
             warningObject.addProperty("id", warning_id++);
             warningObject.addProperty("rule_id", warning.rule().getId());
             warningObject.addProperty("file", warning.source().getFilepath());
-            warningObject.addProperty("line", warning.line());
-            warnings.add(warningObject);
+            warningObject.addProperty("line", warning.line()););
         }
 
         return root;

@@ -1,5 +1,6 @@
 package org.premsc.analyser.rules;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.premsc.analyser.Utils;
@@ -17,10 +18,6 @@ public abstract class RuleAbs implements IRule {
     private final LanguageEnum language;
     private final RuleParameter[] parameters;
 
-    /**
-     * Constructs a RuleAbs instance from a JSON object.
-     * @param data The JSON object containing rule data.
-     */
     public RuleAbs(JsonObject data) {
         this(
                 data.get("rule_id").getAsInt(),

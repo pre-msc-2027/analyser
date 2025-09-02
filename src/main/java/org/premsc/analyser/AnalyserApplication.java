@@ -1,5 +1,6 @@
 package org.premsc.analyser;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import org.premsc.analyser.api.Api;
 import org.premsc.analyser.api.HttpResponseError;
@@ -154,7 +155,7 @@ public class AnalyserApplication {
     private void init() throws Exception {
 
         this.log("Fetching configuration.");
-        this.config = Config.fromJson(this.api.get("scans/options"));
+        this.config = this.api.get("scans/options", Config.class);
 
         this.log("Cloning repository.");
         this.repository.init();
@@ -257,7 +258,7 @@ public class AnalyserApplication {
 
         System.out.printf("[%s] %s%n", datetime, message);
 
-        JsonObject log = new JsonObject();
+        Object log = new JsonObject();
         log.addProperty("timestamp", timestamp);
         log.addProperty("message", message);
         log.addProperty("error", "");

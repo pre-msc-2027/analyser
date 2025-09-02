@@ -1,10 +1,12 @@
 package org.premsc.analyser.api;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.premsc.analyser.AnalyserApplication;
 
 import javax.net.ssl.SSLSession;
+import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -101,6 +103,21 @@ public class Api {
     }
 
     /**
+     * Sends a GET request to the specified route and maps the response to the provided schema class.
+     *
+     * @param route The API route to send the GET request to.
+     * @param schema The class to map the response to.
+     * @return An instance of the schema class populated with the response data.
+     */
+    public <S> S get(String route, Class<S> schema) throws IOException, InterruptedException {
+
+        HttpResponse<String> response = this.send(this.getBuilder(route).GET());
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(response.body(), schema);
+    }
+
+    /**
      * Sends a POST request to the specified route with the provided data.
      *
      * @param route The API route to send the POST request to.
@@ -152,9 +169,9 @@ public class Api {
                                 "use_ai_assistance": false,
                                 "max_depth": -1,
                                 "follow_symlinks": true,
-                                "target_type": "repository",
+                                "target_type": "REPOSITORY",
                                 "target_files": [],
-                                "severity_min": "low",
+                                "severity_min": "LOW",
                                 "branch_id": "main",
                                 "commit_hash": "HEAD"
                             }
@@ -169,7 +186,7 @@ public class Api {
                                       "tags": [],
                                       "parameters": [
                                         {
-                                          "name": "casing", 
+                                          "name": "casing",
                                           "default_value": "lower_case"
                                         }
                                       ]
