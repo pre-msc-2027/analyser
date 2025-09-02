@@ -2,7 +2,6 @@ package org.premsc.analyser.rules;
 
 import org.premsc.analyser.parser.languages.LanguageEnum;
 
-import java.util.Map;
 import java.util.function.Predicate;
 
 /**
@@ -32,9 +31,10 @@ public interface IRule {
 
     /**
      * Returns the parameters associated with the rule.
+     *
      * @return A map of parameter names to their values.
      */
-    Map<String, String> getParameters();
+    RuleParameter[] getParameters();
 
     /**
      * Checks if the rule has a specific tag.
