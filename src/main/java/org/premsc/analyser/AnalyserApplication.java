@@ -12,11 +12,10 @@ import org.premsc.analyser.repository.Repository;
 import org.premsc.analyser.rules.*;
 
 import java.io.IOException;
+import java.lang.foreign.Arena;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
-
-import static org.premsc.analyser.Utils.DeleteFolder;
 
 /**
  * AnalyserApplication is the main class for the application that performs analysis on code repositories.
@@ -107,9 +106,9 @@ public class AnalyserApplication {
      */
     private void start() {
 
-        System.loadLibrary("tree-sitter");
-
         this.log("Starting AnalyserApplication with ID: " + this.id);
+
+        NativeLib.openGrammar("");
 
         try {
             this.init();
@@ -140,7 +139,7 @@ public class AnalyserApplication {
 
         this.log("Cleaning folder.");
         try {
-            DeleteFolder(this.getRepository().getPath().toString());
+            Utils.DeleteFolder(this.getRepository().getPath().toString());
         } catch (IOException e) {
             this.logError(e);
         }
@@ -283,8 +282,6 @@ public class AnalyserApplication {
 
         String id = args[0];
         String token = args[1];
-
-        Utils.loadTreeSitter();
 
         AnalyserApplication app = new AnalyserApplication(id, token);
 
