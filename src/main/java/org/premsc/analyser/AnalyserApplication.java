@@ -12,6 +12,7 @@ import org.premsc.analyser.repository.Repository;
 import org.premsc.analyser.rules.*;
 
 import java.io.IOException;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
