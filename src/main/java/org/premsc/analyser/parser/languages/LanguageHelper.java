@@ -1,6 +1,8 @@
 package org.premsc.analyser.parser.languages;
 
 import io.github.treesitter.jtreesitter.Language;
+import org.premsc.analyser.NativeLib;
+import org.premsc.analyser.Utils;
 
 import java.lang.foreign.Arena;
 import java.lang.foreign.SymbolLookup;
@@ -40,8 +42,9 @@ public class LanguageHelper implements ILanguageHelper {
      * @return the loaded Tree-sitter language
      */
     private static Language load(LanguageEnum language) {
-        String library = System.mapLibraryName(language.getLibraryName());
-        SymbolLookup symbols = SymbolLookup.libraryLookup(library, Arena.global());
-        return Language.load(symbols, language.getDllName());
+        return Language.load(
+                NativeLib.openGrammar(language.getName()),
+                NativeLib.getNativeName(language.getName())
+        );
     }
 }
