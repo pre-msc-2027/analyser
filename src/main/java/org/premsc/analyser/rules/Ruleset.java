@@ -44,9 +44,9 @@ public class Ruleset {
 
         for (JsonElement ruleElement : rules) {
             JsonObject rule = ruleElement.getAsJsonObject();
-            switch (rule.get("rule_id").getAsInt()) {
-                case 0 -> this.rules.add(new CasingRule(rule));
-                case 1 -> this.rules.add(new ClassExistRule(rule));
+            switch (rule.get("rule_id").getAsString()) {
+                case "0" -> this.rules.add(new CasingRule(rule));
+                case "1" -> this.rules.add(new ClassExistRule(rule));
                 default -> throw new IllegalArgumentException("Unknown rule ID: " + rule.get("id").getAsInt());
             }
         }

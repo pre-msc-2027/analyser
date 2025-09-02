@@ -5,7 +5,7 @@ import com.google.gson.JsonObject;
 import org.premsc.analyser.Utils;
 import org.premsc.analyser.parser.languages.LanguageEnum;
 
-import java.util.Map;
+import java.util.Arrays;
 
 /**
  * Abstract base class for rules in the analysis.
@@ -15,7 +15,7 @@ public abstract class RuleAbs implements IRule {
     private final int id;
     private final String[] tags;
     private final LanguageEnum language;
-    private final Map<String, String> parameters;
+    private final RuleParameter[] parameters;
 
     /**
      * Constructs a RuleAbs instance from a JSON object.
@@ -26,7 +26,7 @@ public abstract class RuleAbs implements IRule {
                 data.get("rule_id").getAsInt(),
                 LanguageEnum.valueOf(data.get("language").getAsString().toUpperCase()),
                 Utils.JsonArrayMapper(data.get("tags"), JsonElement::getAsString, String[]::new),
-                Utils.JsonObjectMapper(data.get("parameters"), JsonElement::getAsString)
+                Utils.JsonArrayMapper(data.get("parameters"), RuleParameter::new, RuleParameter[]::new)
         );
     }
 
@@ -38,7 +38,7 @@ public abstract class RuleAbs implements IRule {
      * @param tags       An array of tags associated with the rule.
      * @param parameters A map of parameters for the rule.
      */
-    protected RuleAbs(int id, LanguageEnum language, String[] tags, Map<String, String> parameters) {
+    protected RuleAbs(int id, LanguageEnum language, String[] tags, RuleParameter[] parameters) {
         this.id = id;
         this.tags = tags;
         this.language = language;
@@ -61,7 +61,7 @@ public abstract class RuleAbs implements IRule {
     }
 
     @Override
-    public Map<String, String> getParameters() {
+    public RuleParameter[] getParameters() {
         return this.parameters;
     }
 
@@ -72,8 +72,12 @@ public abstract class RuleAbs implements IRule {
      * @throws UnknownParameter If the parameter with the specified key does not exist.
      */
     protected String getParameter(String key) throws UnknownParameter {
-        if (!this.parameters.containsKey(key)) throw new UnknownParameter(key);
-        return this.parameters.get(key);
+        for (RuleParameter parameter : this.parameters) {
+            if (parameter.name().equalsIgnoreCase(key)) {
+                return parameter.default_value();
+            }
+        }
+        throw new UnknownParameter(key);
     }
 
     @Override
