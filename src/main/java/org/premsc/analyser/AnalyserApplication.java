@@ -1,5 +1,6 @@
 package org.premsc.analyser;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonObject;
 import org.premsc.analyser.api.Api;
@@ -114,7 +115,7 @@ public class AnalyserApplication {
         try {
             this.init();
         } catch (Exception e) {
-            this.logError(e);
+            this.log(e);
 			System.exit(1);
         }
 
@@ -122,7 +123,7 @@ public class AnalyserApplication {
         try {
             this.runIndexing();
         } catch (Exception e) {
-            this.logError(e);
+            this.log(e);
             System.exit(1);
         }
 
@@ -130,19 +131,27 @@ public class AnalyserApplication {
         try {
             this.runAnalysis();
         } catch (Exception e) {
-            this.logError(e);
+            this.log(e);
             System.exit(1);
         }
 
         this.log("Posting results.");
-        this.api.post("", this.analysis.getOutput());
-        if (Objects.equals(this.getId(), "0")) System.out.println(this.analysis.getOutput());
+        this.api.post("", this.analysis);
+        if (Objects.equals(this.getId(), "0")) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(this.analysis.getModule());
+            try {
+                System.out.println(mapper.writeValueAsString(this.analysis));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         this.log("Cleaning folder.");
         try {
             Utils.DeleteFolder(this.getRepository().getPath());
         } catch (IOException e) {
-            this.logError(e);
+            this.log(e);
         }
 
         this.log("Done.");
@@ -208,7 +217,7 @@ public class AnalyserApplication {
 
         for (ISource source : this.getRepository().list()) {
 
-            this.analysis.total_files += 1;
+            this.analysis.totalFiles += 1;
 
             try (ITreeHelper treeHelper = source.parse()) {
 
@@ -228,13 +237,13 @@ public class AnalyserApplication {
 
                     if (!results.isEmpty()) found = true;
 
-                    this.analysis.warnings_found += results.size();
+                    this.analysis.warningsFound += results.size();
 
                     this.analysis.warnings.addAll(results);
 
                 }
 
-                if (found) this.analysis.files_with_warnings += 1;
+                if (found) this.analysis.filesWithWarnings += 1;
 
             } catch (MalformedInputException _) {
                 this.log("Skipping file with invalid encoding: " + source.getFilepath());
@@ -251,43 +260,31 @@ public class AnalyserApplication {
      *
      * @param message the message to log
      */
-    public void log(String message) {
-
-        String datetime = java.time.LocalDateTime.now().toString();
-        long timestamp = System.currentTimeMillis();
-
-        System.out.printf("[%s] %s%n", datetime, message);
-
-        Object log = new JsonObject();
-        log.addProperty("timestamp", timestamp);
-        log.addProperty("message", message);
-        log.addProperty("error", "");
-        System.out.println(log);
-        try {
-            this.api.post("scans/logs", log);
-        } catch (HttpResponseError e) {
-            // Ignore logging errors
-        }
+    private void log(String message) {
+        Log log = new Log(message);
+        this.log(log);
+        this.api.post("logs", log);
     }
 
-    public void logError(Exception error) {
-
-        String datetime = java.time.LocalDateTime.now().toString();
-        long timestamp = System.currentTimeMillis();
-
-        System.err.printf("[%s] ERROR: (%s) %s%n", datetime, error.getClass().getSimpleName(), error.getMessage());
-
-        JsonObject log = new JsonObject();
-        log.addProperty("timestamp", timestamp);
-        log.addProperty("message", error.getMessage());
-        log.addProperty("error", error.getClass().getSimpleName());
-
-        try {
-            if (! (error instanceof HttpResponseError)) this.api.post("scans/logs", log);
-        } catch (HttpResponseError e) {
-            // Ignore logging errors
-        }
+    /**
+     * Logs an exception with its message and type, then posts it to the API.
+     *
+     * @param error the exception to log
+     */
+    private void log(Exception error) {
+        Log log = new Log(error);
+        this.log(log);
         if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
+    }
+
+    /**
+     * Logs a Log object by printing it to the console and posting it to the API.
+     *
+     * @param log the Log object to log
+     */
+    private void log(Log log) {
+        System.out.println(log);
+        this.api.post("logs", log);
     }
 
     /**

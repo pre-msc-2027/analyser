@@ -1,12 +1,9 @@
 package org.premsc.analyser.rules;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.premsc.analyser.Utils;
 import org.premsc.analyser.parser.languages.LanguageEnum;
-
-import java.util.Arrays;
 
 /**
  * Abstract base class for rules in the analysis.

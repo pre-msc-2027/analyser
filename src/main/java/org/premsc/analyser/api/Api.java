@@ -1,12 +1,13 @@
 package org.premsc.analyser.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.premsc.analyser.AnalyserApplication;
+import org.premsc.analyser.IHasModule;
 
 import javax.net.ssl.SSLSession;
-import java.io.DataInput;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
@@ -117,6 +118,16 @@ public class Api {
         return mapper.readValue(response.body(), schema);
     }
 
+    public <C> void post(String route, C obj) {
+        ObjectMapper mapper = new ObjectMapper();
+        if (obj instanceof IHasModule hasModuleObj) mapper.registerModule(hasModuleObj.getModule());
+        try {
+            this.post(route, mapper.writeValueAsString(obj));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     /**
      * Sends a POST request to the specified route with the provided data.
      *
@@ -124,12 +135,20 @@ public class Api {
      * @param data  The data to be sent in the request body as a JsonElement.
      */
     public void post(String route, JsonElement data) {
+
+        this.post(route, data.toString());
+
+    }
+
+    private void post(String route, String data) {
+
+        HttpResponse<String> response;
         try {
             this.send(this.getBuilder(route)
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(data.toString())));
+                    .POST(HttpRequest.BodyPublishers.ofString(data)));
         } catch (Exception ex) {
-            this.app.logError(ex);
+            this.app.log(ex);
         }
     }
 

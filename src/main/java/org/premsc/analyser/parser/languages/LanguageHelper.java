@@ -2,10 +2,6 @@ package org.premsc.analyser.parser.languages;
 
 import io.github.treesitter.jtreesitter.Language;
 import org.premsc.analyser.NativeLib;
-import org.premsc.analyser.Utils;
-
-import java.lang.foreign.Arena;
-import java.lang.foreign.SymbolLookup;
 
 /**
  * Abstract class for language helper implementations.
