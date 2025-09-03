@@ -2,6 +2,7 @@ package org.premsc.analyser;
 
 import com.google.gson.JsonObject;
 import org.premsc.analyser.api.Api;
+import org.premsc.analyser.api.HttpResponseError;
 import org.premsc.analyser.config.Config;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.indexer.IIndexer;
@@ -12,6 +13,7 @@ import org.premsc.analyser.repository.Repository;
 import org.premsc.analyser.rules.*;
 
 import java.io.IOException;
+import java.nio.charset.MalformedInputException;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,7 +23,7 @@ import java.util.Objects;
  */
 public class AnalyserApplication {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private final String id;
     private final String token;
@@ -190,6 +192,10 @@ public class AnalyserApplication {
 
                 }
 
+            } catch (MalformedInputException _) {
+                this.log("Skipping file with invalid encoding: " + source.getFilepath());
+            } catch (Exception e) {
+                this.logError(e);
             }
         }
     }
@@ -229,6 +235,10 @@ public class AnalyserApplication {
 
                 if (found) this.analysis.files_with_warnings += 1;
 
+            } catch (MalformedInputException _) {
+                this.log("Skipping file with invalid encoding: " + source.getFilepath());
+            } catch (Exception e) {
+                this.logError(e);
             }
 
         }
@@ -240,7 +250,7 @@ public class AnalyserApplication {
      *
      * @param message the message to log
      */
-    private void log(String message) {
+    public void log(String message) {
 
         String datetime = java.time.LocalDateTime.now().toString();
         long timestamp = System.currentTimeMillis();
@@ -250,11 +260,16 @@ public class AnalyserApplication {
         JsonObject log = new JsonObject();
         log.addProperty("timestamp", timestamp);
         log.addProperty("message", message);
-
-        this.api.post("scans/logs", log);
+        log.addProperty("error", "");
+        System.out.println(log);
+        try {
+            this.api.post("scans/logs", log);
+        } catch (HttpResponseError e) {
+            // Ignore logging errors
+        }
     }
 
-    private void logError(Exception error) {
+    public void logError(Exception error) {
 
         String datetime = java.time.LocalDateTime.now().toString();
         long timestamp = System.currentTimeMillis();
@@ -266,8 +281,11 @@ public class AnalyserApplication {
         log.addProperty("message", error.getMessage());
         log.addProperty("error", error.getClass().getSimpleName());
 
-        this.api.post("scans/logs", log);
-
+        try {
+            if (! (error instanceof HttpResponseError)) this.api.post("scans/logs", log);
+        } catch (HttpResponseError e) {
+            // Ignore logging errors
+        }
         if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
     }
 

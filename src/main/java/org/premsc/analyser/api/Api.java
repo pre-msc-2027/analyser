@@ -79,7 +79,7 @@ public class Api {
         else response = this.client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
-            throw new HttpResponseError(response.statusCode());
+            throw new HttpResponseError(response);
         }
 
         return response;
@@ -107,20 +107,13 @@ public class Api {
      * @param data  The data to be sent in the request body as a JsonElement.
      */
     public void post(String route, JsonElement data) {
-
-        HttpResponse<String> response;
         try {
-            response = this.send(this.getBuilder(route)
+            this.send(this.getBuilder(route)
                     .header("Content-Type", "application/json")
                     .POST(HttpRequest.BodyPublishers.ofString(data.toString())));
         } catch (Exception ex) {
-            return;
+            this.app.logError(ex);
         }
-
-        if (response.statusCode() != 200) {
-            throw new HttpResponseError(response.statusCode());
-        }
-
     }
 
     static HttpResponse<String> mock(HttpRequest.Builder builder) {
