@@ -12,8 +12,6 @@ import org.premsc.analyser.repository.Repository;
 import org.premsc.analyser.rules.*;
 
 import java.io.IOException;
-import java.lang.foreign.Arena;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
@@ -23,7 +21,7 @@ import java.util.Objects;
  */
 public class AnalyserApplication {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private final String id;
     private final String token;
@@ -139,7 +137,7 @@ public class AnalyserApplication {
 
         this.log("Cleaning folder.");
         try {
-            Utils.DeleteFolder(this.getRepository().getPath().toString());
+            Utils.DeleteFolder(this.getRepository().getPath());
         } catch (IOException e) {
             this.logError(e);
         }
