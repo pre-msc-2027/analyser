@@ -1,0 +1,8 @@
+define
+    param $casing as string
+find node (element [
+		(start_tag (tag_name @target))
+		(end_tag (tag_name @target))
+		])
+	where @target !^ $casing
+then validate @target
