@@ -251,7 +251,7 @@ public class AnalyserApplication {
         log.addProperty("timestamp", timestamp);
         log.addProperty("message", message);
 
-        this.api.post("logs", log);
+        this.api.post("scans/logs", log);
     }
 
     private void logError(Exception error) {
@@ -266,7 +266,7 @@ public class AnalyserApplication {
         log.addProperty("message", error.getMessage());
         log.addProperty("error", error.getClass().getSimpleName());
 
-        this.api.post("logs", log);
+        this.api.post("scans/logs", log);
 
         if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
     }
