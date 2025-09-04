@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>org.premsc</groupId>
 	<artifactId>analyser</artifactId>
-	<version>1.0.6</version>
+	<version>1.1.0</version>
 	<name>analyser</name>
 	<description>Cli analyser</description>
 	<url/>
@@ -48,6 +48,16 @@
 			<groupId>org.slf4j</groupId>
 			<artifactId>slf4j-nop</artifactId>
 			<version>2.0.13</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.core</groupId>
+			<artifactId>jackson-databind</artifactId>
+			<version>2.20.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.fasterxml.jackson.datatype</groupId>
+			<artifactId>jackson-datatype-jsr310</artifactId>
+			<version>2.20.0</version>
 		</dependency>
 	</dependencies>
 	<build>

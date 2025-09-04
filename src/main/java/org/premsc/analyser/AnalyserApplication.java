@@ -1,8 +1,8 @@
 package org.premsc.analyser;
 
-import com.google.gson.JsonObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.premsc.analyser.api.Api;
-import org.premsc.analyser.api.HttpResponseError;
 import org.premsc.analyser.config.Config;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.indexer.IIndexer;
@@ -23,7 +23,7 @@ import java.util.Objects;
  */
 public class AnalyserApplication {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private final String id;
     private final String token;
@@ -113,7 +113,7 @@ public class AnalyserApplication {
         try {
             this.init();
         } catch (Exception e) {
-            this.logError(e);
+            this.log(e);
 			System.exit(1);
         }
 
@@ -121,7 +121,7 @@ public class AnalyserApplication {
         try {
             this.runIndexing();
         } catch (Exception e) {
-            this.logError(e);
+            this.log(e);
             System.exit(1);
         }
 
@@ -129,19 +129,27 @@ public class AnalyserApplication {
         try {
             this.runAnalysis();
         } catch (Exception e) {
-            this.logError(e);
+            this.log(e);
             System.exit(1);
         }
 
         this.log("Posting results.");
-        this.api.post("", this.analysis.getOutput());
-        if (Objects.equals(this.getId(), "0")) System.out.println(this.analysis.getOutput());
+        this.api.post("", this.analysis);
+        if (Objects.equals(this.getId(), "0")) {
+            ObjectMapper mapper = new ObjectMapper();
+            mapper.registerModule(this.analysis.getModule());
+            try {
+                System.out.println(mapper.writeValueAsString(this.analysis));
+            } catch (JsonProcessingException e) {
+                throw new RuntimeException(e);
+            }
+        }
 
         this.log("Cleaning folder.");
         try {
             Utils.DeleteFolder(this.getRepository().getPath());
         } catch (IOException e) {
-            this.logError(e);
+            this.log(e);
         }
 
         this.log("Done.");
@@ -154,7 +162,7 @@ public class AnalyserApplication {
     private void init() throws Exception {
 
         this.log("Fetching configuration.");
-        this.config = Config.fromJson(this.api.get("scans/options"));
+        this.config = this.api.get("scans/options", Config.class);
 
         this.log("Cloning repository.");
         this.repository.init();
@@ -195,7 +203,7 @@ public class AnalyserApplication {
             } catch (MalformedInputException _) {
                 this.log("Skipping file with invalid encoding: " + source.getFilepath());
             } catch (Exception e) {
-                this.logError(e);
+                this.log(e);
             }
         }
     }
@@ -207,7 +215,7 @@ public class AnalyserApplication {
 
         for (ISource source : this.getRepository().list()) {
 
-            this.analysis.total_files += 1;
+            this.analysis.totalFiles += 1;
 
             try (ITreeHelper treeHelper = source.parse()) {
 
@@ -227,18 +235,18 @@ public class AnalyserApplication {
 
                     if (!results.isEmpty()) found = true;
 
-                    this.analysis.warnings_found += results.size();
+                    this.analysis.warningsFound += results.size();
 
                     this.analysis.warnings.addAll(results);
 
                 }
 
-                if (found) this.analysis.files_with_warnings += 1;
+                if (found) this.analysis.filesWithWarnings += 1;
 
             } catch (MalformedInputException _) {
                 this.log("Skipping file with invalid encoding: " + source.getFilepath());
             } catch (Exception e) {
-                this.logError(e);
+                this.log(e);
             }
 
         }
@@ -250,43 +258,31 @@ public class AnalyserApplication {
      *
      * @param message the message to log
      */
-    public void log(String message) {
-
-        String datetime = java.time.LocalDateTime.now().toString();
-        long timestamp = System.currentTimeMillis();
-
-        System.out.printf("[%s] %s%n", datetime, message);
-
-        JsonObject log = new JsonObject();
-        log.addProperty("timestamp", timestamp);
-        log.addProperty("message", message);
-        log.addProperty("error", "");
-        System.out.println(log);
-        try {
-            this.api.post("scans/logs", log);
-        } catch (HttpResponseError e) {
-            // Ignore logging errors
-        }
+    private void log(String message) {
+        Log log = new Log(message);
+        this.log(log);
+        this.api.post("logs", log);
     }
 
-    public void logError(Exception error) {
-
-        String datetime = java.time.LocalDateTime.now().toString();
-        long timestamp = System.currentTimeMillis();
-
-        System.err.printf("[%s] ERROR: (%s) %s%n", datetime, error.getClass().getSimpleName(), error.getMessage());
-
-        JsonObject log = new JsonObject();
-        log.addProperty("timestamp", timestamp);
-        log.addProperty("message", error.getMessage());
-        log.addProperty("error", error.getClass().getSimpleName());
-
-        try {
-            if (! (error instanceof HttpResponseError)) this.api.post("scans/logs", log);
-        } catch (HttpResponseError e) {
-            // Ignore logging errors
-        }
+    /**
+     * Logs an exception with its message and type, then posts it to the API.
+     *
+     * @param error the exception to log
+     */
+    public void log(Exception error) {
+        Log log = new Log(error);
+        this.log(log);
         if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
+    }
+
+    /**
+     * Logs a Log object by printing it to the console and posting it to the API.
+     *
+     * @param log the Log object to log
+     */
+    private void log(Log log) {
+        System.out.println(log);
+        this.api.post("logs", log);
     }
 
     /**

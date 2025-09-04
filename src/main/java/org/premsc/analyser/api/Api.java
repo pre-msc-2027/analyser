@@ -1,8 +1,11 @@
 package org.premsc.analyser.api;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParser;
 import org.premsc.analyser.AnalyserApplication;
+import org.premsc.analyser.IHasModule;
 
 import javax.net.ssl.SSLSession;
 import java.io.IOException;
@@ -101,18 +104,51 @@ public class Api {
     }
 
     /**
+     * Sends a GET request to the specified route and maps the response to the provided schema class.
+     *
+     * @param route The API route to send the GET request to.
+     * @param schema The class to map the response to.
+     * @return An instance of the schema class populated with the response data.
+     */
+    public <S> S get(String route, Class<S> schema) throws IOException, InterruptedException {
+
+        HttpResponse<String> response = this.send(this.getBuilder(route).GET());
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(response.body(), schema);
+    }
+
+    public <C> void post(String route, C obj) {
+        ObjectMapper mapper = new ObjectMapper();
+        if (obj instanceof IHasModule hasModuleObj) mapper.registerModule(hasModuleObj.getModule());
+        try {
+            this.post(route, mapper.writeValueAsString(obj));
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    /**
      * Sends a POST request to the specified route with the provided data.
      *
      * @param route The API route to send the POST request to.
      * @param data  The data to be sent in the request body as a JsonElement.
      */
     public void post(String route, JsonElement data) {
+
+        this.post(route, data.toString());
+
+    }
+
+    private void post(String route, String data) {
+
+        HttpResponse<String> response;
         try {
             this.send(this.getBuilder(route)
                     .header("Content-Type", "application/json")
-                    .POST(HttpRequest.BodyPublishers.ofString(data.toString())));
+                    .POST(HttpRequest.BodyPublishers.ofString(data)));
         } catch (Exception ex) {
-            this.app.logError(ex);
+            this.app.log(ex);
         }
     }
 
@@ -152,9 +188,9 @@ public class Api {
                                 "use_ai_assistance": false,
                                 "max_depth": -1,
                                 "follow_symlinks": true,
-                                "target_type": "repository",
+                                "target_type": "REPOSITORY",
                                 "target_files": [],
-                                "severity_min": "low",
+                                "severity_min": "LOW",
                                 "branch_id": "main",
                                 "commit_hash": "HEAD"
                             }
@@ -169,7 +205,7 @@ public class Api {
                                       "tags": [],
                                       "parameters": [
                                         {
-                                          "name": "casing", 
+                                          "name": "casing",
                                           "default_value": "lower_case"
                                         }
                                       ]

@@ -1,8 +1,6 @@
 package org.premsc.analyser.config;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import org.premsc.analyser.Utils;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.premsc.analyser.rules.IRule;
 
 /**
@@ -18,36 +16,13 @@ import org.premsc.analyser.rules.IRule;
  * @param followSymlinks indicates whether symbolic links should be followed during indexing
  */
 public record Config(
-        TargetType targetType,
-        String repoUrl,
-        String[] targetFiles,
-        IRule.Severity minimumSeverity,
-        String branch,
-        String commit,
-        boolean useAiAssistance,
-        int maxDepth,
-        boolean followSymlinks) {
-
-    /**
-     * Creates a Config object from a JSON object.
-     * @param data the JSON object containing configuration data
-     * @return a Config object populated with the data from the JSON object
-     */
-    public static Config fromJson(final JsonElement data) {
-
-        JsonObject dataObject = data.getAsJsonObject();
-
-        return new Config(
-                TargetType.valueOf(dataObject.get("target_type").getAsString().toUpperCase()),
-                dataObject.get("repo_url").getAsString(),
-                Utils.JsonArrayMapper(dataObject.get("target_files"), JsonElement::getAsString, String[]::new),
-                IRule.Severity.valueOf(dataObject.get("severity_min").getAsString().toUpperCase()),
-                dataObject.get("branch_id").getAsString(),
-                dataObject.get("commit_hash").getAsString(),
-                dataObject.get("use_ai_assistance").getAsBoolean(),
-                dataObject.get("max_depth").getAsInt(),
-                dataObject.get("follow_symlinks").getAsBoolean()
-        );
-
-    }
-}
+        @JsonProperty("target_type") TargetType targetType,
+        @JsonProperty("repo_url") String repoUrl,
+        @JsonProperty("target_files") String[] targetFiles,
+        @JsonProperty("severity_min") IRule.Severity minimumSeverity,
+        @JsonProperty("branch_id") String branch,
+        @JsonProperty("commit_hash") String commit,
+        @JsonProperty("use_ai_assistance") boolean useAiAssistance,
+        @JsonProperty("max_depth") int maxDepth,
+        @JsonProperty("follow_symlinks") boolean followSymlinks
+) {}
