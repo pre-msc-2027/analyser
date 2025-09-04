@@ -1,8 +1,6 @@
 package org.premsc.analyser;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.Module;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 
 import java.time.Instant;
@@ -14,7 +12,7 @@ import java.time.Instant;
 public record Log(
     @JsonFormat(shape = JsonFormat.Shape.NUMBER) Instant timestamp,
     String message,
-    @JsonInclude(JsonInclude.Include.NON_EMPTY) String error
+    String error
 ) implements IHasModule {
 
     /**

@@ -2,9 +2,7 @@ package org.premsc.analyser;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonObject;
 import org.premsc.analyser.api.Api;
-import org.premsc.analyser.api.HttpResponseError;
 import org.premsc.analyser.config.Config;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.indexer.IIndexer;
@@ -25,7 +23,7 @@ import java.util.Objects;
  */
 public class AnalyserApplication {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private final String id;
     private final String token;
@@ -205,7 +203,7 @@ public class AnalyserApplication {
             } catch (MalformedInputException _) {
                 this.log("Skipping file with invalid encoding: " + source.getFilepath());
             } catch (Exception e) {
-                this.logError(e);
+                this.log(e);
             }
         }
     }
@@ -248,7 +246,7 @@ public class AnalyserApplication {
             } catch (MalformedInputException _) {
                 this.log("Skipping file with invalid encoding: " + source.getFilepath());
             } catch (Exception e) {
-                this.logError(e);
+                this.log(e);
             }
 
         }
@@ -271,7 +269,7 @@ public class AnalyserApplication {
      *
      * @param error the exception to log
      */
-    private void log(Exception error) {
+    public void log(Exception error) {
         Log log = new Log(error);
         this.log(log);
         if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
