@@ -19,10 +19,10 @@ public class FunctionValue<P extends ISlangObject> extends SlangTokenAbs<P> impl
     }
 
     @Override
-    public String getClauseValue() {
+    public String getValue() {
         return switch (this.name) {
-            case "filename" -> this.getRuleExpression().getCurrentFile().getFilepath();
-            default -> "";
+            case "filepath" -> this.getRuleExpression().getCurrentFile().getFilepath();
+            default -> throw new IllegalStateException("Unexpected function: " + this.name);
         };
     }
 }

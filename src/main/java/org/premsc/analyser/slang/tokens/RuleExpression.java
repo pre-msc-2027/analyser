@@ -112,7 +112,7 @@ public class RuleExpression extends SlangObjectAbs implements IFinderParent {
                 .map(TargetIdentifierAbs.class::cast)
                 .filter(TargetIdentifierAbs::isTarget)
                 .findFirst()
-                .get();
+                .orElseThrow(() -> new IllegalStateException("No target"));
     }
 
     public List<Warning> execute(DatabaseHandler handler, ITreeHelper treeHelper) {

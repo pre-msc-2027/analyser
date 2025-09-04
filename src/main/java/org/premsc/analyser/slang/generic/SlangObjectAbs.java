@@ -14,10 +14,14 @@ public abstract class SlangObjectAbs implements ISlangObject {
 
     protected static Node[] getChildren(Node parent, String type) {
         return parent
-                .getChildren()
+                .getNamedChildren()
                 .stream()
                 .filter(child -> child.getType().equals(type))
                 .toArray(Node[]::new);
     }
 
+    @Override
+    public String toString() {
+        return this.getPath();
+    }
 }

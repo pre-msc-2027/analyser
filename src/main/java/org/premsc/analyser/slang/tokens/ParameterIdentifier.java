@@ -21,12 +21,8 @@ public class ParameterIdentifier extends IdentifierAbs implements IClauseValue {
         super(parent, node, name);
     }
 
+    @Override
     public String getValue() {
         return this.getRuleExpression().getRule().getParameter(name);
-    }
-
-    @Override
-    public String getClauseValue() {
-        return this.getValue();
     }
 }

@@ -136,10 +136,11 @@ public class AnalyserApplication {
 
         this.log("Posting results.");
         this.api.post("scans/analyse", this.analysis);
+        if (this.id.equals("0")) System.out.println(this.analysis);
 
         this.log("Cleaning folder.");
         try {
-            Utils.DeleteFolder(this.getRepository().getPath());
+            if (!this.id.equals("0")) Utils.DeleteFolder(this.getRepository().getPath());
         } catch (IOException e) {
             this.log(e);
         }
@@ -292,4 +293,5 @@ public class AnalyserApplication {
         app.start();
 
     }
+
 }

@@ -3,6 +3,7 @@ package org.premsc.analyser.slang.tokens;
 import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.slang.generic.ClauseAbs;
 import org.premsc.analyser.slang.generic.FinderStatementAbs;
+import org.premsc.analyser.slang.generic.IndexStatementAbs;
 import org.premsc.analyser.slang.generic.SlangTokenAbs;
 
 import java.util.ArrayList;
@@ -24,8 +25,8 @@ public class WhereStatement<P extends FinderStatementAbs<?>> extends SlangTokenA
     }
 
     private <C extends ClauseAbs<P>> C initClause(Node node) {
-        if (this.getParent() instanceof IndexStatement)
-                return (C) new IndexClause((WhereStatement<IndexStatement<?>>) this, node);
+        if (this.getParent() instanceof IndexStatementAbs<?>)
+                return (C) new IndexClause((WhereStatement<IndexStatementAbs<?>>) this, node);
         if (this.getParent() instanceof NodeStatement)
                 return (C) new NodeClause((WhereStatement<NodeStatement>) this, node);
         return null;

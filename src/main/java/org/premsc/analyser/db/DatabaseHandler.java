@@ -51,6 +51,8 @@ public class DatabaseHandler implements AutoCloseable {
 
         try (Statement stmt = connection.createStatement()) {
 
+            stmt.execute("DROP TABLE index_table;");
+
             stmt.execute("""
                     CREATE TABLE IF NOT EXISTS index_table
                     (id INTEGER PRIMARY KEY AUTOINCREMENT UNIQUE,
@@ -68,6 +70,8 @@ public class DatabaseHandler implements AutoCloseable {
                     """);
 
         }
+
+
     }
 
     /**

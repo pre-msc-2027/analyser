@@ -25,11 +25,7 @@ public class NodeStatement extends FinderStatementAbs<RuleExpression> implements
         return null;
     }
 
-    public Branch<NodeStatement> getBranch() {
-        return branch;
-    }
-
-    public void execute(DatabaseHandler handler, ITreeHelper treeHelper) {
+    protected QueryBuilder<?> getBuilder() {
         QueryBuilder<?> builder = (QueryBuilder<?>) branch.build();
 
         for (ClauseAbs<?> clause : whereStatement.getClauses()) {
@@ -37,19 +33,25 @@ public class NodeStatement extends FinderStatementAbs<RuleExpression> implements
             nodeClause.build(builder);
         }
 
-        String query = builder.build();
+        return builder;
+    }
+
+    public Branch<NodeStatement> getBranch() {
+        return branch;
+    }
+
+    public void execute(DatabaseHandler handler, ITreeHelper treeHelper) {
 
         QueryHelper queryHelper;
         try {
-            queryHelper = treeHelper.query(builder);
+            queryHelper = treeHelper.query(this.getBuilder());
         } catch (UnsupportedLanguage e) {
             throw new RuntimeException(e);
         }
 
-        for (NodeCapture capture: branch.getCaptures()) {
-            NodeIdentifier nodeIdentifier = capture.getNodeIdentifier();
-            List<Node> nodes = queryHelper.getNodes(nodeIdentifier.getName());
-            nodeIdentifier.addCaptures(nodes);
-        }
+        NodeIdentifier nodeIdentifier = (NodeIdentifier) this.getRuleExpression().getTarget();
+        List<Node> nodes = queryHelper.getNodes(nodeIdentifier.getName());
+        nodeIdentifier.addCaptures(nodes);
+
     }
 }

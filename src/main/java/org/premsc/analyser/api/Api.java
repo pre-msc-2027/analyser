@@ -205,7 +205,7 @@ public class Api {
                                       "parameters": [
                                         {
                                           "name": "casing",
-                                          "default": "lower_case"
+                                          "default": "^[a-z0-9]+$"
                                         }
                                       ],
                                       "slang": "node (element [\\n    (start_tag (tag_name @target))\\n    (end_tag (tag_name @target))\\n    ])\\nwhere @target !* $casing"

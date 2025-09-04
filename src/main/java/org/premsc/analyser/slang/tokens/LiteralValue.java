@@ -12,12 +12,9 @@ public class LiteralValue<P extends ISlangObject> extends SlangTokenAbs<P> imple
         this.value = node.getText();
     }
 
+    @Override
     public String getValue() {
         return value;
     }
 
-    @Override
-    public String getClauseValue() {
-        return "";
-    }
 }

@@ -21,6 +21,10 @@ public abstract class IndexStatementAbs<P extends IFinderParent> extends FinderS
         return null;
     }
 
+    public IndexIdentifier getIndexIdentifier() {
+        return indexIdentifier;
+    }
+
     public SelectorPredicateAbs<?> getSelectorPredicate() {
 
         SelectorPredicateAbs<?> predicate = null;
@@ -37,5 +41,12 @@ public abstract class IndexStatementAbs<P extends IFinderParent> extends FinderS
         return Selector
                 .of("index_table")
                 .setPredicate(getSelectorPredicate());
+    }
+
+    @Override
+    public String toString() {
+        return "IndexStatementAbs{" +
+               "indexIdentifier=" + indexIdentifier +
+               '}';
     }
 }

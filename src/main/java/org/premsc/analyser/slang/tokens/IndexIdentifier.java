@@ -31,15 +31,26 @@ public class IndexIdentifier extends TargetIdentifierAbs implements IClauseValue
 
     @Override
     public List<Warning> getResults(ITreeHelper treeHelper) {
-        return List.of();
-    }
-
-    @Override
-    public String getClauseValue() {
-        return "";
+        List<Warning> results = new ArrayList<>();
+        RuleExpression ruleExpression = getRuleExpression();
+        for (IndexModel.Index node : captures)
+            results.add(new Warning(ruleExpression.getRule(), treeHelper.getSource(), node));
+        return results;
     }
 
     public void addCapture(IndexModel.Index index) {
         captures.add(index);
+    }
+
+    @Override
+    public String getValue() {
+        return null;
+    }
+
+    @Override
+    public String toString() {
+        return "IndexIdentifier{" +
+               "name='" + name + '\'' +
+               '}';
     }
 }

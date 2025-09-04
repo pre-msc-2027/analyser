@@ -6,10 +6,11 @@ import org.premsc.analyser.db.selector.SelectorPredicateAbs;
 import org.premsc.analyser.slang.generic.ClauseAbs;
 import org.premsc.analyser.slang.generic.IClauseTarget;
 import org.premsc.analyser.slang.generic.IClauseValue;
+import org.premsc.analyser.slang.generic.IndexStatementAbs;
 
-public class IndexClause extends ClauseAbs<IndexStatement<?>> {
+public class IndexClause extends ClauseAbs<IndexStatementAbs<?>> {
 
-    public IndexClause(WhereStatement<IndexStatement<?>> parent, Node node) {
+    public IndexClause(WhereStatement<IndexStatementAbs<?>> parent, Node node) {
         super(parent, node);
     }
 
@@ -32,19 +33,27 @@ public class IndexClause extends ClauseAbs<IndexStatement<?>> {
 
     }
 
+    public IndexStatement<?> getIndexStatement() {
+        if (this.getParent().getParent() instanceof IndexStatement<?> indexStatement)
+            return indexStatement;
+        else if (this.getParent().getParent() instanceof WithStatement withStatement)
+            return withStatement.getParent();
+        throw new IllegalStateException("Unexpected parent type");
+    }
+
     public SelectorPredicateAbs<?> build() {
 
         if (this.value instanceof IndexIdentifier identifier)
             return switch (this.operator.getOperator()) {
-                case "=" -> Predicate.in(this.target.getName(), this.getParent().getParent().getJoint(identifier));
-                case "!="-> Predicate.in(this.target.getName(), this.getParent().getParent().getJoint(identifier)).not();
-                default -> throw new IllegalStateException("Unexpected value: " + this.operator.getOperator());
+                case "=" -> Predicate.in(this.target.getName(), this.getIndexStatement().getJoint(identifier));
+                case "!="-> Predicate.in(this.target.getName(), this.getIndexStatement().getJoint(identifier)).not();
+                default -> throw new IllegalStateException("Unexpected operator: " + this.operator.getOperator());
             };
 
         return switch (this.operator.getOperator()) {
-            case "=" -> Predicate.equal(this.target.getName(), this.value.getClauseValue());
-            case "!="-> Predicate.notEqual(this.target.getName(), this.value.getClauseValue());
-            default -> throw new IllegalStateException("Unexpected value: " + this.operator.getOperator());
+            case "=" -> Predicate.equal(this.target.getName(), this.value.getValue());
+            case "!="-> Predicate.notEqual(this.target.getName(), this.value.getValue());
+            default -> throw new IllegalStateException("Unexpected operator: " + this.operator.getOperator());
         };
     }
 }

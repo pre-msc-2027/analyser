@@ -20,10 +20,10 @@ public class NodeClause extends ClauseAbs<NodeStatement> {
 
     public void build(QueryBuilder<?> builder) {
         switch (this.operator.getOperator()) {
-            case "=": builder.equal(this.target.getName(), this.value.getClauseValue()); break;
-            case "!=": builder.notEqual(this.target.getName(), this.value.getClauseValue()); break;
-            case "*": builder.match(this.target.getName(), this.value.getClauseValue()); break;
-            case "!*": builder.notMatch(this.target.getName(), this.value.getClauseValue()); break;
+            case "=": builder.equal(this.target.getName(), this.value.getValue()); break;
+            case "!=": builder.notEqual(this.target.getName(), this.value.getValue()); break;
+            case "*": builder.match(this.target.getName(), this.value.getValue()); break;
+            case "!*": builder.notMatch(this.target.getName(), this.value.getValue()); break;
         }
     }
 }

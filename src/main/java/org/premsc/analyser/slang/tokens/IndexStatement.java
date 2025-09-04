@@ -26,9 +26,8 @@ public class IndexStatement<P extends IFinderParent> extends IndexStatementAbs<P
 
     public Selector<?> getJoint(IndexIdentifier indexIdentifier) {
         for (WithStatement withStatement : withStatements) {
-            IndexStatement<?> indexStatement = withStatement.getParent();
-            if (indexStatement.getIndexIdentifier().getName().equals(indexIdentifier.getName())) {
-                return indexStatement.getSelector();
+            if (withStatement.getIndexIdentifier().getName().equals(indexIdentifier.getName())) {
+                return withStatement.getJoint();
             }
         }
         return null;
@@ -40,10 +39,6 @@ public class IndexStatement<P extends IFinderParent> extends IndexStatementAbs<P
             withStatementList.add(new WithStatement(this, child));
         }
         return withStatementList.toArray(WithStatement[]::new);
-    }
-
-    public IndexIdentifier getIndexIdentifier() {
-        return indexIdentifier;
     }
 
     public void execute(DatabaseHandler handler, ITreeHelper treeHelper) {
