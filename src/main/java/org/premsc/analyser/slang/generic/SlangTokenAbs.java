@@ -6,10 +6,12 @@ import org.premsc.analyser.slang.tokens.RuleExpression;
 public abstract class SlangTokenAbs<P extends ISlangObject> extends SlangObjectAbs implements ISlangToken<P> {
 
     protected final P parent;
+    protected final String path;
 
     public SlangTokenAbs(P parent, Node node) {
         super(node);
         this.parent = parent;
+        this.path = parent.getPath() + "." + this.getClass().getSimpleName();
     }
 
     @Override
@@ -18,7 +20,12 @@ public abstract class SlangTokenAbs<P extends ISlangObject> extends SlangObjectA
     }
 
     @Override
-    public RuleExpression getRuleStatement() {
-        return parent.getRuleStatement();
+    public RuleExpression getRuleExpression() {
+        return parent.getRuleExpression();
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
     }
 }

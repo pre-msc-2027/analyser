@@ -197,8 +197,7 @@ public class Api {
                             """;
                 } else if (request.uri().toString().contains("rules")) {
                     return """
-                            {
-                                "rules": [
+                            [
                                     {
                                       "rule_id": 0,
                                       "language": "html",
@@ -206,18 +205,19 @@ public class Api {
                                       "parameters": [
                                         {
                                           "name": "casing",
-                                          "default_value": "lower_case"
+                                          "default": "lower_case"
                                         }
-                                      ]
+                                      ],
+                                      "slang": "node (element [\\n    (start_tag (tag_name @target))\\n    (end_tag (tag_name @target))\\n    ])\\nwhere @target !* $casing"
                                     },
                                     {
                                       "rule_id": 1,
                                       "language": "html",
                                       "tags": [],
-                                      "parameters": []
+                                      "parameters": [],
+                                      "slang": "index &target\\n    where source = filepath()\\n        type = \\"class\\"\\n        value != &other\\n    with &other\\n        where type = \\"class\\"\\n            source = &style\\n    with &style\\n        where type = \\"link_stylesheet\\"\\n            source = filepath()\\n"
                                     }
-                                ]
-                            }
+                            ]
                             """;
                 }
 
@@ -244,3 +244,4 @@ public class Api {
     }
 
 }
+

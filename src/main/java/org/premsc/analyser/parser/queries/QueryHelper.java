@@ -51,6 +51,23 @@ public class QueryHelper implements AutoCloseable {
         return cursor.findMatches(tree.getRoot()).flatMap(NodeFlatMapper).toList();
     }
 
+    /**
+     * Finds nodes in the tree that match the query and have a specific capture name.
+     * @param name The name of the capture to filter nodes by.
+     * @return A list of nodes that match the query and have the specified capture name.
+     */
+    public List<Node> getNodes(String name) {
+        return cursor
+                .findMatches(tree.getRoot())
+                .flatMap((QueryMatch match) -> match
+                        .captures()
+                        .stream()
+                        .filter((QueryCapture capture) -> capture.name().equals(name))
+                        .map(QueryCapture::node)
+                ).toList();
+
+    }
+
     @Override
     public void close() {
         this.cursor.close();

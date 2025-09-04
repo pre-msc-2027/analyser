@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.stream.Stream;
 
 
-abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> extends QueryBuilderAbs<This> {
+abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> extends QueryBuilderAbs<This> implements IQueryBuilderParent<This> {
 
     protected String capture = "";
     protected String quantity = "";
@@ -114,8 +114,8 @@ abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> exten
      * @param node The child node to add.
      * @return This QueryBuilder instance for method chaining.
      */
-    public <Q extends QueryBuilderAbs<?>> This addChild(Q node) {
-        this.nodes.add(node);
+    public <Q extends IQueryBuilder<?>> This addChild(Q node) {
+        this.nodes.add((QueryBuilderAbs<?>) node);
         return self;
     }
 

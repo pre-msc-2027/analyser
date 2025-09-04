@@ -4,6 +4,7 @@ import org.premsc.analyser.slang.tokens.RuleExpression;
 
 public interface ISlangObject {
 
-    RuleExpression getRuleStatement();
+    RuleExpression getRuleExpression();
 
+    String getPath();
 }

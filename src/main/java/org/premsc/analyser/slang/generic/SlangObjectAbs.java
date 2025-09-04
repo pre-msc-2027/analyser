@@ -8,11 +8,11 @@ public abstract class SlangObjectAbs implements ISlangObject {
 
     public SlangObjectAbs(Node node) {}
 
-    protected static Node getNode(Node parent, String type) {
-        return Arrays.stream(getNodes(parent, type)).findFirst().orElse(null);
+    protected static Node getChild(Node parent, String type) {
+        return Arrays.stream(getChildren(parent, type)).findFirst().orElse(null);
     }
 
-    protected static Node[] getNodes(Node parent, String type) {
+    protected static Node[] getChildren(Node parent, String type) {
         return parent
                 .getChildren()
                 .stream()

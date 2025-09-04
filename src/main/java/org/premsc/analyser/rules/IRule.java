@@ -2,6 +2,7 @@ package org.premsc.analyser.rules;
 
 import com.fasterxml.jackson.annotation.JsonAlias;
 import org.premsc.analyser.parser.languages.LanguageEnum;
+import org.premsc.analyser.slang.tokens.RuleExpression;
 
 import java.util.function.Predicate;
 
@@ -38,11 +39,21 @@ public interface IRule {
     RuleParameter[] getParameters();
 
     /**
+     * Returns the slang expression defining the rule.
+     * @return The slang expression as a string.
+     */
+    String getSlang();
+
+    /**
      * Checks if the rule has a specific tag.
      * @param tag The tag to check for.
      * @return True if the rule has the specified tag, false otherwise.
      */
     boolean hasTag(String tag);
+
+    String getParameter(String key) throws UnknownParameter;
+
+    RuleExpression getExpression();
 
     class LanguagePredicate implements Predicate<IRule> {
 

@@ -217,13 +217,7 @@ public class AnalyserApplication {
 
                     if (!rule.getLanguage().equals(source.getLanguage())) continue;
 
-                    List<Warning> results = switch (rule) {
-                        case IQueryRule queryRule -> queryRule.test(treeHelper).toList();
-
-                        case IIndexRule indexRule -> indexRule.test(this.dbHandler, source);
-
-                        default -> throw new IllegalStateException("Unexpected value: " + rule);
-                    };
+                    List<Warning> results = rule.getExpression().execute(dbHandler, treeHelper);
 
                     if (!results.isEmpty()) found = true;
 

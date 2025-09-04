@@ -17,7 +17,7 @@ public class MockSource extends Source {
      *
      * @param filepath the path to the source file.
      */
-    protected MockSource(String filepath) {
+    public MockSource(String filepath) {
         super(filepath);
     }
 

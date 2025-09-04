@@ -4,39 +4,46 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import org.premsc.analyser.Utils;
 import org.premsc.analyser.parser.languages.LanguageEnum;
+import org.premsc.analyser.slang.tokens.RuleExpression;
 
 /**
  * Abstract base class for rules in the analysis.
  */
-public abstract class RuleAbs implements IRule {
+public class Rule implements IRule {
 
     private final String id;
     private final String[] tags;
     private final LanguageEnum language;
     private final RuleParameter[] parameters;
+    private final String slang;
+    private final RuleExpression expression;
 
-    public RuleAbs(JsonObject data) {
+    public Rule(JsonObject data) {
         this(
                 data.get("rule_id").getAsString(),
                 LanguageEnum.valueOf(data.get("language").getAsString().toUpperCase()),
                 Utils.JsonArrayMapper(data.get("tags"), JsonElement::getAsString, String[]::new),
-                Utils.JsonArrayMapper(data.get("parameters"), RuleParameter::new, RuleParameter[]::new)
+                Utils.JsonArrayMapper(data.get("parameters"), RuleParameter::new, RuleParameter[]::new),
+                data.get("slang").getAsString()
         );
     }
 
     /**
-     * Constructs a RuleAbs instance with specified parameters.
+     * Constructs a Rule instance with specified parameters.
      *
      * @param id         The unique identifier for the rule.
      * @param language   The language associated with the rule.
      * @param tags       An array of tags associated with the rule.
      * @param parameters A map of parameters for the rule.
+     * @param slang      The slang expression defining the rule.
      */
-    protected RuleAbs(String id, LanguageEnum language, String[] tags, RuleParameter[] parameters) {
+    protected Rule(String id, LanguageEnum language, String[] tags, RuleParameter[] parameters, String slang) {
         this.id = id;
         this.tags = tags;
         this.language = language;
         this.parameters = parameters;
+        this.slang = slang;
+        this.expression = new RuleExpression(this);
     }
 
     @Override
@@ -65,13 +72,19 @@ public abstract class RuleAbs implements IRule {
      * @return The value of the parameter as a String.
      * @throws UnknownParameter If the parameter with the specified key does not exist.
      */
-    protected String getParameter(String key) throws UnknownParameter {
+    @Override
+    public String getParameter(String key) throws UnknownParameter {
         for (RuleParameter parameter : this.parameters) {
             if (parameter.name().equalsIgnoreCase(key)) {
                 return parameter.default_value();
             }
         }
         throw new UnknownParameter(key);
+    }
+
+    @Override
+    public RuleExpression getExpression() {
+        return this.expression;
     }
 
     @Override
@@ -85,4 +98,8 @@ public abstract class RuleAbs implements IRule {
     }
 
 
+    @Override
+    public String getSlang() {
+        return slang;
+    }
 }
