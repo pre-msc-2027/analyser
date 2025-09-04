@@ -22,15 +22,20 @@ jobs:
         cache: maven
     - name: Build with Maven
       run: mvn -B package --file pom.xml
+    - name: Find built JAR
+      id: jar
+      run: |
+        JAR_PATH=$(ls target/*.jar | head -n 1)
+        echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
+        echo "::set-output name=jar_path::$JAR_PATH"
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
       with:
         name: my-app-jar
-        path: target/*.jar
+        path: ${{ env.JAR_PATH }}
     - name: Extract Maven project version
       run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
       id: project
-
     - name: Show extracted Maven project version
       run: echo ${{ steps.project.outputs.version }}
       
@@ -44,17 +49,16 @@ jobs:
         release_name: Release ${{ steps.project.outputs.version }}
         draft: false
         prerelease: false
+
     - name: Upload JAR to Release
       uses: actions/upload-release-asset@v1
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         upload_url: ${{ steps.create_release.outputs.upload_url }}
-        asset_path: ./target/*.jar
+        asset_path: ${{ env.JAR_PATH }}
         asset_name: analyser-${{ steps.project.outputs.version }}.jar
         asset_content_type: application/java-archive
-
-
 
   trivy-scan:
     runs-on: ubuntu-latest
