@@ -5,7 +5,6 @@ import org.premsc.analyser.parser.tree.ITreeHelper;
 import org.premsc.analyser.rules.Warning;
 import org.premsc.analyser.slang.tokens.RuleExpression;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 

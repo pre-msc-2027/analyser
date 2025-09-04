@@ -2,13 +2,9 @@ package org.premsc.analyser.slang.tokens;
 
 import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.queries.builder.IQueryBuilderParent;
-import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.queries.builder.QueryBuilderAlternation;
 import org.premsc.analyser.slang.generic.BranchAbs;
 import org.premsc.analyser.slang.generic.ISlangBranchParent;
-import org.premsc.analyser.slang.generic.SlangTokenAbs;
-
-import java.util.List;
 
 public class Alternation<P extends ISlangBranchParent> extends BranchAbs<P> implements ISlangBranchParent {
 

@@ -3,23 +3,15 @@ package org.premsc.analyser.slang.tokens;
 import io.github.treesitter.jtreesitter.*;
 import org.premsc.analyser.NativeLib;
 import org.premsc.analyser.db.DatabaseHandler;
-import org.premsc.analyser.parser.languages.LanguageEnum;
-import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 import org.premsc.analyser.repository.ISource;
-import org.premsc.analyser.repository.MockSource;
-import org.premsc.analyser.repository.Source;
 import org.premsc.analyser.rules.IRule;
-import org.premsc.analyser.rules.RuleParameter;
-import org.premsc.analyser.rules.UnknownParameter;
 import org.premsc.analyser.rules.Warning;
 import org.premsc.analyser.slang.generic.*;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 public class RuleExpression extends SlangObjectAbs implements IFinderParent {
 

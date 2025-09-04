@@ -1,7 +1,9 @@
 package org.premsc.analyser.slang.tokens;
 
 import io.github.treesitter.jtreesitter.Node;
-import org.premsc.analyser.slang.generic.*;
+import org.premsc.analyser.slang.generic.IClauseValue;
+import org.premsc.analyser.slang.generic.ISlangObject;
+import org.premsc.analyser.slang.generic.SlangTokenAbs;
 
 public class LiteralValue<P extends ISlangObject> extends SlangTokenAbs<P> implements IClauseValue {
 

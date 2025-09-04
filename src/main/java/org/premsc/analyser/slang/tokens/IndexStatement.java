@@ -4,10 +4,7 @@ import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.db.IndexModel;
 import org.premsc.analyser.db.selector.Selector;
-import org.premsc.analyser.db.selector.SelectorPredicateAbs;
 import org.premsc.analyser.parser.tree.ITreeHelper;
-import org.premsc.analyser.slang.generic.ClauseAbs;
-import org.premsc.analyser.slang.generic.FinderStatementAbs;
 import org.premsc.analyser.slang.generic.IFinderParent;
 import org.premsc.analyser.slang.generic.IndexStatementAbs;
 

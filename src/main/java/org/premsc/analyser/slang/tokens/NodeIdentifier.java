@@ -4,7 +4,6 @@ import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 import org.premsc.analyser.rules.Warning;
 import org.premsc.analyser.slang.generic.IClauseTarget;
-import org.premsc.analyser.slang.generic.IClauseValue;
 import org.premsc.analyser.slang.generic.ISlangObject;
 import org.premsc.analyser.slang.generic.TargetIdentifierAbs;
 

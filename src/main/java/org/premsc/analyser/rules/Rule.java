@@ -1,8 +1,6 @@
 package org.premsc.analyser.rules;
 
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import org.premsc.analyser.Utils;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.premsc.analyser.parser.languages.LanguageEnum;
 import org.premsc.analyser.slang.tokens.RuleExpression;
 
@@ -18,16 +16,6 @@ public class Rule implements IRule {
     private final String slang;
     private final RuleExpression expression;
 
-    public Rule(JsonObject data) {
-        this(
-                data.get("rule_id").getAsString(),
-                LanguageEnum.valueOf(data.get("language").getAsString().toUpperCase()),
-                Utils.JsonArrayMapper(data.get("tags"), JsonElement::getAsString, String[]::new),
-                Utils.JsonArrayMapper(data.get("parameters"), RuleParameter::new, RuleParameter[]::new),
-                data.get("slang").getAsString()
-        );
-    }
-
     /**
      * Constructs a Rule instance with specified parameters.
      *
@@ -37,7 +25,13 @@ public class Rule implements IRule {
      * @param parameters A map of parameters for the rule.
      * @param slang      The slang expression defining the rule.
      */
-    protected Rule(String id, LanguageEnum language, String[] tags, RuleParameter[] parameters, String slang) {
+    protected Rule(
+            @JsonProperty("rule_id") String id,
+            @JsonProperty("language") LanguageEnum language,
+            @JsonProperty("tags") String[] tags,
+            @JsonProperty("parameters") RuleParameter[] parameters,
+            @JsonProperty("slang") String slang
+    ) {
         this.id = id;
         this.tags = tags;
         this.language = language;
@@ -68,6 +62,7 @@ public class Rule implements IRule {
 
     /**
      * Retrieves the value of a specific parameter by its key.
+     *
      * @param key The key of the parameter to retrieve.
      * @return The value of the parameter as a String.
      * @throws UnknownParameter If the parameter with the specified key does not exist.

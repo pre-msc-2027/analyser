@@ -4,12 +4,7 @@ import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.db.selector.Selector;
 import org.premsc.analyser.parser.tree.ITreeHelper;
-import org.premsc.analyser.slang.generic.FinderStatementAbs;
-import org.premsc.analyser.slang.generic.IFinderParent;
 import org.premsc.analyser.slang.generic.IndexStatementAbs;
-import org.premsc.analyser.slang.generic.SlangTokenAbs;
-
-import java.util.Objects;
 
 public class WithStatement extends IndexStatementAbs<IndexStatement<?>> {
 

@@ -1,7 +1,5 @@
 package org.premsc.analyser;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import org.premsc.analyser.api.Api;
 import org.premsc.analyser.api.HttpResponseError;
 import org.premsc.analyser.config.Config;
@@ -11,12 +9,13 @@ import org.premsc.analyser.indexer.IndexerManager;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 import org.premsc.analyser.repository.ISource;
 import org.premsc.analyser.repository.Repository;
-import org.premsc.analyser.rules.*;
+import org.premsc.analyser.rules.IRule;
+import org.premsc.analyser.rules.Ruleset;
+import org.premsc.analyser.rules.Warning;
 
 import java.io.IOException;
 import java.nio.charset.MalformedInputException;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * AnalyserApplication is the main class for the application that performs analysis on code repositories.
@@ -32,9 +31,9 @@ public class AnalyserApplication {
 
     private final Api api = new Api(this);
     private final Repository repository = new Repository(this);
-    private final Ruleset ruleset = new Ruleset(this);
     private final DatabaseHandler dbHandler = new DatabaseHandler();
     private final IndexerManager indexerManager = new IndexerManager();
+    private final Ruleset ruleset = new Ruleset(this);
     private final Analysis analysis = new Analysis();
 
     /**
@@ -170,7 +169,7 @@ public class AnalyserApplication {
     /**
      * Runs the indexing process for all sources in the repository.
      */
-    private void runIndexing() throws Exception {
+    private void runIndexing() {
 
         for (ISource source : this.getRepository().list()) {
 
@@ -204,7 +203,7 @@ public class AnalyserApplication {
     /**
      * Runs the analysis process based on the rules defined in the ruleset.
      */
-    private void runAnalysis() throws Exception {
+    private void runAnalysis() {
 
         for (ISource source : this.getRepository().list()) {
 

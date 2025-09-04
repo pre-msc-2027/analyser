@@ -6,7 +6,9 @@ import org.premsc.analyser.parser.languages.UnsupportedLanguage;
 import org.premsc.analyser.parser.queries.QueryHelper;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.tree.ITreeHelper;
-import org.premsc.analyser.slang.generic.*;
+import org.premsc.analyser.slang.generic.ClauseAbs;
+import org.premsc.analyser.slang.generic.FinderStatementAbs;
+import org.premsc.analyser.slang.generic.ISlangBranchParent;
 
 import java.util.List;
 

@@ -6,7 +6,6 @@ import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.slang.generic.BranchAbs;
 import org.premsc.analyser.slang.generic.ISlangBranchParent;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class Branch<P extends ISlangBranchParent> extends BranchAbs<P> {

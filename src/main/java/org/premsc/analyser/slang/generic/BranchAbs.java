@@ -2,7 +2,6 @@ package org.premsc.analyser.slang.generic;
 
 import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.queries.builder.IQueryBuilderParent;
-import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.slang.tokens.Alternation;
 import org.premsc.analyser.slang.tokens.Branch;
 import org.premsc.analyser.slang.tokens.NodeCapture;
