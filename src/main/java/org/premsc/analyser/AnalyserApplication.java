@@ -23,7 +23,7 @@ import java.util.List;
  */
 public class AnalyserApplication {
 
-    private static final boolean DEBUG = true;
+    private static final boolean DEBUG = false;
 
     private final String id;
     private final String token;
