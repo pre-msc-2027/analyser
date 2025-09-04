@@ -24,5 +24,6 @@ public record Config(
         @JsonProperty("commit_hash") String commit,
         @JsonProperty("use_ai_assistance") boolean useAiAssistance,
         @JsonProperty("max_depth") int maxDepth,
-        @JsonProperty("follow_symlinks") boolean followSymlinks
+        @JsonProperty("follow_symlinks") boolean followSymlinks,
+        @JsonProperty("rules_id") String[] rules_id
 ) {}

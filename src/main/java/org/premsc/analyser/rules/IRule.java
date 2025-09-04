@@ -1,5 +1,6 @@
 package org.premsc.analyser.rules;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
 import org.premsc.analyser.parser.languages.LanguageEnum;
 
 import java.util.function.Predicate;
@@ -57,9 +58,13 @@ public interface IRule {
     }
 
     enum Severity {
+        @JsonAlias({"low","LOW"})
         LOW,
+        @JsonAlias({"medium","MEDIUM"})
         MEDIUM,
+        @JsonAlias({"high","HIGH"})
         HIGH,
+        @JsonAlias({"critical","CRITICAL"})
         CRITICAL
     }
 }

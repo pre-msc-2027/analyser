@@ -24,7 +24,7 @@ import java.util.Objects;
  */
 public class AnalyserApplication {
 
-    private static final boolean DEBUG = false;
+    private static final boolean DEBUG = true;
 
     private final String id;
     private final String token;
@@ -135,8 +135,8 @@ public class AnalyserApplication {
         }
 
         this.log("Posting results.");
-        this.api.post("", this.analysis);
-        if (Objects.equals(this.getId(), "0")) {
+        this.api.post("scans/analyse", this.analysis);
+        if (AnalyserApplication.DEBUG) {
             ObjectMapper mapper = new ObjectMapper();
             mapper.registerModule(this.analysis.getModule());
             try {
@@ -272,8 +272,10 @@ public class AnalyserApplication {
      */
     public void log(Exception error) {
         Log log = new Log(error);
-        if (!(error instanceof HttpResponseError)) this.log(log);
-        if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
+        if (!(error instanceof HttpResponseError)) {
+            this.log(log);
+            if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
+        }
     }
 
     /**
@@ -283,7 +285,11 @@ public class AnalyserApplication {
      */
     private void log(Log log) {
         System.out.println(log);
-        this.api.post("scans/logs", log);
+        try {
+            this.api.post("scans/logs", log);
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
     }
 
     /**
