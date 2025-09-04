@@ -34,7 +34,7 @@ jobs:
         name: my-app-jar
         path: ${{ env.JAR_PATH }}
     - name: Extract Maven project version
-      run: echo "name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
+      run: echo "version=$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
       id: project
     - name: Show extracted Maven project version
       run: echo ${{ steps.project.outputs.version }}
