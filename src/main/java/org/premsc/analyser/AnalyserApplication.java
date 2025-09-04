@@ -3,6 +3,7 @@ package org.premsc.analyser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.premsc.analyser.api.Api;
+import org.premsc.analyser.api.HttpResponseError;
 import org.premsc.analyser.config.Config;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.indexer.IIndexer;
@@ -261,7 +262,7 @@ public class AnalyserApplication {
     private void log(String message) {
         Log log = new Log(message);
         this.log(log);
-        this.api.post("logs", log);
+        this.api.post("scans/logs", log);
     }
 
     /**
@@ -271,7 +272,7 @@ public class AnalyserApplication {
      */
     public void log(Exception error) {
         Log log = new Log(error);
-        this.log(log);
+        if (!(error instanceof HttpResponseError)) this.log(log);
         if (AnalyserApplication.DEBUG) throw new RuntimeException(error);
     }
 
@@ -282,7 +283,7 @@ public class AnalyserApplication {
      */
     private void log(Log log) {
         System.out.println(log);
-        this.api.post("logs", log);
+        this.api.post("scans/logs", log);
     }
 
     /**
