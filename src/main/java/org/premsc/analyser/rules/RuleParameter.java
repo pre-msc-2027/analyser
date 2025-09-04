@@ -9,7 +9,7 @@ public record RuleParameter(
     public RuleParameter(JsonElement data) {
         this(
                 data.getAsJsonObject().get("name").getAsString(),
-                data.getAsJsonObject().get("default_value").getAsString()
+                data.getAsJsonObject().get("default").getAsString()
         );
     }
 }
