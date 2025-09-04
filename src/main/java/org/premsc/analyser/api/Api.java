@@ -79,7 +79,6 @@ public class Api {
         HttpResponse<String> response;
 
         if (Objects.equals(this.app.getId(), "0")) response = Api.mock(builder);
-        else if (builder.build().uri().toString().contains("rules")) response = Api.mock(builder);
         else response = this.client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
 
         if (response.statusCode() != 200) {
