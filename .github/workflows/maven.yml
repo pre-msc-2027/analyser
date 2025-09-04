@@ -27,14 +27,14 @@ jobs:
       run: |
         JAR_PATH=$(ls target/*.jar | head -n 1)
         echo "JAR_PATH=$JAR_PATH" >> $GITHUB_ENV
-        echo "::set-output name=jar_path::$JAR_PATH"
+        echo "jar_path=$JAR_PATH" >> $GITHUB_OUTPUT
     - name: Upload JAR artifact
       uses: actions/upload-artifact@v4
       with:
         name: my-app-jar
         path: ${{ env.JAR_PATH }}
     - name: Extract Maven project version
-      run: echo ::set-output name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)
+      run: echo "name=version::$(mvn -q -Dexec.executable=echo -Dexec.args='${project.version}' --non-recursive exec:exec)" >> $GITHUB_OUTPUT
       id: project
     - name: Show extracted Maven project version
       run: echo ${{ steps.project.outputs.version }}
