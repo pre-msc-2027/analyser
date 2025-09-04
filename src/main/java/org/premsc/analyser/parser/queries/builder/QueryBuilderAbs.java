@@ -7,7 +7,7 @@ import java.util.stream.Stream;
  * This class provides a common structure for building queries.
  * It is designed to be extended by specific query builder implementations.
  */
-abstract class QueryBuilderAbs<This extends QueryBuilderAbs<This>> {
+abstract class QueryBuilderAbs<This extends QueryBuilderAbs<This>> implements IQueryBuilder<This> {
 
     @SuppressWarnings("unchecked")
     protected final This self = (This) this;

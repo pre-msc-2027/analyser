@@ -1,12 +1,17 @@
 package org.premsc.analyser.parser.languages;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+
 /**
  * Enum representing different programming languages supported by the parser.
  * Each language has a name, associated DLL file, and file extension.
  */
 public enum LanguageEnum {
 
+    @JsonAlias({"html", "HTML"})
     HTML("html","html"),
+
+    @JsonAlias({"css", "HTML"})
     CSS("css", "css"),
     //JAVASCRIPT,
     //TYPESCRIPT

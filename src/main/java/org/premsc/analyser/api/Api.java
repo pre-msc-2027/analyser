@@ -2,8 +2,6 @@ package org.premsc.analyser.api;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonParser;
 import org.premsc.analyser.AnalyserApplication;
 import org.premsc.analyser.IHasModule;
 
@@ -14,6 +12,7 @@ import java.net.http.HttpClient;
 import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.util.Collection;
 import java.util.Objects;
 import java.util.Optional;
 
@@ -90,32 +89,38 @@ public class Api {
     }
 
     /**
-     * Sends a GET request to the specified route and returns the response as a JsonElement.
-     *
+     * Sends a GET request to the specified route and maps the response to a collection of the provided schema class.
      * @param route The API route to send the GET request to.
-     * @return The response body parsed as a JsonElement.
+     * @param collectionClass The class of the collection to map the response to.
+     * @param schemaClass The class of the schema to map the response elements to.
+     * @return A collection of the specified type populated with the response data.
+     * @param <C> The type of the collection (e.g., List, Set).
+     * @param <S> The type of the schema class.
      */
-    public JsonElement get(String route) throws IOException, InterruptedException {
-
-        HttpResponse<String> response = this.send(this.getBuilder(route).GET());
-
-        return JsonParser.parseString(response.body());
-
-    }
-
-    /**
-     * Sends a GET request to the specified route and maps the response to the provided schema class.
-     *
-     * @param route The API route to send the GET request to.
-     * @param schema The class to map the response to.
-     * @return An instance of the schema class populated with the response data.
-     */
-    public <S> S get(String route, Class<S> schema) throws IOException, InterruptedException {
+    public <C extends Collection<S>, S> C get(String route, Class<C> collectionClass, Class<S> schemaClass) throws IOException, InterruptedException {
 
         HttpResponse<String> response = this.send(this.getBuilder(route).GET());
 
         ObjectMapper mapper = new ObjectMapper();
-        return mapper.readValue(response.body(), schema);
+        return mapper.readValue(
+                response.body(),
+                mapper.getTypeFactory().constructCollectionType(collectionClass, schemaClass)
+        );
+    }
+
+    /**
+     * Sends a GET request to the specified route and maps the response to an instance of the provided schema class.
+     * @param route The API route to send the GET request to.
+     * @param schemaClass The class of the schema to map the response to.
+     * @return An instance of the specified schema class populated with the response data.
+     * @param <S> The type of the schema class.
+     */
+    public <S> S get(String route, Class<S> schemaClass) throws IOException, InterruptedException {
+
+        HttpResponse<String> response = this.send(this.getBuilder(route).GET());
+
+        ObjectMapper mapper = new ObjectMapper();
+        return mapper.readValue(response.body(), schemaClass);
     }
 
     public <C> void post(String route, C obj) {
@@ -126,18 +131,6 @@ public class Api {
         } catch (JsonProcessingException e) {
             throw new RuntimeException(e);
         }
-    }
-
-    /**
-     * Sends a POST request to the specified route with the provided data.
-     *
-     * @param route The API route to send the POST request to.
-     * @param data  The data to be sent in the request body as a JsonElement.
-     */
-    public void post(String route, JsonElement data) {
-
-        this.post(route, data.toString());
-
     }
 
     private void post(String route, String data) {
@@ -197,8 +190,7 @@ public class Api {
                             """;
                 } else if (request.uri().toString().contains("rules")) {
                     return """
-                            {
-                                "rules": [
+                            [
                                     {
                                       "rule_id": 0,
                                       "language": "html",
@@ -206,18 +198,19 @@ public class Api {
                                       "parameters": [
                                         {
                                           "name": "casing",
-                                          "default_value": "lower_case"
+                                          "default": "^[a-z0-9]+$"
                                         }
-                                      ]
+                                      ],
+                                      "slang": "node (element [\\n    (start_tag (tag_name @target))\\n    (end_tag (tag_name @target))\\n    ])\\nwhere @target !* $casing"
                                     },
                                     {
                                       "rule_id": 1,
                                       "language": "html",
                                       "tags": [],
-                                      "parameters": []
+                                      "parameters": [],
+                                      "slang": "index &target\\n    where source = filepath()\\n        type = \\"class\\"\\n        value != &other\\n    with &other\\n        where type = \\"class\\"\\n            source = &style\\n    with &style\\n        where type = \\"link_stylesheet\\"\\n            source = filepath()\\n"
                                     }
-                                ]
-                            }
+                            ]
                             """;
                 }
 
@@ -244,3 +237,4 @@ public class Api {
     }
 
 }
+

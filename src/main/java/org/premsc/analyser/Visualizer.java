@@ -19,22 +19,26 @@ public class Visualizer {
 
     public static void main(String[] args) {
 
-        System.loadLibrary("tree-sitter");
+        NativeLib.openGrammar("");
 
-        Language css = loadLanguage("tree-sitter-css");
+        Language css = Language.load(
+                NativeLib.openGrammar("slang"),
+                NativeLib.getNativeName("slang")
+        );
 
         Parser parser = new Parser();
         parser.setLanguage(css);
 
         String sourceHtml = loadResource("index.html");
         String sourceCss = loadResource("style.css");
+        String sourceSlang = loadResource("casing.slg");
 
-        Tree tree = parser.parse(sourceCss).orElseThrow();
+        Tree tree = parser.parse(sourceSlang).orElseThrow();
         Node node = tree.getRootNode();
 
-        query(css, node);
+        //query(css, node);
 
-        display(node, sourceCss);
+        display(node, sourceSlang);
 
         tree.close();
 
