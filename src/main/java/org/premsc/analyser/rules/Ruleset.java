@@ -38,8 +38,7 @@ public class Ruleset {
      */
     public void init() throws Exception {
 
-        JsonObject data = this.app.getApi().get("rules/by_scan").getAsJsonObject();
-        JsonArray rules = data.getAsJsonArray("rules");
+        JsonArray rules = this.app.getApi().get("rules/by_scan").getAsJsonArray();
 
         for (JsonElement ruleElement : rules) {
             JsonObject rule = ruleElement.getAsJsonObject();
