@@ -136,15 +136,6 @@ public class AnalyserApplication {
 
         this.log("Posting results.");
         this.api.post("scans/analyse", this.analysis);
-        if (AnalyserApplication.DEBUG) {
-            ObjectMapper mapper = new ObjectMapper();
-            mapper.registerModule(this.analysis.getModule());
-            try {
-                System.out.println(mapper.writeValueAsString(this.analysis));
-            } catch (JsonProcessingException e) {
-                throw new RuntimeException(e);
-            }
-        }
 
         this.log("Cleaning folder.");
         try {
@@ -216,7 +207,7 @@ public class AnalyserApplication {
 
         for (ISource source : this.getRepository().list()) {
 
-            this.analysis.totalFiles += 1;
+            this.analysis.summary.totalFiles += 1;
 
             try (ITreeHelper treeHelper = source.parse()) {
 
@@ -236,13 +227,13 @@ public class AnalyserApplication {
 
                     if (!results.isEmpty()) found = true;
 
-                    this.analysis.warningsFound += results.size();
+                    this.analysis.summary.warningsFound += results.size();
 
                     this.analysis.warnings.addAll(results);
 
                 }
 
-                if (found) this.analysis.filesWithWarnings += 1;
+                if (found) this.analysis.summary.filesWithWarnings += 1;
 
             } catch (MalformedInputException _) {
                 this.log("Skipping file with invalid encoding: " + source.getFilepath());

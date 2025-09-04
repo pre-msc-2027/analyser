@@ -11,19 +11,32 @@ import java.util.List;
  */
 public class Analysis implements IHasModule{
 
-    @JsonProperty("total_files")
-    public int totalFiles;
+    public final Summary summary = new Summary();
 
-    @JsonProperty("files_with_warnings")
-    public int filesWithWarnings;
+    @JsonProperty("status")
+    public String status = "completed";
 
-    @JsonProperty("warnings_found")
-    public int warningsFound;
-
+    @JsonProperty("warnings")
     public final List<Warning> warnings = new ArrayList<>();
+
+    @JsonProperty("vulnerabilities")
+    public final List<Warning> vulnerabilities = new ArrayList<>();
 
     @Override
     public Warning.WarningModule getModule() {
         return new Warning.WarningModule();
+    }
+
+    public static class Summary {
+
+        @JsonProperty("total_files")
+        public int totalFiles;
+
+        @JsonProperty("files_with_vulnerabilities")
+        public int filesWithWarnings;
+
+        @JsonProperty("vulnerabilities_found")
+        public int warningsFound;
+
     }
 }

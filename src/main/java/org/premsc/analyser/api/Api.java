@@ -64,6 +64,7 @@ public class Api {
     private HttpRequest.Builder getBuilder(String route) {
         return HttpRequest
                 .newBuilder()
+                .version(HttpClient.Version.HTTP_1_1)
                 .uri(this.getUri(route));
     }
 

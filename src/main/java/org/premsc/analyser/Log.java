@@ -10,7 +10,7 @@ import java.time.Instant;
  * It provides multiple constructors for creating log entries with different levels of detail.
  */
 public record Log(
-    @JsonFormat(shape = JsonFormat.Shape.NUMBER) Instant timestamp,
+    String timestamp,
     String message,
     String error
 ) implements IHasModule {
@@ -20,7 +20,7 @@ public record Log(
      * @param message The log message.
      */
     public Log(String message) {
-        this(Instant.now(), message, "");
+        this(Instant.now().toString(), message, "");
     }
 
     /**
@@ -29,7 +29,7 @@ public record Log(
      * @param error The error information.
      */
     public Log(String message, String error) {
-        this(Instant.now(), message, error);
+        this(Instant.now().toString(), message, error);
     }
 
     /**
@@ -37,7 +37,7 @@ public record Log(
      * @param error The exception to log.
      */
     public Log(Exception error) {
-        this(Instant.now(), error.getMessage(), error.getClass().getSimpleName());
+        this(Instant.now().toString(), error.getMessage(), error.getClass().getSimpleName());
     }
 
     @Override
