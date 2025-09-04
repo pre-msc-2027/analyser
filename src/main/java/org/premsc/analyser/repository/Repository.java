@@ -5,6 +5,7 @@ import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.CredentialsProvider;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
 import org.premsc.analyser.AnalyserApplication;
+import org.premsc.analyser.Utils;
 
 import java.io.File;
 import java.io.IOException;
@@ -83,6 +84,10 @@ public class Repository {
     private void gitClone() throws Exception {
 
         if (Objects.equals(this.app.getId(), "0")) return;
+
+        try {
+            Utils.DeleteFolder(this.getPath());
+        } catch (IOException _) {}
 
         String url = this.app.getConfig().repoUrl();
         String branch = this.app.getConfig().branch();
