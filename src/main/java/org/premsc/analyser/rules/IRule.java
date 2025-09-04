@@ -16,7 +16,7 @@ public interface IRule {
      * Returns the unique identifier for the rule.
      * @return The ID of the rule.
      */
-    int getId();
+    String getId();
 
     /**
      * Returns the language associated with the rule.

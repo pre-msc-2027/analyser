@@ -10,14 +10,14 @@ import org.premsc.analyser.parser.languages.LanguageEnum;
  */
 public abstract class RuleAbs implements IRule {
 
-    private final int id;
+    private final String id;
     private final String[] tags;
     private final LanguageEnum language;
     private final RuleParameter[] parameters;
 
     public RuleAbs(JsonObject data) {
         this(
-                data.get("rule_id").getAsInt(),
+                data.get("rule_id").getAsString(),
                 LanguageEnum.valueOf(data.get("language").getAsString().toUpperCase()),
                 Utils.JsonArrayMapper(data.get("tags"), JsonElement::getAsString, String[]::new),
                 Utils.JsonArrayMapper(data.get("parameters"), RuleParameter::new, RuleParameter[]::new)
@@ -32,7 +32,7 @@ public abstract class RuleAbs implements IRule {
      * @param tags       An array of tags associated with the rule.
      * @param parameters A map of parameters for the rule.
      */
-    protected RuleAbs(int id, LanguageEnum language, String[] tags, RuleParameter[] parameters) {
+    protected RuleAbs(String id, LanguageEnum language, String[] tags, RuleParameter[] parameters) {
         this.id = id;
         this.tags = tags;
         this.language = language;
@@ -40,7 +40,7 @@ public abstract class RuleAbs implements IRule {
     }
 
     @Override
-    public int getId() {
+    public String getId() {
         return this.id;
     }
 

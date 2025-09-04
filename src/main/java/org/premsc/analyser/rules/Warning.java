@@ -26,7 +26,7 @@ import java.io.IOException;
  * @param endByte   the ending byte position of the warning in the file
  */
 public record Warning(
-        @JsonProperty("rule_id") int ruleId,
+        @JsonProperty("rule_id") String ruleId,
         @JsonProperty("file") String file,
         @JsonProperty("line") int line,
         @JsonIgnore int startByte,
