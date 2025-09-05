@@ -161,7 +161,7 @@ public class AnalyserApplication {
 
         this.log("Cleaning folder.");
         try {
-            Utils.DeleteFolder(this.getRepository().getPath());
+            Utils.deleteFolder(this.getRepository().getPath());
         } catch (IOException e) {
             this.log(e);
         }

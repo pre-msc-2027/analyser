@@ -17,27 +17,26 @@ public class Utils {
      * @param root the root path of the folder to delete
      * @throws IOException if an I/O error occurs
      */
-    public static void DeleteFolder(Path root) throws IOException {
+    public static void deleteFolder(Path root) throws IOException {
         Files.walkFileTree(root, new SimpleFileVisitor<>() {
 
             private void makeWritable(Path p) {
                 try {
                     DosFileAttributeView view = Files.getFileAttributeView(p, DosFileAttributeView.class);
                     if (view != null) {
-                        // Removing read-only/hidden/system flags helps on Windows
                         view.setReadOnly(false);
                         view.setHidden(false);
                         view.setSystem(false);
                     }
-                } catch (IOException ignored) {
+                } catch (IOException _) {
+                    //
                 }
             }
 
             private void deleteWithFixes(Path p) throws IOException {
                 try {
                     Files.delete(p);
-                } catch (AccessDeniedException e) {
-                    // Clear attributes and retry
+                } catch (AccessDeniedException _) {
                     makeWritable(p);
                     Files.delete(p);
                 }

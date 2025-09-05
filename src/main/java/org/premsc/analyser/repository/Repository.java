@@ -87,8 +87,9 @@ public class Repository {
     private void gitClone() throws Exception {
 
         try {
-            Utils.DeleteFolder(this.getPath());
+            Utils.deleteFolder(this.getPath());
         } catch (IOException _) {
+            //
         }
 
         String url = this.app.getConfig().repoUrl();

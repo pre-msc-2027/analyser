@@ -40,8 +40,8 @@ public class Ruleset {
      */
     public void init() throws Exception {
         @SuppressWarnings("unchecked")
-        List<IRule> rules = this.app.getApi().get("rules/by_scan", List.class, Rule.class);
-        this.rules.addAll(rules);
+        List<IRule> ruleList = this.app.getApi().get("rules/by_scan", List.class, Rule.class);
+        this.rules.addAll(ruleList);
     }
 
     /**

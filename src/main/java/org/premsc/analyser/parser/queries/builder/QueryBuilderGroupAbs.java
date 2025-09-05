@@ -14,7 +14,7 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
      * @param open  the character that opens the group
      * @param close the character that closes the group
      */
-    public QueryBuilderGroupAbs(Character open, Character close) {
+    protected QueryBuilderGroupAbs(Character open, Character close) {
         this.open = open;
         this.close = close;
     }
@@ -25,7 +25,7 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
      * @param open  the character that opens the group
      * @param close the character that closes the group
      */
-    public QueryBuilderGroupAbs(Character open, Character close, IQueryBuilder<?>[] nodes) {
+    protected QueryBuilderGroupAbs(Character open, Character close, IQueryBuilder<?>[] nodes) {
         this.open = open;
         this.close = close;
 
@@ -41,7 +41,7 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
      * @param close   the character that closes the group
      * @param capture the capture name for the query node
      */
-    public QueryBuilderGroupAbs(Character open, Character close, String capture) {
+    protected QueryBuilderGroupAbs(Character open, Character close, String capture) {
         super(capture);
         this.open = open;
         this.close = close;
@@ -54,7 +54,7 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
      * @param close   the character that closes the group
      * @param capture the capture name for the query node
      */
-    public QueryBuilderGroupAbs(Character open, Character close, String capture, IQueryBuilder<?>[] nodes) {
+    protected QueryBuilderGroupAbs(Character open, Character close, String capture, IQueryBuilder<?>[] nodes) {
         super(capture);
         this.open = open;
         this.close = close;

@@ -32,7 +32,7 @@ public interface ISource {
         try {
             LanguageEnum.getByExtension(ext);
             return true;
-        } catch (UnsupportedLanguage e) {
+        } catch (UnsupportedLanguage _) {
             return false;
         }
     }
