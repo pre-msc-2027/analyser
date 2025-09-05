@@ -3,7 +3,7 @@ package org.premsc.analyser.rules;
 /**
  * Enum representing different casing styles with their corresponding regex patterns.
  */
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "MissingJavadoc"})
 public enum Casing {
 
     LOWER_CASE("lower_case", "^[a-z0-9]+$"),

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 /**
  * Enum representing different parameter types.
  */
+@SuppressWarnings("MissingJavadoc")
 public enum ParameterType {
 
     @JsonAlias({"enum", "ENUM"})

@@ -6,6 +6,7 @@ import com.fasterxml.jackson.annotation.JsonAlias;
  * Enum representing different programming languages supported by the parser.
  * Each language has a name and file extension.
  */
+@SuppressWarnings("MissingJavadoc")
 public enum LanguageEnum {
 
     @JsonAlias({"html", "HTML"})

@@ -58,7 +58,7 @@ public interface IRule {
     /**
      * Tests the rule against the provided TreeHelper and source.
      */
-    @SuppressWarnings("unused")
+    @SuppressWarnings({"unused", "MissingJavadoc"})
     enum Severity {
         @JsonAlias({"low", "LOW"})
         LOW,

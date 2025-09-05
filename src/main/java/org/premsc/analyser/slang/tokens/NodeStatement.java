@@ -15,6 +15,7 @@ import java.util.List;
 
 /**
  * Class representing a node statement in the slang language.
+ * @param <P> the type of the parent rule expression
  */
 public class NodeStatement<P extends IFinderParent> extends FinderStatementAbs<P> implements ISlangBranchParent {
 
