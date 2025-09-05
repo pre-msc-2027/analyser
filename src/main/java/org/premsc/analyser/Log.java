@@ -9,13 +9,14 @@ import java.time.Instant;
  * It provides multiple constructors for creating log entries with different levels of detail.
  */
 public record Log(
-    String timestamp,
-    String message,
-    String error
+        String timestamp,
+        String message,
+        String error
 ) implements IHasModule {
 
     /**
      * Constructor for Log with current timestamp and message only.
+     *
      * @param message The log message.
      */
     public Log(String message) {
@@ -24,15 +25,7 @@ public record Log(
 
     /**
      * Constructor for Log with specified timestamp, message, and error.
-     * @param message The log message.
-     * @param error The error information.
-     */
-    public Log(String message, String error) {
-        this(Instant.now().toString(), message, error);
-    }
-
-    /**
-     * Constructor for Log with specified timestamp, message, and error.
+     *
      * @param error The exception to log.
      */
     public Log(Exception error) {

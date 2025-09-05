@@ -28,6 +28,7 @@ public class QueryHelper implements AutoCloseable {
      *
      * @param tree        The tree to query.
      * @param queryString The query string to execute on the tree.
+     * @throws UnsupportedLanguage if the language of the tree is not supported.
      */
     public QueryHelper(ITreeHelper tree, String queryString) throws UnsupportedLanguage {
         this.tree = tree;
@@ -37,6 +38,7 @@ public class QueryHelper implements AutoCloseable {
 
     /**
      * Executes the query on the tree and returns a stream of nodes that match the query.
+     *
      * @return A stream of nodes that match the query.
      */
     public Stream<Node> streamNodes() {
@@ -45,6 +47,7 @@ public class QueryHelper implements AutoCloseable {
 
     /**
      * Finds nodes in the tree that match the query and returns them as a list.
+     *
      * @return A list of nodes that match the query.
      */
     public List<Node> findNodes() {
@@ -53,6 +56,7 @@ public class QueryHelper implements AutoCloseable {
 
     /**
      * Finds nodes in the tree that match the query and have a specific capture name.
+     *
      * @param name The name of the capture to filter nodes by.
      * @return A list of nodes that match the query and have the specified capture name.
      */

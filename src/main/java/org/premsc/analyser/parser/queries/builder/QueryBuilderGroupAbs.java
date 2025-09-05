@@ -10,7 +10,8 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
 
     /**
      * Creates a new QueryBuilderGroupAbs instance with the specified open and close characters.
-     * @param open the character that opens the group
+     *
+     * @param open  the character that opens the group
      * @param close the character that closes the group
      */
     public QueryBuilderGroupAbs(Character open, Character close) {
@@ -20,22 +21,24 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
 
     /**
      * Creates a new QueryBuilderGroupAbs instance with the specified open and close characters.
-     * @param open the character that opens the group
+     *
+     * @param open  the character that opens the group
      * @param close the character that closes the group
      */
-    public QueryBuilderGroupAbs(Character open, Character close, QueryBuilderAbs<?>[] nodes) {
+    public QueryBuilderGroupAbs(Character open, Character close, IQueryBuilder<?>[] nodes) {
         this.open = open;
         this.close = close;
 
-        for (QueryBuilderAbs<?> node : nodes) {
+        for (IQueryBuilder<?> node : nodes) {
             this.addChild(node);
         }
     }
 
     /**
      * Creates a new QueryBuilderGroupAbs instance with the specified open, close characters, and capture name.
-     * @param open the character that opens the group
-     * @param close the character that closes the group
+     *
+     * @param open    the character that opens the group
+     * @param close   the character that closes the group
      * @param capture the capture name for the query node
      */
     public QueryBuilderGroupAbs(Character open, Character close, String capture) {
@@ -43,18 +46,20 @@ abstract class QueryBuilderGroupAbs<This extends QueryBuilderGroupAbs<This>> ext
         this.open = open;
         this.close = close;
     }
+
     /**
      * Creates a new QueryBuilderGroupAbs instance with the specified open, close characters, and capture name.
-     * @param open the character that opens the group
-     * @param close the character that closes the group
+     *
+     * @param open    the character that opens the group
+     * @param close   the character that closes the group
      * @param capture the capture name for the query node
      */
-    public QueryBuilderGroupAbs(Character open, Character close, String capture, QueryBuilderAbs<?>[] nodes) {
+    public QueryBuilderGroupAbs(Character open, Character close, String capture, IQueryBuilder<?>[] nodes) {
         super(capture);
         this.open = open;
         this.close = close;
 
-        for (QueryBuilderAbs<?> node : nodes) {
+        for (IQueryBuilder<?> node : nodes) {
             this.addChild(node);
         }
     }

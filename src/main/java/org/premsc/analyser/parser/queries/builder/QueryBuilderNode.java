@@ -2,6 +2,8 @@ package org.premsc.analyser.parser.queries.builder;
 
 /**
  * A query builder for creating query nodes with a specific type.
+ *
+ * @param <This> the type of the implementing class
  */
 public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends QueryBuilderNodeAbs<This> {
 
@@ -9,6 +11,7 @@ public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends Query
 
     /**
      * Creates a new QueryBuilder instance with the specified type.
+     *
      * @param type The type of the query node.
      * @return A new QueryBuilder instance.
      */
@@ -18,7 +21,8 @@ public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends Query
 
     /**
      * Creates a new QueryBuilder instance with the specified type and capture.
-     * @param type The type of the query node.
+     *
+     * @param type    The type of the query node.
      * @param capture The capture name for the query node.
      * @return A new QueryBuilder instance.
      */
@@ -28,6 +32,7 @@ public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends Query
 
     /**
      * Creates a new QueryBuilderNode instance with the specified type.
+     *
      * @param type The type of the query node.
      */
     protected QueryBuilderNode(String type) {
@@ -36,7 +41,8 @@ public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends Query
 
     /**
      * Creates a new QueryBuilderNode instance with the specified type and capture.
-     * @param type The type of the query node.
+     *
+     * @param type    The type of the query node.
      * @param capture The capture name for the query node.
      */
     protected QueryBuilderNode(String type, String capture) {

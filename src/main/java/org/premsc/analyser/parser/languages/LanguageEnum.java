@@ -4,13 +4,12 @@ import com.fasterxml.jackson.annotation.JsonAlias;
 
 /**
  * Enum representing different programming languages supported by the parser.
- * Each language has a name, associated DLL file, and file extension.
+ * Each language has a name and file extension.
  */
 public enum LanguageEnum {
 
     @JsonAlias({"html", "HTML"})
-    HTML("html","html"),
-
+    HTML("html", "html"),
     @JsonAlias({"css", "HTML"})
     CSS("css", "css"),
     //JAVASCRIPT,
@@ -22,7 +21,8 @@ public enum LanguageEnum {
 
     /**
      * Constructor for the LanguageEnum.
-     * @param name the name of the language
+     *
+     * @param name      the name of the language
      * @param extension the file extension associated with the language
      */
     LanguageEnum(String name, String extension) {
@@ -32,6 +32,7 @@ public enum LanguageEnum {
 
     /**
      * Get the string value of the language.
+     *
      * @return the string value of the language
      */
     public String getName() {
@@ -40,6 +41,7 @@ public enum LanguageEnum {
 
     /**
      * Get the file extension associated with the language.
+     *
      * @return the file extension
      */
     public String getExtension() {
@@ -48,6 +50,7 @@ public enum LanguageEnum {
 
     /**
      * Get the language helper for this language.
+     *
      * @return the ILanguageHelper instance for this language
      */
     public ILanguageHelper getHelper() {
@@ -56,6 +59,7 @@ public enum LanguageEnum {
 
     /**
      * Get the language helper class for this language.
+     *
      * @param extension the file extension to check
      * @return the corresponding LanguageEnum if the extension matches
      * @throws UnsupportedLanguage if the extension is not supported
@@ -71,6 +75,7 @@ public enum LanguageEnum {
 
     /**
      * Get the language enum by its name.
+     *
      * @param name the name of the language
      * @return the corresponding LanguageEnum
      * @throws UnsupportedLanguage if the name is not supported

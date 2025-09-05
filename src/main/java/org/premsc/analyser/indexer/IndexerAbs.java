@@ -18,6 +18,7 @@ public abstract class IndexerAbs implements IIndexer {
 
     /**
      * Constructor for IndexerAbs.
+     *
      * @param language The programming language that this indexer is responsible for.
      * @param type     The type of indexing that this indexer performs.
      */
@@ -38,8 +39,9 @@ public abstract class IndexerAbs implements IIndexer {
 
     /**
      * Indexes the source code using the provided ITreeHelper.
+     *
      * @param treeHelper the ITreeHelper to assist in indexing
-     * @param node the Node to index
+     * @param node       the Node to index
      * @return a List of IndexerManager.Index objects representing the indexed entries
      */
     protected List<IndexerManager.Index> index(ITreeHelper treeHelper, Node node) {
@@ -48,11 +50,12 @@ public abstract class IndexerAbs implements IIndexer {
 
     /**
      * Indexes the source code using the provided ITreeHelper.
+     *
      * @param treeHelper the ITreeHelper to assist in indexing
-     * @param value the text value to index
-     * @param line the line number of the text
-     * @param startByte the starting byte position of the text
-     * @param endByte the ending byte position of the text
+     * @param value      the text value to index
+     * @param line       the line number of the text
+     * @param startByte  the starting byte position of the text
+     * @param endByte    the ending byte position of the text
      * @return a List of IndexerManager.Index objects representing the indexed entries
      */
     protected List<IndexerManager.Index> index(ITreeHelper treeHelper, String value, int line, int startByte, int endByte) {

@@ -9,6 +9,7 @@ class QueryBuilderSimpleAbs<This extends QueryBuilderSimpleAbs<This>> extends Qu
 
     /**
      * Creates a new QueryBuilderSimpleAbs instance with the specified value.
+     *
      * @param value The literal value to be used in the query.
      */
     public QueryBuilderSimpleAbs(String value) {

@@ -5,16 +5,12 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import org.premsc.analyser.AnalyserApplication;
 import org.premsc.analyser.IHasModule;
 
-import javax.net.ssl.SSLSession;
 import java.io.IOException;
 import java.net.URI;
 import java.net.http.HttpClient;
-import java.net.http.HttpHeaders;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.Collection;
-import java.util.Objects;
-import java.util.Optional;
 
 /**
  * Abstract base class for API interactions.
@@ -38,20 +34,12 @@ public class Api {
     }
 
     /**
-     * Returns the AnalyserApplication instance associated with this API.
-     *
-     * @return The AnalyserApplication instance.
-     */
-    public HttpClient getClient() {
-        return client;
-    }
-
-    /**
      * Returns the URL of the API.
      *
      * @return The API URL.
      */
     private URI getUri(String route) {
+        //noinspection HttpUrlsUsage
         return URI.create("http://" + URL + "/" + route + "/" + this.app.getId());
     }
 
@@ -75,27 +63,25 @@ public class Api {
      */
     private HttpResponse<String> send(HttpRequest.Builder builder) throws IOException, InterruptedException {
 
-        HttpResponse<String> response;
-
-        if (Objects.equals(this.app.getId(), "0")) response = Api.mock(builder);
-        else response = this.client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
-
+        HttpResponse<String> response = this.client.send(builder.build(), HttpResponse.BodyHandlers.ofString());
         if (response.statusCode() != 200) {
             throw new HttpResponseError(response);
         }
-
         return response;
 
     }
 
     /**
      * Sends a GET request to the specified route and maps the response to a collection of the provided schema class.
-     * @param route The API route to send the GET request to.
+     *
+     * @param route           The API route to send the GET request to.
      * @param collectionClass The class of the collection to map the response to.
-     * @param schemaClass The class of the schema to map the response elements to.
+     * @param schemaClass     The class of the schema to map the response elements to.
+     * @param <C>             The type of the collection (e.g., List, Set).
+     * @param <S>             The type of the schema class.
      * @return A collection of the specified type populated with the response data.
-     * @param <C> The type of the collection (e.g., List, Set).
-     * @param <S> The type of the schema class.
+     * @throws IOException          If an I/O error occurs when sending or receiving.
+     * @throws InterruptedException If the operation is interrupted.
      */
     public <C extends Collection<S>, S> C get(String route, Class<C> collectionClass, Class<S> schemaClass) throws IOException, InterruptedException {
 
@@ -110,10 +96,13 @@ public class Api {
 
     /**
      * Sends a GET request to the specified route and maps the response to an instance of the provided schema class.
-     * @param route The API route to send the GET request to.
+     *
+     * @param route       The API route to send the GET request to.
      * @param schemaClass The class of the schema to map the response to.
+     * @param <S>         The type of the schema class.
      * @return An instance of the specified schema class populated with the response data.
-     * @param <S> The type of the schema class.
+     * @throws IOException          If an I/O error occurs when sending or receiving.
+     * @throws InterruptedException If the operation is interrupted.
      */
     public <S> S get(String route, Class<S> schemaClass) throws IOException, InterruptedException {
 
@@ -123,6 +112,13 @@ public class Api {
         return mapper.readValue(response.body(), schemaClass);
     }
 
+    /**
+     * Sends a POST request to the specified route with the provided object serialized as JSON.
+     *
+     * @param route the API route to send the POST request to
+     * @param obj   the object to be serialized and sent in the request body
+     * @param <C>   the type of the object being sent
+     */
     public <C> void post(String route, C obj) {
         ObjectMapper mapper = new ObjectMapper();
         if (obj instanceof IHasModule hasModuleObj) mapper.registerModule(hasModuleObj.getModule());
@@ -135,7 +131,6 @@ public class Api {
 
     private void post(String route, String data) {
 
-        HttpResponse<String> response;
         try {
             this.send(this.getBuilder(route)
                     .header("Content-Type", "application/json")
@@ -143,97 +138,6 @@ public class Api {
         } catch (Exception ex) {
             this.app.log(ex);
         }
-    }
-
-    static HttpResponse<String> mock(HttpRequest.Builder builder) {
-
-        HttpRequest request = builder.build();
-
-        return new HttpResponse<>() {
-
-            @Override
-            public int statusCode() {
-                return 200;
-            }
-
-            @Override
-            public HttpRequest request() {
-                return request;
-            }
-
-            @Override
-            public Optional<HttpResponse<String>> previousResponse() {
-                return Optional.empty();
-            }
-
-            @Override
-            public HttpHeaders headers() {
-                return null;
-            }
-
-            @Override
-            public String body() {
-
-                if (request.uri().toString().contains("scans/options")) {
-                    return """
-                            {
-                                "repo_url": "",
-                                "use_ai_assistance": false,
-                                "max_depth": -1,
-                                "follow_symlinks": true,
-                                "target_type": "REPOSITORY",
-                                "target_files": [],
-                                "severity_min": "LOW",
-                                "branch_id": "main",
-                                "commit_hash": "HEAD"
-                            }
-                            """;
-                } else if (request.uri().toString().contains("rules")) {
-                    return """
-                            [
-                                    {
-                                      "rule_id": 0,
-                                      "language": "html",
-                                      "tags": [],
-                                      "parameters": [
-                                        {
-                                          "name": "casing",
-                                          "default": "^[a-z0-9]+$"
-                                        }
-                                      ],
-                                      "slang": "node (element [\\n    (start_tag (tag_name @target))\\n    (end_tag (tag_name @target))\\n    ])\\nwhere @target !* $casing"
-                                    },
-                                    {
-                                      "rule_id": 1,
-                                      "language": "html",
-                                      "tags": [],
-                                      "parameters": [],
-                                      "slang": "index &target\\n    where source = filepath()\\n        type = \\"class\\"\\n        value != &other\\n    with &other\\n        where type = \\"class\\"\\n            source = &style\\n    with &style\\n        where type = \\"link_stylesheet\\"\\n            source = filepath()\\n"
-                                    }
-                            ]
-                            """;
-                }
-
-                return "{}";
-
-            }
-
-            @Override
-            public Optional<SSLSession> sslSession() {
-                return Optional.empty();
-            }
-
-            @Override
-            public URI uri() {
-                return request.uri();
-            }
-
-            @Override
-            public HttpClient.Version version() {
-                return null;
-            }
-        };
-
     }
 
 }

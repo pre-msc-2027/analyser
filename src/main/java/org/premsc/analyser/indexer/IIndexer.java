@@ -14,20 +14,24 @@ public interface IIndexer {
 
     /**
      * Returns the language that this indexer is responsible for.
+     *
      * @return the LanguageEnum representing the programming language
      */
     LanguageEnum getLanguage();
 
     /**
      * Returns the type of indexing that this indexer performs.
+     *
      * @return a String representing the type of indexing
      */
     String getType();
 
     /**
      * Indexes the source code using the provided ITreeHelper.
+     *
      * @param treeHelper the ITreeHelper to assist in indexing
      * @return a List of IndexerManager.Index objects representing the indexed entries
+     * @throws UnsupportedLanguage if the language is not supported
      */
     List<IndexerManager.Index> index(ITreeHelper treeHelper) throws UnsupportedLanguage;
 

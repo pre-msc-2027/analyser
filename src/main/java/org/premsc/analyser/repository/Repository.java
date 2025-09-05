@@ -16,7 +16,6 @@ import java.nio.file.SimpleFileVisitor;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Stream;
 
 /**
@@ -33,6 +32,8 @@ public class Repository {
 
     /**
      * Constructor for the Repository class.
+     *
+     * @param app the main application instance
      */
     public Repository(AnalyserApplication app) {
         this.app = app;
@@ -68,6 +69,8 @@ public class Repository {
     /**
      * Initializes the repository by cloning the git repository and reading its contents.
      * This method is typically called at the start of the application to set up the repository.
+     *
+     * @throws Exception if an error occurs during cloning or reading the repository
      */
     public void init() throws Exception {
 
@@ -83,11 +86,10 @@ public class Repository {
      */
     private void gitClone() throws Exception {
 
-        if (Objects.equals(this.app.getId(), "0")) return;
-
         try {
             Utils.DeleteFolder(this.getPath());
-        } catch (IOException _) {}
+        } catch (IOException _) {
+        }
 
         String url = this.app.getConfig().repoUrl();
         String branch = this.app.getConfig().branch();
@@ -121,12 +123,6 @@ public class Repository {
      */
     private void read() throws IOException {
 
-        if (Objects.equals(this.app.getId(), "0")) {
-            this.sources.add(new MockSource("index.html"));
-            this.sources.add(new MockSource("style.css"));
-            return;
-        }
-
         Files.walkFileTree(this.getPath(), new FileVisitor(this.sources));
 
     }
@@ -147,12 +143,14 @@ public class Repository {
             this.sources = sources;
         }
 
+        @SuppressWarnings("NullableProblems")
         @Override
         public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
             if (ISource.isSupported(file)) this.sources.add(new Source(file.toString()));
             return FileVisitResult.CONTINUE;
         }
 
+        @SuppressWarnings("NullableProblems")
         @Override
         public FileVisitResult visitFileFailed(Path file, IOException exc) {
             return FileVisitResult.CONTINUE;

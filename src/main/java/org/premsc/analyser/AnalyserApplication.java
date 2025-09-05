@@ -41,7 +41,7 @@ public class AnalyserApplication {
     /**
      * Constructor for AnalyserApplication.
      *
-     * @param id the unique identifier for the scan
+     * @param id    the unique identifier for the scan
      * @param token the user token for authentication
      */
     private AnalyserApplication(String id, String token) {
@@ -116,7 +116,7 @@ public class AnalyserApplication {
             this.init();
         } catch (Exception e) {
             this.log(e);
-			System.exit(1);
+            System.exit(1);
         }
 
         this.log("Indexing sources.");
@@ -137,7 +137,6 @@ public class AnalyserApplication {
 
         this.log("Posting results.");
         this.api.post("scans/analyse", this.analysis);
-        if (this.id.equals("0")) System.out.println(this.analysis);
 
         if (config.useAiAssistance()){
             String aiDirectoryPath = Optional.ofNullable(System.getenv("AI_DIRECTORY_PATH")).orElse("../ai");
@@ -148,7 +147,7 @@ public class AnalyserApplication {
 
         this.log("Cleaning folder.");
         try {
-            if (!this.id.equals("0")) Utils.DeleteFolder(this.getRepository().getPath());
+            Utils.DeleteFolder(this.getRepository().getPath());
         } catch (IOException e) {
             this.log(e);
         }
@@ -282,7 +281,8 @@ public class AnalyserApplication {
         try {
             this.api.post("scans/logs", log);
         } catch (Exception ex) {
-            System.out.println(ex);
+            //noinspection ThrowablePrintedToSystemOut
+            System.err.println(ex);
         }
     }
 

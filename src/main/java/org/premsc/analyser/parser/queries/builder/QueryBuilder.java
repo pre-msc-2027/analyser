@@ -2,11 +2,15 @@ package org.premsc.analyser.parser.queries.builder;
 
 /**
  * A builder for constructing Tree-sitter queries.
+ *
+ * @param <This>
  */
+@SuppressWarnings({"UnusedReturnValue", "unused"})
 public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderNode<This> {
 
     /**
      * Creates a new QueryBuilder instance with the specified type.
+     *
      * @param type The type of the query node.
      * @return A new QueryBuilder instance.
      */
@@ -16,7 +20,8 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Creates a new QueryBuilder instance with the specified type and capture.
-     * @param type The type of the query node.
+     *
+     * @param type    The type of the query node.
      * @param capture The capture name for the query node.
      * @return A new QueryBuilder instance.
      */
@@ -26,6 +31,7 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Creates a new QueryBuilder instance with the specified type.
+     *
      * @param type The type of the query node.
      */
     public QueryBuilder(String type) {
@@ -34,7 +40,8 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Creates a new QueryBuilder instance with the specified type and capture.
-     * @param type The type of the query node.
+     *
+     * @param type    The type of the query node.
      * @param capture The capture name for the query node.
      */
     public QueryBuilder(String type, String capture) {
@@ -43,8 +50,9 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds an equal predicate to the query.
+     *
      * @param target The target of the predicate.
-     * @param value The value for the predicate.
+     * @param value  The value for the predicate.
      * @return This QueryBuilder instance for method chaining.
      */
     public This equal(String target, String value) {
@@ -53,8 +61,9 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds a not equal predicate to the query.
+     *
      * @param target The target of the predicate.
-     * @param value The value for the predicate.
+     * @param value  The value for the predicate.
      * @return This QueryBuilder instance for method chaining.
      */
     public This notEqual(String target, String value) {
@@ -63,8 +72,9 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds a match predicate to the query.
+     *
      * @param target The target of the predicate.
-     * @param regex The regular expression for the match.
+     * @param regex  The regular expression for the match.
      * @return This QueryBuilder instance for method chaining.
      */
     public This match(String target, String regex) {
@@ -73,8 +83,9 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds a not match predicate to the query.
+     *
      * @param target The target of the predicate.
-     * @param regex The regular expression for the not match.
+     * @param regex  The regular expression for the not match.
      * @return This QueryBuilder instance for method chaining.
      */
     public This notMatch(String target, String regex) {
@@ -83,7 +94,8 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds an equal other predicate to the query for a capture.
-     * @param target The target of the predicate.
+     *
+     * @param target  The target of the predicate.
      * @param capture The capture name for the predicate.
      * @return This QueryBuilder instance for method chaining.
      */
@@ -93,7 +105,8 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds a not equal other predicate to the query for a capture.
-     * @param target The target of the predicate.
+     *
+     * @param target  The target of the predicate.
      * @param capture The capture name for the predicate.
      * @return This QueryBuilder instance for method chaining.
      */
@@ -103,9 +116,10 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds a value predicate to the query.
-     * @param target The target of the predicate.
+     *
+     * @param target   The target of the predicate.
      * @param operator The operator for the predicate (e.g., "eq", "not-eq", "match", "not-match").
-     * @param value The value for the predicate.
+     * @param value    The value for the predicate.
      * @return This QueryBuilder instance for method chaining.
      */
     protected This addValuePredicate(String target, String operator, String value) {
@@ -114,9 +128,10 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Adds a compare predicate to the query for a capture.
-     * @param target The target of the predicate.
+     *
+     * @param target   The target of the predicate.
      * @param operator The operator for the predicate (e.g., "eq", "not-eq").
-     * @param capture The capture name for the predicate.
+     * @param capture  The capture name for the predicate.
      * @return This QueryBuilder instance for method chaining.
      */
     protected This addComparePredicate(String target, String operator, String capture) {
@@ -125,6 +140,7 @@ public class QueryBuilder<This extends QueryBuilder<This>> extends QueryBuilderN
 
     /**
      * Builds the query string.
+     *
      * @return The constructed query string.
      */
     public String build() {

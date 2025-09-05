@@ -2,6 +2,8 @@ package org.premsc.analyser.db.selector;
 
 /**
  * Abstract base class for SQL-like statements.
+ *
+ * @param <This> the type of the current StatementAbs instance, used for method chaining
  */
 public abstract class StatementAbs<This extends StatementAbs<This>> {
 
@@ -10,6 +12,7 @@ public abstract class StatementAbs<This extends StatementAbs<This>> {
 
     /**
      * Builds the SQL-like statement and returns it as a String.
+     *
      * @param builder the StringBuilder to append the statement to
      */
     abstract protected void build(StringBuilder builder);

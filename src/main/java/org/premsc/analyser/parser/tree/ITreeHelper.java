@@ -14,12 +14,14 @@ public interface ITreeHelper extends AutoCloseable {
 
     /**
      * Returns the source associated with this tree helper.
+     *
      * @return the source object
      */
     ISource getSource();
 
     /**
      * Returns the root node of the parse tree.
+     *
      * @return the root node of the tree
      */
     Node getRoot();
@@ -29,6 +31,7 @@ public interface ITreeHelper extends AutoCloseable {
      *
      * @param queryBuilder the QueryBuilder to build the query
      * @return a list of Node objects representing the matches found
+     * @throws UnsupportedLanguage if the language of the source is not supported
      */
     QueryHelper query(QueryBuilder<?> queryBuilder) throws UnsupportedLanguage;
 

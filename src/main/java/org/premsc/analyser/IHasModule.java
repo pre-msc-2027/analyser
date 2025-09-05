@@ -10,6 +10,7 @@ public interface IHasModule {
 
     /**
      * Gets the Jackson Module associated with this class.
+     *
      * @return the Jackson Module
      */
     @JsonIgnore

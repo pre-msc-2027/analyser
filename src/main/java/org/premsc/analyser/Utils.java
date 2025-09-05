@@ -5,8 +5,18 @@ import java.nio.file.*;
 import java.nio.file.attribute.BasicFileAttributes;
 import java.nio.file.attribute.DosFileAttributeView;
 
+/**
+ * Utility class providing file and directory operations.
+ */
 public class Utils {
 
+    /**
+     * Recursively deletes a folder and its contents.
+     * Attempts to handle read-only files on Windows by clearing attributes before deletion.
+     *
+     * @param root the root path of the folder to delete
+     * @throws IOException if an I/O error occurs
+     */
     public static void DeleteFolder(Path root) throws IOException {
         Files.walkFileTree(root, new SimpleFileVisitor<>() {
 
@@ -19,7 +29,8 @@ public class Utils {
                         view.setHidden(false);
                         view.setSystem(false);
                     }
-                } catch (IOException ignored) {}
+                } catch (IOException ignored) {
+                }
             }
 
             private void deleteWithFixes(Path p) throws IOException {
@@ -32,12 +43,14 @@ public class Utils {
                 }
             }
 
+            @SuppressWarnings("NullableProblems")
             @Override
             public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
                 deleteWithFixes(file);
                 return FileVisitResult.CONTINUE;
             }
 
+            @SuppressWarnings("NullableProblems")
             @Override
             public FileVisitResult postVisitDirectory(Path dir, IOException exc) throws IOException {
                 deleteWithFixes(dir);

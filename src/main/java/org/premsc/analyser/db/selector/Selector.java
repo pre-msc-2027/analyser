@@ -5,12 +5,14 @@ import java.util.List;
 
 /**
  * Represents a SQL-like SELECT statement builder.
+ *
  * @param <This> The type of the current Selector instance, used for method chaining.
  */
 public class Selector<This extends Selector<This>> extends StatementAbs<This> {
 
     /**
      * Factory method to create a Selector instance for a given table.
+     *
      * @param table The name of the table to select from.
      * @return A new Selector instance.
      */
@@ -44,6 +46,12 @@ public class Selector<This extends Selector<This>> extends StatementAbs<This> {
         return me;
     }
 
+    /**
+     * Sets the predicate for the select statement.
+     *
+     * @param predicate The predicate to set.
+     * @return The current Selector instance for method chaining.
+     */
     public This setPredicate(SelectorPredicateAbs<?> predicate) {
         this.predicate = predicate;
         return me;
@@ -51,6 +59,7 @@ public class Selector<This extends Selector<This>> extends StatementAbs<This> {
 
     /**
      * Builds the select statement.
+     *
      * @return The select statement as a String.
      */
     public String build() {
@@ -62,10 +71,11 @@ public class Selector<This extends Selector<This>> extends StatementAbs<This> {
 
     /**
      * Gets the number of columns in the select statement.
+     *
      * @return The number of columns, or -1 if no columns are specified.
      */
     public int getColumnCount() {
-        return columns.isEmpty()?-1:columns.size();
+        return columns.isEmpty() ? -1 : columns.size();
     }
 
     /**
@@ -89,6 +99,7 @@ public class Selector<This extends Selector<This>> extends StatementAbs<This> {
 
     /**
      * Builds the columns for the select statement.
+     *
      * @param builder The StringBuilder to append the columns to.
      */
     private void buildColumns(StringBuilder builder) {
@@ -101,6 +112,7 @@ public class Selector<This extends Selector<This>> extends StatementAbs<This> {
 
     /**
      * Builds the predicates for the select statement.
+     *
      * @param builder The StringBuilder to append the predicates to.
      */
     private void buildPredicate(StringBuilder builder) {

@@ -15,9 +15,10 @@ class SelectorComparison<This extends SelectorComparison<This, T>, T> extends Se
 
     /**
      * Constructor for SelectorComparison.
+     *
      * @param comparator the comparator to use for the comparison
-     * @param column the column to compare
-     * @param value the value to compare against
+     * @param column     the column to compare
+     * @param value      the value to compare against
      */
     protected SelectorComparison(Comparator comparator, String column, T value) {
         this.comparator = comparator;
@@ -31,7 +32,7 @@ class SelectorComparison<This extends SelectorComparison<This, T>, T> extends Se
         builder.append(" ")
                 .append(column)
                 .append(" ")
-                .append(this.inverted?comparator.opposite:comparator.symbol)
+                .append(this.inverted ? comparator.opposite : comparator.symbol)
                 .append(" ")
                 .append(value instanceof String ? "'" + value + "'" : value);
 

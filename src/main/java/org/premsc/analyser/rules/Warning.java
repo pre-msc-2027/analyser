@@ -68,6 +68,9 @@ public record Warning(
         this(rule, source, index.line(), index.startByte(), index.endByte());
     }
 
+    /**
+     * Custom Jackson module to serialize Warning objects with an additional "id" field.
+     */
     public static class WarningModule extends SimpleModule {
         @Override
         public void setupModule(SetupContext ctx) {
@@ -83,8 +86,7 @@ public record Warning(
                         return serializer;
                     }
 
-                    @SuppressWarnings("unchecked")
-                    final JsonSerializer<Object> defaultSer = (JsonSerializer<Object>) serializer;
+                    @SuppressWarnings("unchecked") final JsonSerializer<Object> defaultSer = (JsonSerializer<Object>) serializer;
                     final JsonSerializer<Object> unwrapping = defaultSer.unwrappingSerializer(NameTransformer.NOP);
 
                     return new JsonSerializer<Warning>() {

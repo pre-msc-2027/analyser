@@ -14,6 +14,7 @@ abstract class QueryBuilderAbs<This extends QueryBuilderAbs<This>> implements IQ
 
     /**
      * Builds the query represented by this QueryBuilderNode.
+     *
      * @param builder The StringBuilder to which the query will be appended.
      */
     protected abstract void build(StringBuilder builder);
@@ -21,6 +22,7 @@ abstract class QueryBuilderAbs<This extends QueryBuilderAbs<This>> implements IQ
     /**
      * Returns a stream of predicates associated with this QueryBuilderNode and its children.
      * This includes both the predicates added directly to this node and those from its child nodes.
+     *
      * @return A stream of QueryBuilderPredicate objects.
      */
     protected Stream<QueryBuilderPredicate<?>> getPredicates() {

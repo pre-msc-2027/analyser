@@ -8,11 +8,11 @@ import com.fasterxml.jackson.annotation.JsonAlias;
  */
 public enum TargetType {
 
-    @JsonAlias({"repository","REPOSITORY"})
+    @JsonAlias({"repository", "REPOSITORY"})
     REPOSITORY,
-    @JsonAlias({"file","FILE"})
+    @JsonAlias({"file", "FILE"})
     FILE,
-    @JsonAlias({"file_list","FILE_LIST"})
+    @JsonAlias({"file_list", "FILE_LIST"})
     FILE_LIST
 
 }

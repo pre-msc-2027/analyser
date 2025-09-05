@@ -11,16 +11,30 @@ import java.util.List;
 /**
  * Represents the result of an analysis performed by the Analyser.
  */
-public class Analysis implements IHasModule{
+public class Analysis implements IHasModule {
 
+    /**
+     * Summary of the analysis results.
+     */
     public final Summary summary = new Summary();
 
+    /**
+     * Status of the analysis (e.g., "completed").
+     */
+    @SuppressWarnings("unused")
     @JsonProperty("status")
     public String status = "completed";
 
+    /**
+     * List of warnings found during the analysis.
+     */
     @JsonProperty("warnings")
     public final List<Warning> warnings = new ArrayList<>();
 
+    /**
+     * List of vulnerabilities found during the analysis (currently unused).
+     */
+    @SuppressWarnings("unused")
     @JsonProperty("vulnerabilities")
     public final List<Warning> vulnerabilities = new ArrayList<>();
 
@@ -29,14 +43,26 @@ public class Analysis implements IHasModule{
         return new Warning.WarningModule();
     }
 
+    /**
+     * Summary class representing a summary of the analysis results.
+     */
     public static class Summary {
 
+        /**
+         * Total number of files analyzed.
+         */
         @JsonProperty("total_files")
         public int totalFiles;
 
+        /**
+         * Number of files with warnings.
+         */
         @JsonProperty("files_with_vulnerabilities")
         public int filesWithWarnings;
 
+        /**
+         * Total number of warnings found.
+         */
         @JsonProperty("vulnerabilities_found")
         public int warningsFound;
 

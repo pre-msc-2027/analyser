@@ -9,12 +9,14 @@ public interface ILanguageHelper {
 
     /**
      * Get the LanguageEnum representing with this helper.
+     *
      * @return the LanguageEnum representing the language
      */
     LanguageEnum getLanguage();
 
     /**
      * Get the TreeSitter Language object associated with this helper.
+     *
      * @return the TreeSitter Language object
      */
     Language getTsLanguage();

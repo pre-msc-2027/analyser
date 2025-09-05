@@ -21,6 +21,7 @@ public class Source implements ISource {
 
     /**
      * Constructor for the Source class.
+     *
      * @param filepath the path to the source file.
      */
     protected Source(String filepath) {
@@ -68,8 +69,8 @@ public class Source implements ISource {
     @Override
     public String toString() {
         return "Source{" +
-                "filepath='" + filepath + '\'' +
-                '}';
+               "filepath='" + filepath + '\'' +
+               '}';
     }
 
 }

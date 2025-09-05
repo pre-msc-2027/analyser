@@ -26,6 +26,8 @@ public class TreeHelper implements ITreeHelper {
      * Initializes the parser and parses the source content to create a parse tree.
      *
      * @param source the source object containing the content to be parsed
+     * @throws IOException         if an I/O error occurs reading the source content
+     * @throws UnsupportedLanguage if the language of the source is not supported
      */
     public TreeHelper(ISource source) throws UnsupportedLanguage, IOException {
         this.source = source;

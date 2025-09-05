@@ -17,6 +17,7 @@ public class Ruleset {
 
     /**
      * Constructor for Ruleset.
+     *
      * @param app the AnalyserApplication instance
      */
     public Ruleset(AnalyserApplication app) {
@@ -25,6 +26,7 @@ public class Ruleset {
 
     /**
      * Returns the list of rules defined in the ruleset.
+     *
      * @return a list of IRule objects
      */
     public List<IRule> getRules() {
@@ -33,13 +35,18 @@ public class Ruleset {
 
     /**
      * Initializes the ruleset by fetching rules from the API and populating the rules list.
+     *
+     * @throws Exception if an error occurs during initialization
      */
     public void init() throws Exception {
-        this.rules.addAll(this.app.getApi().get("rules/by_scan", List.class, Rule.class));
+        @SuppressWarnings("unchecked")
+        List<IRule> rules = this.app.getApi().get("rules/by_scan", List.class, Rule.class);
+        this.rules.addAll(rules);
     }
 
     /**
      * Streams the rules defined in the ruleset.
+     *
      * @return a Stream of IRule objects
      */
     public Stream<IRule> stream() {

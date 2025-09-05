@@ -13,6 +13,7 @@ public class LanguageHelper implements ILanguageHelper {
 
     /**
      * Constructor for the LanguageHelper class.
+     *
      * @param language the language enum representing the language to be used
      */
     protected LanguageHelper(LanguageEnum language) {
@@ -34,6 +35,7 @@ public class LanguageHelper implements ILanguageHelper {
 
     /**
      * Load the Tree-sitter language from the specified library.
+     *
      * @param language the language enum representing the language to load
      * @return the loaded Tree-sitter language
      */

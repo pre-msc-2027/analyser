@@ -168,12 +168,13 @@ public class IndexModel {
 
     /**
      * Inserts a new index entry into the database.
-     * @param source the source of the index entry.
-     * @param type the type of the index entry (e.g., class, method).
-     * @param value the value of the index entry (e.g., class name, method name).
-     * @param line the line number in the source file where the index entry is located.
+     *
+     * @param source    the source of the index entry.
+     * @param type      the type of the index entry (e.g., class, method).
+     * @param value     the value of the index entry (e.g., class name, method name).
+     * @param line      the line number in the source file where the index entry is located.
      * @param startByte the starting position of the index entry in the source file.
-     * @param endByte the ending position of the index entry in the source file.
+     * @param endByte   the ending position of the index entry in the source file.
      * @throws Exception if there is an error executing the SQL query or if the source language is unsupported.
      */
     public void insert(ISource source, String type, String value, int line, int startByte, int endByte) throws Exception {
@@ -189,9 +190,10 @@ public class IndexModel {
 
     /**
      * Inserts a new index entry into the database using an IndexerManager.Index object.
+     *
      * @param source the source of the index entry.
-     * @param type the type of the index entry (e.g., class, method).
-     * @param index the IndexerManager.Index object containing the index entry details.
+     * @param type   the type of the index entry (e.g., class, method).
+     * @param index  the IndexerManager.Index object containing the index entry details.
      * @throws Exception if there is an error executing the SQL query or if the source language is unsupported.
      */
     public void insert(ISource source, String type, IndexerManager.Index index) throws Exception {

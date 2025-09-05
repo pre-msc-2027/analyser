@@ -18,6 +18,7 @@ public class DatabaseHandler implements AutoCloseable {
 
     /**
      * Returns the connection to the SQLite database.
+     *
      * @return the connection to the database
      */
     public Connection getConnection() {
@@ -26,6 +27,7 @@ public class DatabaseHandler implements AutoCloseable {
 
     /**
      * Returns the IndexModel instance associated with this DatabaseHandler.
+     *
      * @return the IndexModel instance
      */
     public IndexModel getIndexModel() {
@@ -34,6 +36,8 @@ public class DatabaseHandler implements AutoCloseable {
 
     /**
      * Initializes the database connection and sets up the necessary tables.
+     *
+     * @throws SQLException if a database access error occurs
      */
     public void init() throws SQLException {
 
@@ -68,10 +72,7 @@ public class DatabaseHandler implements AutoCloseable {
                     CREATE INDEX idx2 ON index_table(source, type, value);
                     CREATE INDEX idx3 ON index_table(language, source, type, value);
                     """);
-
         }
-
-
     }
 
     /**

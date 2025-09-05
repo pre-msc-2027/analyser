@@ -18,7 +18,7 @@ public abstract class QueryIndexerAbs extends IndexerAbs implements IQueryIndexe
      * Constructor for QueryIndexerAbs.
      *
      * @param language the programming language of the code being indexed
-     * @param type the type of indexer
+     * @param type     the type of indexer
      */
     protected QueryIndexerAbs(LanguageEnum language, String type) {
         super(language, type);
@@ -29,8 +29,8 @@ public abstract class QueryIndexerAbs extends IndexerAbs implements IQueryIndexe
 
         List<IndexerManager.Index> indexes = new ArrayList<>();
 
-        try(QueryHelper queryHelper = treeHelper.query(this.getQuery())) {
-            for (Node node: queryHelper.findNodes()) {
+        try (QueryHelper queryHelper = treeHelper.query(this.getQuery())) {
+            for (Node node : queryHelper.findNodes()) {
                 indexes.addAll(this.index(treeHelper, node));
             }
         }

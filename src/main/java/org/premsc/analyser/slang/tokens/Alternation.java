@@ -6,8 +6,19 @@ import org.premsc.analyser.parser.queries.builder.QueryBuilderAlternation;
 import org.premsc.analyser.slang.generic.BranchAbs;
 import org.premsc.analyser.slang.generic.ISlangBranchParent;
 
+/**
+ * Alternation represents a branching structure where one of several branches can be taken.
+ *
+ * @param <P> the type of the parent token
+ */
 public class Alternation<P extends ISlangBranchParent> extends BranchAbs<P> implements ISlangBranchParent {
 
+    /**
+     * Constructor for Alternation.
+     *
+     * @param parent the parent token
+     * @param node   the syntax tree node representing the alternation
+     */
     public Alternation(P parent, Node node) {
         super(parent, node);
     }

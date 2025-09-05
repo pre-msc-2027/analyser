@@ -12,6 +12,7 @@ public abstract class QueryFactoryAbs {
 
     /**
      * Creates a new QueryFactoryAbs instance with the specified QueryBuilder.
+     *
      * @param query The QueryBuilder to be used for building queries.
      */
     protected QueryFactoryAbs(QueryBuilder<?> query) {
@@ -20,6 +21,7 @@ public abstract class QueryFactoryAbs {
 
     /**
      * Returns the QueryBuilder associated with this factory.
+     *
      * @return The QueryBuilder instance.
      */
     public QueryBuilder<?> getQuery() {
@@ -28,6 +30,7 @@ public abstract class QueryFactoryAbs {
 
     /**
      * Builds the query string using the QueryBuilder.
+     *
      * @return The built query string.
      */
     public String build() {

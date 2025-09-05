@@ -5,11 +5,12 @@ package org.premsc.analyser.rules;
  */
 public class UnknownParameter extends RuntimeException {
 
-  /**
-   * Constructs an UnknownParameter exception with a message indicating the unknown key.
-   * @param key The key of the unknown parameter.
-   */
-  public UnknownParameter(String key) {
+    /**
+     * Constructs an UnknownParameter exception with a message indicating the unknown key.
+     *
+     * @param key The key of the unknown parameter.
+     */
+    public UnknownParameter(String key) {
         super("Unknown parameter: " + key);
     }
 }

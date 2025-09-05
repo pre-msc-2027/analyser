@@ -12,7 +12,7 @@ import java.util.List;
  */
 public class IndexerManager {
 
-    private final IIndexer[] indexers = new IIndexer[] {
+    private final IIndexer[] indexers = new IIndexer[]{
             new HtmlLinkStylesheetIndexer(),
             new HtmlClassIndexer(),
             new CssClassIndexer(),
@@ -20,6 +20,7 @@ public class IndexerManager {
 
     /**
      * Returns the array of indexers managed by this IndexerManager.
+     *
      * @return an array of IIndexer instances
      */
     public IIndexer[] getIndexers() {
@@ -30,8 +31,18 @@ public class IndexerManager {
      * Represents an indexed entry with its value, line number, start byte, and end byte.
      */
     public record Index(String value, int line, int startByte, int endByte) {
+
+        /**
+         * Creates an array containing a single Index instance.
+         *
+         * @param value     the indexed value
+         * @param line      the line number where the value is found
+         * @param startByte the starting byte position of the value
+         * @param endByte   the ending byte position of the value
+         * @return an array with one Index instance
+         */
         public static Index[] of(String value, int line, int startByte, int endByte) {
-            return new Index[] {new Index(value, line, startByte, endByte)};
+            return new Index[]{new Index(value, line, startByte, endByte)};
         }
     }
 
@@ -40,10 +51,13 @@ public class IndexerManager {
      */
     public static class HtmlLinkStylesheetIndexer extends QueryIndexerAbs {
 
-
+        /**
+         * Constructor for HtmlLinkStylesheetIndexer.
+         */
         public HtmlLinkStylesheetIndexer() {
             super(LanguageEnum.HTML, "link_stylesheet");
         }
+
         @Override
         public QueryBuilder<?> getQuery() {
             return QueryBuilder
@@ -76,6 +90,9 @@ public class IndexerManager {
      */
     public static class HtmlClassIndexer extends QueryIndexerAbs {
 
+        /**
+         * Constructor for HtmlClassIndexer.
+         */
         public HtmlClassIndexer() {
             super(LanguageEnum.HTML, "class");
         }
@@ -115,6 +132,9 @@ public class IndexerManager {
      */
     public static class CssClassIndexer extends QueryIndexerAbs {
 
+        /**
+         * Constructor for CssClassIndexer.
+         */
         public CssClassIndexer() {
             super(LanguageEnum.CSS, "class");
         }
@@ -124,12 +144,12 @@ public class IndexerManager {
             return QueryBuilder
                     .of("rule_set")
                     .addChild(QueryBuilder
-                        .of("selectors")
-                        .addChild(QueryBuilder
-                            .of("class_selector")
+                            .of("selectors")
                             .addChild(QueryBuilder
-                                .of("class_name")
-                                .addChild("identifier", "target"))));
+                                    .of("class_selector")
+                                    .addChild(QueryBuilder
+                                            .of("class_name")
+                                            .addChild("identifier", "target"))));
         }
 
     }

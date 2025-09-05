@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * Abstract base class for selector predicates that can contain child predicates.
+ *
+ * @param <This> The type of the current SelectorPredicateAbs instance, used for method chaining.
  */
 public abstract class SelectorPredicateAbs<This extends SelectorPredicateAbs<This>> extends StatementAbs<This> {
 
@@ -14,6 +16,7 @@ public abstract class SelectorPredicateAbs<This extends SelectorPredicateAbs<Thi
 
     /**
      * Adds a child predicate with an AND logical separator.
+     *
      * @param predicate The predicate to add.
      * @return The current instance for method chaining.
      */
@@ -25,6 +28,7 @@ public abstract class SelectorPredicateAbs<This extends SelectorPredicateAbs<Thi
 
     /**
      * Adds a child predicate with an OR logical separator.
+     *
      * @param predicate The predicate to add.
      * @return The current instance for method chaining.
      */
@@ -36,6 +40,7 @@ public abstract class SelectorPredicateAbs<This extends SelectorPredicateAbs<Thi
 
     /**
      * Inverts the current predicate, changing its logical meaning.
+     *
      * @return The current instance for method chaining.
      */
     public This not() {
@@ -52,12 +57,14 @@ public abstract class SelectorPredicateAbs<This extends SelectorPredicateAbs<Thi
     /**
      * Builds the comparison part of the predicate.
      * This method must be implemented by subclasses to define the specific comparison logic.
+     *
      * @param builder The StringBuilder to append the comparison to.
      */
     protected abstract void buildComparison(StringBuilder builder);
 
     /**
      * Builds the children predicates with their respective separators.
+     *
      * @param builder The StringBuilder to append the children predicates to.
      */
     protected void buildChildren(StringBuilder builder) {
