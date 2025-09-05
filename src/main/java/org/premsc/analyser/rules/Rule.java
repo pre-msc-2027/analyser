@@ -1,5 +1,6 @@
 package org.premsc.analyser.rules;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.premsc.analyser.parser.languages.LanguageEnum;
 import org.premsc.analyser.slang.tokens.RuleExpression;
@@ -7,11 +8,10 @@ import org.premsc.analyser.slang.tokens.RuleExpression;
 /**
  * Abstract base class for rules in the analysis.
  */
+@JsonIgnoreProperties({"name", "description", "tags"})
 public class Rule implements IRule {
 
-    private final String name;
     private final String id;
-    private final String[] tags;
     private final LanguageEnum language;
     private final RuleParameter[] parameters;
     private final String slang;
@@ -22,7 +22,6 @@ public class Rule implements IRule {
      *
      * @param id         The unique identifier for the rule.
      * @param language   The language associated with the rule.
-     * @param tags       An array of tags associated with the rule.
      * @param parameters A map of parameters for the rule.
      * @param slang      The slang expression defining the rule.
      */
@@ -30,13 +29,10 @@ public class Rule implements IRule {
             @JsonProperty("name") String name,
             @JsonProperty("rule_id") String id,
             @JsonProperty("language") LanguageEnum language,
-            @JsonProperty("tags") String[] tags,
             @JsonProperty("parameters") RuleParameter[] parameters,
             @JsonProperty("slang") String slang
     ) {
-        this.name = name;
         this.id = id;
-        this.tags = tags;
         this.language = language;
         this.parameters = parameters;
         this.slang = slang;
@@ -44,18 +40,8 @@ public class Rule implements IRule {
     }
 
     @Override
-    public String getName() {
-        return name;
-    }
-
-    @Override
     public String getId() {
         return this.id;
-    }
-
-    @Override
-    public String[] getTags() {
-        return this.tags;
     }
 
     @Override
@@ -89,17 +75,6 @@ public class Rule implements IRule {
     public RuleExpression getExpression() {
         return this.expression;
     }
-
-    @Override
-    public boolean hasTag(String tag) {
-
-        for (String t : this.tags) {
-            if (t.equalsIgnoreCase(tag)) return true;
-        }
-
-        return false;
-    }
-
 
     @Override
     public String getSlang() {

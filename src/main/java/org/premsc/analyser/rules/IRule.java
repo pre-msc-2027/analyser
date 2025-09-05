@@ -14,12 +14,6 @@ import java.util.function.Predicate;
 public interface IRule {
 
     /**
-     * Returns the name of the rule.
-     * @return The name of the rule.
-     */
-    String getName();
-
-    /**
      * Returns the unique identifier for the rule.
      * @return The ID of the rule.
      */
@@ -30,12 +24,6 @@ public interface IRule {
      * @return The LanguageEnum representing the language.
      */
     LanguageEnum getLanguage();
-
-    /**
-     * Returns the tags associated with the rule.
-     * @return An array of tags.
-     */
-    String[] getTags();
 
     /**
      * Returns the parameters associated with the rule.
@@ -49,13 +37,6 @@ public interface IRule {
      * @return The slang expression as a string.
      */
     String getSlang();
-
-    /**
-     * Checks if the rule has a specific tag.
-     * @param tag The tag to check for.
-     * @return True if the rule has the specified tag, false otherwise.
-     */
-    boolean hasTag(String tag);
 
     String getParameter(String key) throws UnknownParameter;
 
