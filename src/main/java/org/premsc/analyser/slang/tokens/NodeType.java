@@ -8,6 +8,20 @@ import org.premsc.analyser.slang.generic.SlangTokenAbs;
  */
 public class NodeType extends SlangTokenAbs<Branch<?>> {
 
+    /**
+     * Factory method to create a NodeType instance from a syntax tree node.
+     *
+     * @param parent the parent branch
+     * @param node   the syntax tree node representing the node type
+     * @param <P>    the type of the parent branch
+     * @return a NodeType instance if the type node exists, otherwise null
+     */
+    public static <P extends Branch<?>> NodeType of(P parent, Node node) {
+        Node typeNode = getChild(node, "type");
+        if (typeNode != null) return new NodeType(parent, typeNode);
+        return null;
+    }
+
     protected final String type;
 
     /**
@@ -16,7 +30,7 @@ public class NodeType extends SlangTokenAbs<Branch<?>> {
      * @param parent the parent branch
      * @param node   the syntax tree node representing the node type
      */
-    public NodeType(Branch<?> parent, Node node) {
+    protected NodeType(Branch<?> parent, Node node) {
         super(parent, node);
         this.type = node.getText();
     }

@@ -21,7 +21,7 @@ public abstract class IndexStatementAbs<P extends IFinderParent> extends FinderS
      * @param parent the parent finder construct
      * @param node   the syntax tree node representing the index statement
      */
-    public IndexStatementAbs(P parent, Node node) {
+    protected IndexStatementAbs(P parent, Node node) {
         super(parent, node);
         this.indexIdentifier = initIndexIdentifier(node);
     }

@@ -24,26 +24,42 @@ public abstract class BranchAbs<P extends ISlangBranchParent> extends SlangToken
      * @param parent the parent token
      * @param node   the syntax tree node representing the branch
      */
-    public BranchAbs(P parent, Node node) {
+    protected BranchAbs(P parent, Node node) {
         super(parent, node);
-        this.branches = initBranches(node);
+        this.branches = listOf(this, node);
     }
 
     /**
-     * Initializes the branches of this branch from the syntax tree node.
+     * Factory method to create a BranchAbs instance based on the node type.
      *
-     * @param node the syntax tree node
-     * @return an array of initialized branches
+     * @param parent the parent token
+     * @param node   the syntax tree node
+     * @param <P>    the type of the parent token
+     * @return an instance of BranchAbs
+     * @throws IllegalArgumentException if the node type is unknown
      */
-    private BranchAbs<?>[] initBranches(Node node) {
+    public static <P extends ISlangBranchParent> BranchAbs<?> of(P parent, Node node) {
+        if (node.getType().equals("alternation"))
+            return new Alternation<>(parent, node);
+        if (node.getType().equals("branch"))
+            return new Branch<>(parent, node);
+        throw new IllegalArgumentException("Unknown branch type: " + node.getType());
+    }
+
+    /**
+     * Creates an array of BranchAbs instances for each child node.
+     *
+     * @param parent the parent token
+     * @param node   the syntax tree node
+     * @param <P>    the type of the parent token
+     * @return an array of BranchAbs instances
+     */
+    public static <P extends ISlangBranchParent> BranchAbs<?>[] listOf(P parent, Node node) {
         List<BranchAbs<?>> brancheList = new ArrayList<>();
         for (int i = 0; i < node.getChildCount(); i++) {
-            if (node.getChild(i).isEmpty()) continue;
-            Node child = node.getChild(i).get();
-            if (child.getType().equals("alternation"))
-                brancheList.add(new Alternation<>(this, child));
-            if (child.getType().equals("branch"))
-                brancheList.add(new Branch<>(this, child));
+            Node child = node.getChild(i).orElse(null);
+            if (child == null) continue;
+            brancheList.add(BranchAbs.of(parent, child));
         }
         return brancheList.toArray(BranchAbs[]::new);
     }

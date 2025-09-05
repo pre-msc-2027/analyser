@@ -9,8 +9,6 @@ import org.premsc.analyser.slang.generic.IFinderParent;
 import org.premsc.analyser.slang.generic.IndexStatementAbs;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
 
 /**
  * Class representing an index statement in the slang language.
@@ -29,7 +27,7 @@ public class IndexStatement<P extends IFinderParent> extends IndexStatementAbs<P
      */
     public IndexStatement(P parent, Node node) {
         super(parent, node);
-        this.withStatements = initWithStatement(node);
+        this.withStatements = WithStatement.listOf(this, node);
     }
 
     /**
@@ -45,20 +43,6 @@ public class IndexStatement<P extends IFinderParent> extends IndexStatementAbs<P
             }
         }
         return null;
-    }
-
-    /**
-     * Initializes the with statements from the syntax tree node.
-     *
-     * @param node the syntax tree node
-     * @return an array of initialized with statements
-     */
-    protected WithStatement[] initWithStatement(Node node) {
-        List<WithStatement> withStatementList = new ArrayList<>();
-        for (Node child : getChildren(node, "with")) {
-            withStatementList.add(new WithStatement(this, child));
-        }
-        return withStatementList.toArray(WithStatement[]::new);
     }
 
     /**

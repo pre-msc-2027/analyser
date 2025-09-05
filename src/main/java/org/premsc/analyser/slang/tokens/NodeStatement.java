@@ -8,6 +8,7 @@ import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.parser.tree.ITreeHelper;
 import org.premsc.analyser.slang.generic.ClauseAbs;
 import org.premsc.analyser.slang.generic.FinderStatementAbs;
+import org.premsc.analyser.slang.generic.IFinderParent;
 import org.premsc.analyser.slang.generic.ISlangBranchParent;
 
 import java.util.List;
@@ -15,9 +16,9 @@ import java.util.List;
 /**
  * Class representing a node statement in the slang language.
  */
-public class NodeStatement extends FinderStatementAbs<RuleExpression> implements ISlangBranchParent {
+public class NodeStatement<P extends IFinderParent> extends FinderStatementAbs<P> implements ISlangBranchParent {
 
-    protected final Branch<NodeStatement> branch;
+    protected final Branch<NodeStatement<?>> branch;
 
     /**
      * Constructor for NodeStatement.
@@ -25,21 +26,9 @@ public class NodeStatement extends FinderStatementAbs<RuleExpression> implements
      * @param parent the parent rule expression
      * @param node   the syntax tree node representing the node statement
      */
-    public NodeStatement(RuleExpression parent, Node node) {
+    public NodeStatement(P parent, Node node) {
         super(parent, node);
-        this.branch = initBranch(node);
-    }
-
-    /**
-     * Initializes the branch from the syntax tree node.
-     *
-     * @param node the syntax tree node
-     * @return the initialized branch, or null if not found
-     */
-    protected Branch<NodeStatement> initBranch(Node node) {
-        Node branchNode = getChild(node, "branch");
-        if (branchNode != null) return new Branch<>(this, branchNode);
-        return null;
+        this.branch = Branch.of(this, node);
     }
 
     /**
