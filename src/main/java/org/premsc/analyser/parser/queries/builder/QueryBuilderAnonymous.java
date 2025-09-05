@@ -11,19 +11,19 @@ public class QueryBuilderAnonymous<This extends QueryBuilderAnonymous<This>> ext
      * Creates a new QueryBuilderAnonymous instance with the specified value.
      *
      * @param value The value to be used in the query.
-     * @return A new instance of QueryBuilderAnonymous.
      */
-    static public QueryBuilderAnonymous<?> of(String value) {
-        return new QueryBuilderAnonymous<>(value);
+    public QueryBuilderAnonymous(String value) {
+        super("\"" + value + "\"");
     }
 
     /**
      * Creates a new QueryBuilderAnonymous instance with the specified value.
      *
      * @param value The value to be used in the query.
+     * @return A new instance of QueryBuilderAnonymous.
      */
-    public QueryBuilderAnonymous(String value) {
-        super("\"" + value + "\"");
+    static public QueryBuilderAnonymous<?> of(String value) {
+        return new QueryBuilderAnonymous<>(value);
     }
 
 }

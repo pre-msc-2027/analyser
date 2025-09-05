@@ -11,6 +11,17 @@ import org.premsc.analyser.slang.generic.IdentifierAbs;
 public class ParameterIdentifier extends IdentifierAbs implements IClauseValue {
 
     /**
+     * Constructor for ParameterIdentifier.
+     *
+     * @param parent the parent rule expression
+     * @param node   the syntax tree node
+     * @param name   the name of the parameter identifier
+     */
+    protected ParameterIdentifier(RuleExpression parent, Node node, String name) {
+        super(parent, node, name);
+    }
+
+    /**
      * Factory method to create or retrieve a ParameterIdentifier instance.
      *
      * @param parent the parent slang object
@@ -26,17 +37,6 @@ public class ParameterIdentifier extends IdentifierAbs implements IClauseValue {
         parameterIdentifier = new ParameterIdentifier(parent.getRuleExpression(), node, name);
         ruleExpression.addIdentifier(parameterIdentifier);
         return parameterIdentifier;
-    }
-
-    /**
-     * Constructor for ParameterIdentifier.
-     *
-     * @param parent the parent rule expression
-     * @param node   the syntax tree node
-     * @param name   the name of the parameter identifier
-     */
-    protected ParameterIdentifier(RuleExpression parent, Node node, String name) {
-        super(parent, node, name);
     }
 
     @Override

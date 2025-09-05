@@ -9,16 +9,6 @@ public class QueryBuilderWildcard<This extends QueryBuilderWildcard<This>> exten
 
     /**
      * Creates a new QueryBuilderAnonymous instance with the specified value.
-     *
-     * @param named If true, the value will be treated as a named wildcard.
-     * @return a new QueryBuilderAnonymous instance
-     */
-    static public QueryBuilderWildcard<?> of(boolean named) {
-        return new QueryBuilderWildcard<>(named);
-    }
-
-    /**
-     * Creates a new QueryBuilderAnonymous instance with the specified value.
      */
     public QueryBuilderWildcard() {
         this(false);
@@ -31,6 +21,16 @@ public class QueryBuilderWildcard<This extends QueryBuilderWildcard<This>> exten
      */
     public QueryBuilderWildcard(boolean named) {
         super(named ? "\"_\"" : "_");
+    }
+
+    /**
+     * Creates a new QueryBuilderAnonymous instance with the specified value.
+     *
+     * @param named If true, the value will be treated as a named wildcard.
+     * @return a new QueryBuilderAnonymous instance
+     */
+    static public QueryBuilderWildcard<?> of(boolean named) {
+        return new QueryBuilderWildcard<>(named);
     }
 
 }

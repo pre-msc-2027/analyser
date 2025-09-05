@@ -20,12 +20,11 @@ import java.util.concurrent.ConcurrentHashMap;
  * Utility class for loading native Tree-sitter libraries.
  */
 public final class NativeLib {
-    private NativeLib() {
-    }
-
-    private static volatile boolean runtimeLoaded = false;
     private static final Set<String> loadedGrammars = ConcurrentHashMap.newKeySet();
     private static final Map<String, String> extractedPaths = new HashMap<>();
+    private static volatile boolean runtimeLoaded = false;
+    private NativeLib() {
+    }
 
     /**
      * Ensure the Tree-sitter runtime library is loaded only once.

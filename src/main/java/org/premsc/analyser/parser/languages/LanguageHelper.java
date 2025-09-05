@@ -23,16 +23,6 @@ public class LanguageHelper implements ILanguageHelper {
 
     }
 
-    @Override
-    public LanguageEnum getLanguage() {
-        return this.language;
-    }
-
-    @Override
-    public Language getTsLanguage() {
-        return this.tsLanguage;
-    }
-
     /**
      * Load the Tree-sitter language from the specified library.
      *
@@ -44,5 +34,15 @@ public class LanguageHelper implements ILanguageHelper {
                 NativeLib.openGrammar(language.getName()),
                 NativeLib.getNativeName(language.getName())
         );
+    }
+
+    @Override
+    public LanguageEnum getLanguage() {
+        return this.language;
+    }
+
+    @Override
+    public Language getTsLanguage() {
+        return this.tsLanguage;
     }
 }

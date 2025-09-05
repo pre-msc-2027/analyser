@@ -10,6 +10,26 @@ public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends Query
     protected final String type;
 
     /**
+     * Creates a new QueryBuilderNode instance with the specified type.
+     *
+     * @param type The type of the query node.
+     */
+    protected QueryBuilderNode(String type) {
+        this.type = type;
+    }
+
+    /**
+     * Creates a new QueryBuilderNode instance with the specified type and capture.
+     *
+     * @param type    The type of the query node.
+     * @param capture The capture name for the query node.
+     */
+    protected QueryBuilderNode(String type, String capture) {
+        super(capture);
+        this.type = type;
+    }
+
+    /**
      * Creates a new QueryBuilder instance with the specified type.
      *
      * @param type The type of the query node.
@@ -28,26 +48,6 @@ public class QueryBuilderNode<This extends QueryBuilderNode<This>> extends Query
      */
     public static QueryBuilderNode<?> of(String type, String capture) {
         return new QueryBuilderNode<>(type, capture);
-    }
-
-    /**
-     * Creates a new QueryBuilderNode instance with the specified type.
-     *
-     * @param type The type of the query node.
-     */
-    protected QueryBuilderNode(String type) {
-        this.type = type;
-    }
-
-    /**
-     * Creates a new QueryBuilderNode instance with the specified type and capture.
-     *
-     * @param type    The type of the query node.
-     * @param capture The capture name for the query node.
-     */
-    protected QueryBuilderNode(String type, String capture) {
-        super(capture);
-        this.type = type;
     }
 
     @Override

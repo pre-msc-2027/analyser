@@ -8,11 +8,10 @@ import java.util.stream.Stream;
 @SuppressWarnings("UnusedReturnValue")
 abstract class QueryBuilderNodeAbs<This extends QueryBuilderNodeAbs<This>> extends QueryBuilderAbs<This> implements IQueryBuilderParent<This> {
 
-    protected String capture = "";
-    protected String quantity = "";
-
     protected final List<QueryBuilderAbs<?>> nodes = new ArrayList<>();
     private final List<QueryBuilderPredicate<?>> predicates = new ArrayList<>();
+    protected String capture = "";
+    protected String quantity = "";
 
     /**
      * Default constructor for QueryBuilderNodeAbs.

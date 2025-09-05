@@ -31,33 +31,6 @@ public enum LanguageEnum {
     }
 
     /**
-     * Get the string value of the language.
-     *
-     * @return the string value of the language
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Get the file extension associated with the language.
-     *
-     * @return the file extension
-     */
-    public String getExtension() {
-        return this.extension;
-    }
-
-    /**
-     * Get the language helper for this language.
-     *
-     * @return the ILanguageHelper instance for this language
-     */
-    public ILanguageHelper getHelper() {
-        return LanguageHelperFactory.get(this);
-    }
-
-    /**
      * Get the language helper class for this language.
      *
      * @param extension the file extension to check
@@ -87,6 +60,33 @@ public enum LanguageEnum {
             }
         }
         throw new UnsupportedLanguage("Unsupported language: " + name);
+    }
+
+    /**
+     * Get the string value of the language.
+     *
+     * @return the string value of the language
+     */
+    public String getName() {
+        return this.name;
+    }
+
+    /**
+     * Get the file extension associated with the language.
+     *
+     * @return the file extension
+     */
+    public String getExtension() {
+        return this.extension;
+    }
+
+    /**
+     * Get the language helper for this language.
+     *
+     * @return the ILanguageHelper instance for this language
+     */
+    public ILanguageHelper getHelper() {
+        return LanguageHelperFactory.get(this);
     }
 
 }

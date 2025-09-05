@@ -6,18 +6,6 @@ package org.premsc.analyser.parser.queries.builder;
 public class QueryBuilderGroup extends QueryBuilderGroupAbs<QueryBuilderGroup> {
 
     /**
-     * Factory method to create a new QueryBuilderGroup instance.
-     *
-     * @param nodes The query nodes to be included in the group.
-     * @param <Q>   the type of the query nodes
-     * @return A new QueryBuilderGroup instance.
-     */
-    @SafeVarargs
-    public static <Q extends IQueryBuilder<?>> QueryBuilderGroup of(Q... nodes) {
-        return new QueryBuilderGroup(nodes);
-    }
-
-    /**
      * Creates a new QueryBuilderGroup
      */
     public QueryBuilderGroup() {
@@ -52,6 +40,18 @@ public class QueryBuilderGroup extends QueryBuilderGroupAbs<QueryBuilderGroup> {
      */
     public <Q extends IQueryBuilder<?>> QueryBuilderGroup(String capture, Q[] nodes) {
         super('(', ')', capture, nodes);
+    }
+
+    /**
+     * Factory method to create a new QueryBuilderGroup instance.
+     *
+     * @param nodes The query nodes to be included in the group.
+     * @param <Q>   the type of the query nodes
+     * @return A new QueryBuilderGroup instance.
+     */
+    @SafeVarargs
+    public static <Q extends IQueryBuilder<?>> QueryBuilderGroup of(Q... nodes) {
+        return new QueryBuilderGroup(nodes);
     }
 
 }

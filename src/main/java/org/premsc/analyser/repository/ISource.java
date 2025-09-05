@@ -15,6 +15,29 @@ import java.nio.file.Path;
 public interface ISource {
 
     /**
+     * Checks if the given file path is supported by the parser based on its extension.
+     *
+     * @param filepath the path to the file to check.
+     * @return true if the file extension is supported, false otherwise.
+     */
+    static boolean isSupported(Path filepath) {
+        String extension = filepath.getFileName().toString();
+        int lastDotIndex = extension.lastIndexOf('.');
+
+        if (lastDotIndex == -1 || lastDotIndex == extension.length() - 1) {
+            return false;
+        }
+
+        String ext = extension.substring(lastDotIndex + 1);
+        try {
+            LanguageEnum.getByExtension(ext);
+            return true;
+        } catch (UnsupportedLanguage e) {
+            return false;
+        }
+    }
+
+    /**
      * Returns the file path of the source.
      *
      * @return the file path as a String.
@@ -60,27 +83,4 @@ public interface ISource {
      * @throws UnsupportedLanguage if the language is not supported.
      */
     ITreeHelper parse() throws UnsupportedLanguage, IOException;
-
-    /**
-     * Checks if the given file path is supported by the parser based on its extension.
-     *
-     * @param filepath the path to the file to check.
-     * @return true if the file extension is supported, false otherwise.
-     */
-    static boolean isSupported(Path filepath) {
-        String extension = filepath.getFileName().toString();
-        int lastDotIndex = extension.lastIndexOf('.');
-
-        if (lastDotIndex == -1 || lastDotIndex == extension.length() - 1) {
-            return false;
-        }
-
-        String ext = extension.substring(lastDotIndex + 1);
-        try {
-            LanguageEnum.getByExtension(ext);
-            return true;
-        } catch (UnsupportedLanguage e) {
-            return false;
-        }
-    }
 }

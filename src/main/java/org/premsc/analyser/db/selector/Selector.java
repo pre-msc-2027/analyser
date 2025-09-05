@@ -10,6 +10,18 @@ import java.util.List;
  */
 public class Selector<This extends Selector<This>> extends StatementAbs<This> {
 
+    protected final String table;
+    protected final List<String> columns = new ArrayList<>();
+    protected SelectorPredicateAbs<?> predicate;
+    /**
+     * Constructor for Selector.
+     *
+     * @param table The name of the table to select from.
+     */
+    public Selector(String table) {
+        this.table = table;
+    }
+
     /**
      * Factory method to create a Selector instance for a given table.
      *
@@ -18,19 +30,6 @@ public class Selector<This extends Selector<This>> extends StatementAbs<This> {
      */
     public static Selector<?> of(String table) {
         return new Selector<>(table);
-    }
-
-    protected final String table;
-    protected final List<String> columns = new ArrayList<>();
-    protected SelectorPredicateAbs<?> predicate;
-
-    /**
-     * Constructor for Selector.
-     *
-     * @param table The name of the table to select from.
-     */
-    public Selector(String table) {
-        this.table = table;
     }
 
     /**

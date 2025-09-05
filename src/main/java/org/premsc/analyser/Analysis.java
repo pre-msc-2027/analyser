@@ -17,7 +17,17 @@ public class Analysis implements IHasModule {
      * Summary of the analysis results.
      */
     public final Summary summary = new Summary();
-
+    /**
+     * List of warnings found during the analysis.
+     */
+    @JsonProperty("warnings")
+    public final List<Warning> warnings = new ArrayList<>();
+    /**
+     * List of vulnerabilities found during the analysis (currently unused).
+     */
+    @SuppressWarnings("unused")
+    @JsonProperty("vulnerabilities")
+    public final List<Warning> vulnerabilities = new ArrayList<>();
     /**
      * Status of the analysis (e.g., "completed").
      */
@@ -25,22 +35,20 @@ public class Analysis implements IHasModule {
     @JsonProperty("status")
     public String status = "completed";
 
-    /**
-     * List of warnings found during the analysis.
-     */
-    @JsonProperty("warnings")
-    public final List<Warning> warnings = new ArrayList<>();
-
-    /**
-     * List of vulnerabilities found during the analysis (currently unused).
-     */
-    @SuppressWarnings("unused")
-    @JsonProperty("vulnerabilities")
-    public final List<Warning> vulnerabilities = new ArrayList<>();
-
     @Override
     public Warning.WarningModule getModule() {
         return new Warning.WarningModule();
+    }
+
+    @Override
+    public String toString() {
+        ObjectMapper mapper = new ObjectMapper();
+        mapper.registerModule(this.getModule());
+        try {
+            return mapper.writeValueAsString(this);
+        } catch (JsonProcessingException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     /**
@@ -66,16 +74,5 @@ public class Analysis implements IHasModule {
         @JsonProperty("vulnerabilities_found")
         public int warningsFound;
 
-    }
-
-    @Override
-    public String toString() {
-        ObjectMapper mapper = new ObjectMapper();
-        mapper.registerModule(this.getModule());
-        try {
-            return mapper.writeValueAsString(this);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
     }
 }

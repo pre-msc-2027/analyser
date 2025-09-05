@@ -29,14 +29,13 @@ public class AnalyserApplication {
 
     private final String id;
     private final String token;
-    private Config config;
-
     private final Api api = new Api(this);
     private final Repository repository = new Repository(this);
     private final DatabaseHandler dbHandler = new DatabaseHandler();
     private final IndexerManager indexerManager = new IndexerManager();
     private final Ruleset ruleset = new Ruleset(this);
     private final Analysis analysis = new Analysis();
+    private Config config;
 
     /**
      * Constructor for AnalyserApplication.
@@ -47,6 +46,22 @@ public class AnalyserApplication {
     private AnalyserApplication(String id, String token) {
         this.id = id;
         this.token = token;
+    }
+
+    /**
+     * Main method to start the AnalyserApplication.
+     *
+     * @param args command line arguments, where the first argument is the unique identifier for the application instance
+     */
+    public static void main(String[] args) {
+
+        String id = args[0];
+        String token = args[1];
+
+        AnalyserApplication app = new AnalyserApplication(id, token);
+
+        app.start();
+
     }
 
     /**
@@ -284,22 +299,6 @@ public class AnalyserApplication {
             //noinspection ThrowablePrintedToSystemOut
             System.err.println(ex);
         }
-    }
-
-    /**
-     * Main method to start the AnalyserApplication.
-     *
-     * @param args command line arguments, where the first argument is the unique identifier for the application instance
-     */
-    public static void main(String[] args) {
-
-        String id = args[0];
-        String token = args[1];
-
-        AnalyserApplication app = new AnalyserApplication(id, token);
-
-        app.start();
-
     }
 
     private void runAiAnalysis(String scanId, String aiDirectoryPath) {

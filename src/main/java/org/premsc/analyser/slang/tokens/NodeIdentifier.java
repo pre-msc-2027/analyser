@@ -18,6 +18,17 @@ public class NodeIdentifier extends TargetIdentifierAbs implements IClauseTarget
     protected final List<Node> captures = new ArrayList<>();
 
     /**
+     * Constructor for NodeIdentifier.
+     *
+     * @param parent the parent rule expression
+     * @param node   the syntax tree node
+     * @param name   the name of the node identifier
+     */
+    protected NodeIdentifier(RuleExpression parent, Node node, String name) {
+        super(parent, node, name);
+    }
+
+    /**
      * Factory method to create or retrieve a NodeIdentifier.
      *
      * @param parent the parent slang object
@@ -33,17 +44,6 @@ public class NodeIdentifier extends TargetIdentifierAbs implements IClauseTarget
         nodeIdentifier = new NodeIdentifier(parent.getRuleExpression(), node, name);
         ruleExpression.addIdentifier(nodeIdentifier);
         return nodeIdentifier;
-    }
-
-    /**
-     * Constructor for NodeIdentifier.
-     *
-     * @param parent the parent rule expression
-     * @param node   the syntax tree node
-     * @param name   the name of the node identifier
-     */
-    protected NodeIdentifier(RuleExpression parent, Node node, String name) {
-        super(parent, node, name);
     }
 
     /**

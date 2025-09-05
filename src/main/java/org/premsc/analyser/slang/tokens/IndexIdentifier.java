@@ -19,6 +19,17 @@ public class IndexIdentifier extends TargetIdentifierAbs implements IClauseValue
     protected final List<IndexModel.Index> captures = new ArrayList<>();
 
     /**
+     * Constructor for IndexIdentifier.
+     *
+     * @param parent the parent rule expression
+     * @param node   the syntax tree node
+     * @param name   the name of the index identifier
+     */
+    protected IndexIdentifier(RuleExpression parent, Node node, String name) {
+        super(parent, node, name);
+    }
+
+    /**
      * Factory method to create or retrieve an IndexIdentifier.
      *
      * @param parent the parent slang object
@@ -34,17 +45,6 @@ public class IndexIdentifier extends TargetIdentifierAbs implements IClauseValue
         indexIdentifier = new IndexIdentifier(parent.getRuleExpression(), node, name);
         ruleExpression.addIdentifier(indexIdentifier);
         return indexIdentifier;
-    }
-
-    /**
-     * Constructor for IndexIdentifier.
-     *
-     * @param parent the parent rule expression
-     * @param node   the syntax tree node
-     * @param name   the name of the index identifier
-     */
-    protected IndexIdentifier(RuleExpression parent, Node node, String name) {
-        super(parent, node, name);
     }
 
     @Override

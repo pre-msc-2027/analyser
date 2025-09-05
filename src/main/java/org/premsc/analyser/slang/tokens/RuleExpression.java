@@ -35,6 +35,22 @@ public class RuleExpression extends SlangObjectAbs implements IFinderParent {
     }
 
     /**
+     * Constructor for RuleExpression.
+     *
+     * @param rule the rule associated with this expression
+     * @param tree the syntax tree representing the parsed slang code
+     */
+    protected RuleExpression(IRule rule, Tree tree) {
+        super(tree.getRootNode());
+
+        this.rule = rule;
+        this.identifiers = new ArrayList<>();
+        this.finderStatement = initFinderStatement(tree.getRootNode());
+
+        tree.close();
+    }
+
+    /**
      * Parses the slang code of the given rule and returns the corresponding syntax tree.
      *
      * @param rule the rule containing the slang code
@@ -50,22 +66,6 @@ public class RuleExpression extends SlangObjectAbs implements IFinderParent {
 
         Parser tsParser = new Parser(language);
         return tsParser.parse(slang, InputEncoding.UTF_8).orElseThrow();
-    }
-
-    /**
-     * Constructor for RuleExpression.
-     *
-     * @param rule the rule associated with this expression
-     * @param tree the syntax tree representing the parsed slang code
-     */
-    protected RuleExpression(IRule rule, Tree tree) {
-        super(tree.getRootNode());
-
-        this.rule = rule;
-        this.identifiers = new ArrayList<>();
-        this.finderStatement = initFinderStatement(tree.getRootNode());
-
-        tree.close();
     }
 
     /**
