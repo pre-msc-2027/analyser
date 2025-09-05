@@ -17,7 +17,6 @@ import java.io.IOException;
 import java.nio.charset.MalformedInputException;
 import java.util.List;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 /**
  * AnalyserApplication is the main class for the application that performs analysis on code repositories.
@@ -308,18 +307,17 @@ public class AnalyserApplication {
         );
         pb.directory(new java.io.File(aiDirectoryPath));
         pb.redirectErrorStream(true);
+        pb.redirectOutput(ProcessBuilder.Redirect.INHERIT);
 
-        CompletableFuture.runAsync(() -> {
-            try {
-                Process process = pb.start();
-                int exitCode = process.waitFor();
-                log("AI exited with code: " + exitCode);
+        try {
+            Process process = pb.start();
+            int exitCode = process.waitFor();
+            log("AI exited with code: " + exitCode);
 
-            } catch (IOException | InterruptedException e) {
-                Thread.currentThread().interrupt();
-                log(e);
-            }
-        });
+        } catch (IOException | InterruptedException e) {
+            Thread.currentThread().interrupt();
+            log(e);
+        }
     }
 
 }
