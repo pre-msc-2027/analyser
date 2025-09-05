@@ -302,7 +302,7 @@ public class AnalyserApplication {
 
     }
 
-    void runAiAnalysis(String scanId, String aiDirectoryPath) {
+    private void runAiAnalysis(String scanId, String aiDirectoryPath) {
 
         ProcessBuilder pb = new ProcessBuilder(
                 "python", "-m", "src.main", "--scan-id", scanId
@@ -314,7 +314,7 @@ public class AnalyserApplication {
             try {
                 Process process = pb.start();
                 int exitCode = process.waitFor();
-                log("Python exited with code: " + exitCode);
+                log("AI exited with code: " + exitCode);
 
             } catch (IOException | InterruptedException e) {
                 Thread.currentThread().interrupt();
