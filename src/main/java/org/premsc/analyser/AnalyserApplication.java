@@ -139,11 +139,12 @@ public class AnalyserApplication {
         this.api.post("scans/analyse", this.analysis);
         if (this.id.equals("0")) System.out.println(this.analysis);
 
-        Optional<String> aiDirectoryPath = Optional.ofNullable(System.getenv("AI_DIRECTORY_PATH"));
-        if (aiDirectoryPath.isPresent()) {
+        if (config.useAiAssistance()){
+            String aiDirectoryPath = Optional.ofNullable(System.getenv("AI_DIRECTORY_PATH")).orElse("../ai");
             this.log("Running AI analysis.");
-            this.runAiAnalysis(this.id, aiDirectoryPath.get());
+            this.runAiAnalysis(this.id, aiDirectoryPath);
         }
+
 
         this.log("Cleaning folder.");
         try {
