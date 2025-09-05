@@ -1,5 +1,7 @@
 package org.premsc.analyser.rules;
 
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.premsc.analyser.parser.languages.LanguageEnum;
@@ -25,6 +27,7 @@ public class Rule implements IRule {
      * @param parameters A map of parameters for the rule.
      * @param slang      The slang expression defining the rule.
      */
+    @JsonCreator
     protected Rule(
             @JsonProperty("rule_id") String id,
             @JsonProperty("language") LanguageEnum language,
