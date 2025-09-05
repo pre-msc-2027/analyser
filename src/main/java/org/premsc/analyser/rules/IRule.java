@@ -14,6 +14,12 @@ import java.util.function.Predicate;
 public interface IRule {
 
     /**
+     * Returns the name of the rule.
+     * @return The name of the rule.
+     */
+    String getName();
+
+    /**
      * Returns the unique identifier for the rule.
      * @return The ID of the rule.
      */

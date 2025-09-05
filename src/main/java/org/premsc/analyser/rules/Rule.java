@@ -9,6 +9,7 @@ import org.premsc.analyser.slang.tokens.RuleExpression;
  */
 public class Rule implements IRule {
 
+    private final String name;
     private final String id;
     private final String[] tags;
     private final LanguageEnum language;
@@ -26,18 +27,25 @@ public class Rule implements IRule {
      * @param slang      The slang expression defining the rule.
      */
     protected Rule(
+            @JsonProperty("name") String name,
             @JsonProperty("rule_id") String id,
             @JsonProperty("language") LanguageEnum language,
             @JsonProperty("tags") String[] tags,
             @JsonProperty("parameters") RuleParameter[] parameters,
             @JsonProperty("slang") String slang
     ) {
+        this.name = name;
         this.id = id;
         this.tags = tags;
         this.language = language;
         this.parameters = parameters;
         this.slang = slang;
         this.expression = new RuleExpression(this);
+    }
+
+    @Override
+    public String getName() {
+        return name;
     }
 
     @Override
