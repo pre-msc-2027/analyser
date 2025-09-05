@@ -16,6 +16,8 @@ import org.premsc.analyser.rules.Warning;
 import java.io.IOException;
 import java.nio.charset.MalformedInputException;
 import java.util.List;
+import java.util.Optional;
+import java.util.concurrent.CompletableFuture;
 
 /**
  * AnalyserApplication is the main class for the application that performs analysis on code repositories.
@@ -136,6 +138,12 @@ public class AnalyserApplication {
         this.log("Posting results.");
         this.api.post("scans/analyse", this.analysis);
         if (this.id.equals("0")) System.out.println(this.analysis);
+
+        Optional<String> aiDirectoryPath = Optional.ofNullable(System.getenv("AI_DIRECTORY_PATH"));
+        if (aiDirectoryPath.isPresent()) {
+            this.log("Running AI analysis.");
+            this.runAiAnalysis(this.id, aiDirectoryPath.get());
+        }
 
         this.log("Cleaning folder.");
         try {
@@ -291,6 +299,27 @@ public class AnalyserApplication {
 
         app.start();
 
+    }
+
+    void runAiAnalysis(String scanId, String aiDirectoryPath) {
+
+        ProcessBuilder pb = new ProcessBuilder(
+                "python", "-m", "src.main", "--scan-id", scanId
+        );
+        pb.directory(new java.io.File(aiDirectoryPath));
+        pb.redirectErrorStream(true);
+
+        CompletableFuture.runAsync(() -> {
+            try {
+                Process process = pb.start();
+                int exitCode = process.waitFor();
+                log("Python exited with code: " + exitCode);
+
+            } catch (IOException | InterruptedException e) {
+                Thread.currentThread().interrupt();
+                log(e);
+            }
+        });
     }
 
 }
