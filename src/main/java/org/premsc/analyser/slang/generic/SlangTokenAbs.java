@@ -19,7 +19,7 @@ public abstract class SlangTokenAbs<P extends ISlangObject> extends SlangObjectA
      * @param parent the parent slang object
      * @param node   the syntax tree node representing the slang token
      */
-    protected SlangTokenAbs(P parent, Node node) {
+    public SlangTokenAbs(P parent, Node node) {
         super(node);
         this.parent = parent;
         this.path = parent.getPath() + "." + this.getClass().getSimpleName();

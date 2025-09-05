@@ -1,9 +1,6 @@
 package org.premsc.analyser.slang.tokens;
 
-import io.github.treesitter.jtreesitter.InputEncoding;
-import io.github.treesitter.jtreesitter.Language;
-import io.github.treesitter.jtreesitter.Parser;
-import io.github.treesitter.jtreesitter.Tree;
+import io.github.treesitter.jtreesitter.*;
 import org.premsc.analyser.NativeLib;
 import org.premsc.analyser.db.DatabaseHandler;
 import org.premsc.analyser.parser.tree.ITreeHelper;
@@ -14,6 +11,7 @@ import org.premsc.analyser.slang.generic.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Class representing a rule expression in the slang language.
@@ -25,6 +23,7 @@ public class RuleExpression extends SlangObjectAbs implements IFinderParent {
     protected final FinderStatementAbs<RuleExpression> finderStatement;
 
     protected ISource source;
+    protected DatabaseHandler dbHandler;
 
     /**
      * Constructor for RuleExpression.
@@ -46,7 +45,7 @@ public class RuleExpression extends SlangObjectAbs implements IFinderParent {
 
         this.rule = rule;
         this.identifiers = new ArrayList<>();
-        this.finderStatement = FinderStatementAbs.of(this, tree.getRootNode());
+        this.finderStatement = initFinderStatement(tree.getRootNode());
 
         tree.close();
     }
@@ -67,6 +66,20 @@ public class RuleExpression extends SlangObjectAbs implements IFinderParent {
 
         Parser tsParser = new Parser(language);
         return tsParser.parse(slang, InputEncoding.UTF_8).orElseThrow();
+    }
+
+    /**
+     * Initializes the finder statement from the syntax tree node.
+     *
+     * @param node the syntax tree node
+     * @return the initialized finder statement
+     */
+    private FinderStatementAbs<RuleExpression> initFinderStatement(Node node) {
+        Node finderStatementNode = getChild(node, "statement");
+        Node childNode = finderStatementNode.getChild(0).orElseThrow(() -> new IllegalStateException("No child in statement"));
+        if (Objects.equals(childNode.getText(), "node")) return new NodeStatement(this, finderStatementNode);
+        if (Objects.equals(childNode.getText(), "index")) return new IndexStatement<>(this, finderStatementNode);
+        return null;
     }
 
     @Override

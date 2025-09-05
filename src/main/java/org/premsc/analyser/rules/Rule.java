@@ -1,6 +1,7 @@
 package org.premsc.analyser.rules;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import org.premsc.analyser.parser.languages.LanguageEnum;
@@ -16,6 +17,8 @@ public class Rule implements IRule {
     private final LanguageEnum language;
     private final RuleParameter[] parameters;
     private final String slang;
+
+    @JsonIgnore
     private final RuleExpression expression;
 
     /**
@@ -37,7 +40,6 @@ public class Rule implements IRule {
         this.language = language;
         this.parameters = parameters;
         this.slang = slang;
-        this.expression = new RuleExpression(this);
     }
 
     @Override
@@ -74,7 +76,7 @@ public class Rule implements IRule {
 
     @Override
     public RuleExpression getExpression() {
-        return this.expression;
+        return new RuleExpression(this);
     }
 
     @Override

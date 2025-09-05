@@ -3,11 +3,12 @@ package org.premsc.analyser.slang.tokens;
 import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.parser.queries.builder.QueryBuilder;
 import org.premsc.analyser.slang.generic.ClauseAbs;
+import org.premsc.analyser.slang.generic.IClauseTarget;
 
 /**
  * Represents a node clause in the slang language.
  */
-public class NodeClause extends ClauseAbs<NodeStatement<?>> {
+public class NodeClause extends ClauseAbs<NodeStatement> {
 
     /**
      * Constructor for NodeClause.
@@ -15,8 +16,15 @@ public class NodeClause extends ClauseAbs<NodeStatement<?>> {
      * @param parent the parent WHERE statement
      * @param node   the syntax tree node representing the node clause
      */
-    public NodeClause(WhereStatement<NodeStatement<?>> parent, Node node) {
+    public NodeClause(WhereStatement<NodeStatement> parent, Node node) {
         super(parent, node);
+    }
+
+    @Override
+    protected IClauseTarget initTarget(Node node) {
+        Node nodeNode = getChild(node, "node");
+        if (nodeNode != null) return NodeIdentifier.of(this, nodeNode);
+        return null;
     }
 
     /**

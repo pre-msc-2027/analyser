@@ -7,7 +7,7 @@ import org.premsc.analyser.slang.generic.SlangTokenAbs;
 
 /**
  * FunctionValue represents a function used as a value in a WHERE clause.
- * Currently, supports functions like 'filepath'.
+ * Currently supports functions like 'filepath'.
  *
  * @param <P> the type of the parent token
  */

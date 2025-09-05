@@ -9,20 +9,6 @@ import org.premsc.analyser.slang.generic.SlangTokenAbs;
  */
 public class ClauseOperator extends SlangTokenAbs<ClauseAbs<?>> {
 
-    /**
-     * Factory method to create a ClauseOperator instance from a syntax tree node.
-     *
-     * @param parent the parent branch
-     * @param node   the syntax tree node representing the node type
-     * @param <P>    the type of the parent branch
-     * @return a ClauseOperator instance if the type node exists, otherwise null
-     */
-    public static <P extends ClauseAbs<?>> ClauseOperator of(P parent, Node node) {
-        Node typeNode = getChild(node, "operator");
-        if (typeNode != null) return new ClauseOperator(parent, typeNode);
-        return null;
-    }
-
     protected final String operator;
 
     /**
@@ -31,7 +17,7 @@ public class ClauseOperator extends SlangTokenAbs<ClauseAbs<?>> {
      * @param parent the parent clause
      * @param node   the syntax tree node representing the operator
      */
-    protected ClauseOperator(ClauseAbs<?> parent, Node node) {
+    public ClauseOperator(ClauseAbs<?> parent, Node node) {
         super(parent, node);
         this.operator = node.getText();
     }

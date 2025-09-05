@@ -4,6 +4,8 @@ import io.github.treesitter.jtreesitter.Node;
 import org.premsc.analyser.db.selector.Predicate;
 import org.premsc.analyser.db.selector.SelectorPredicateAbs;
 import org.premsc.analyser.slang.generic.ClauseAbs;
+import org.premsc.analyser.slang.generic.IClauseTarget;
+import org.premsc.analyser.slang.generic.IClauseValue;
 import org.premsc.analyser.slang.generic.IndexStatementAbs;
 
 /**
@@ -19,6 +21,25 @@ public class IndexClause extends ClauseAbs<IndexStatementAbs<?>> {
      */
     public IndexClause(WhereStatement<IndexStatementAbs<?>> parent, Node node) {
         super(parent, node);
+    }
+
+    @Override
+    protected IClauseTarget initTarget(Node node) {
+        Node fieldNode = getChild(node, "field");
+        if (fieldNode != null) return new ClauseField(this, fieldNode);
+        return null;
+    }
+
+    @Override
+    protected IClauseValue initValue(Node node) {
+        Node valueNode = getChild(node, "value");
+        if (valueNode == null) return null;
+
+        Node indexNode = getChild(valueNode, "index");
+        if (indexNode != null) return IndexIdentifier.of(this, indexNode);
+
+        return super.initValue(node);
+
     }
 
     /**
