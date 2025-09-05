@@ -26,7 +26,6 @@ public class Rule implements IRule {
      * @param slang      The slang expression defining the rule.
      */
     protected Rule(
-            @JsonProperty("name") String name,
             @JsonProperty("rule_id") String id,
             @JsonProperty("language") LanguageEnum language,
             @JsonProperty("parameters") RuleParameter[] parameters,
