@@ -40,6 +40,7 @@ public class Rule implements IRule {
         this.language = language;
         this.parameters = parameters;
         this.slang = slang;
+        this.expression = new RuleExpression(this);
     }
 
     @Override
@@ -76,7 +77,7 @@ public class Rule implements IRule {
 
     @Override
     public RuleExpression getExpression() {
-        return new RuleExpression(this);
+        return this.expression;
     }
 
     @Override
